@@ -1,12 +1,14 @@
 import { Metadata } from "next";
+import { getTranslation } from "@/i18n";
+
+const t = getTranslation();
 
 const siteConfig = {
-	name: "Your Name",
-	title: "Your Name - Personal Blog",
-	description:
-		"A personal blog about web development, programming, and technology.",
+	name: t.site.name,
+	title: t.site.title,
+	description: t.site.description,
 	url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-	author: "Your Name",
+	author: t.site.name,
 	twitterHandle: "@yourhandle",
 	defaultLanguage: "en",
 };

@@ -12,6 +12,7 @@ A modern, fast, and SEO-friendly personal blog built with Next.js 15, MDX, and T
 - 📱 Responsive design
 - 🏷️ Tag system for content organization
 - 📊 GitHub Actions for content validation
+- 🌐 Internationalization (i18n) support with centralized translations
 
 ## Project Structure
 
@@ -21,7 +22,9 @@ blog/
 │   ├── app/                 # Next.js app router pages
 │   ├── components/          # React components
 │   ├── utils/              # Utility functions
-│   └── content/            # Static content (JSON)
+│   ├── content/            # Static content (JSON)
+│   ├── i18n/               # Internationalization
+│   └── posts/             # Blog posts (MDX files)
 ├── public/                 # Static assets
 └── content/               # Blog posts (MDX files)
 ```
@@ -167,3 +170,79 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Tailwind CSS](https://tailwindcss.com)
 - [MDX](https://mdxjs.com)
 - [rehype-prism-plus](https://github.com/timlrx/rehype-prism-plus)
+
+## Internationalization (i18n)
+
+The blog uses a centralized i18n system for managing all text content. This makes it easy to:
+- Maintain consistent text across the site
+- Add support for multiple languages
+- Update text content in one place
+
+### Translation Structure
+
+Translations are organized in the `src/i18n` directory:
+
+```typescript
+// src/i18n/en.ts
+export const en = {
+  // Site metadata
+  site: {
+    name: "Your Name",
+    title: "Your Name - Personal Blog",
+    description: "A personal blog about...",
+  },
+
+  // Navigation
+  nav: {
+    home: "Home",
+    blog: "Blog",
+    about: "About",
+    now: "Now",
+    projects: "Projects",
+  },
+
+  // Blog
+  blog: {
+    title: "Blog",
+    description: "Read my latest blog posts...",
+    readMore: "Read more",
+    publishedOn: "Published on",
+    tags: "Tags",
+  },
+
+  // Other sections...
+};
+```
+
+### Using Translations
+
+1. **In Pages and Components**:
+```typescript
+import { getTranslation } from "@/i18n";
+
+const t = getTranslation();
+
+// Use translations
+<h1>{t.blog.title}</h1>
+```
+
+2. **With Dynamic Content**:
+```typescript
+// Format messages with parameters
+const message = t.formatMessage(t.tags.title, { tag: "javascript" });
+```
+
+3. **In Metadata**:
+```typescript
+export const metadata: Metadata = generateSiteMetadata({
+  title: t.blog.title,
+  description: t.blog.description,
+  path: "/blog",
+});
+```
+
+### Adding New Languages
+
+1. Create a new translation file (e.g., `es.ts`) in the `src/i18n` directory
+2. Add the language to the `Language` type in `src/i18n/index.ts`
+3. Add the translations to the `translations` object

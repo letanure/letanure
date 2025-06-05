@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
+import { getTranslation } from "@/i18n";
+
+const t = getTranslation();
 
 export const metadata: Metadata = generateSiteMetadata({
-	title: "Projects",
-	description:
-		"Explore my current and past projects in web development and technology.",
+	title: t.projects.title,
+	description: t.projects.description,
 	path: "/projects",
 });
 
