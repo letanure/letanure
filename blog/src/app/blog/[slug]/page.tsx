@@ -16,34 +16,38 @@ function formatDate(dateString: string) {
 	});
 }
 
-export async function generateStaticParams() {
-	const slugs = await getPostSlugs();
-	return slugs.map((slug) => ({ slug }));
-}
-
 interface Props {
 	params: {
 		slug: string;
 	};
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-	const { slug } = params;
-	const { meta } = await getPostBySlug(slug);
-
-	return generateSiteMetadata({
-		title: meta.title,
-		description: meta.summary,
-		path: `/blog/${slug}`,
-	});
+export async function generateStaticParams() {
+	const slugs = await getPostSlugs();
+	return slugs.map((slug) => ({ slug }));
 }
 
-export default async function BlogPostPage({
-	params,
-}: { params: { slug: string } }) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	try {
-		const { slug } = await params;
-		const { meta, content } = await getPostBySlug(slug);
+		const { meta } = await getPostBySlug(params.slug);
+		return generateSiteMetadata({
+			title: meta.title,
+			description: meta.summary,
+			path: `/blog/${params.slug}`,
+		});
+	} catch (error) {
+		console.error("Error generating metadata:", error);
+		return generateSiteMetadata({
+			title: t.blog.title,
+			description: t.blog.description,
+			path: "/blog",
+		});
+	}
+}
+
+export default async function BlogPostPage({ params }: Props) {
+	try {
+		const { meta, content } = await getPostBySlug(params.slug);
 		return (
 			<article className="prose max-w-2xl mx-auto" aria-labelledby="post-title">
 				<header>
