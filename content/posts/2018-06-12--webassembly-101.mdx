@@ -1,0 +1,71 @@
+---
+title: WebAssembly 101 – High-Performance Web Apps
+date: 2018-06-12
+summary: A beginner-friendly overview of WebAssembly and how it enables fast, low-level code to run in the browser alongside JavaScript.
+tags: [webassembly, performance, wasm]
+---
+
+WebAssembly (Wasm) is a low-level bytecode format designed to run code at near-native speed in modern browsers. It allows developers to compile code from languages like C, C++, or Rust and execute it on the web alongside JavaScript.
+
+WebAssembly reached its 1.0 release and was supported in all major browsers, marking a big step toward making the web a platform for high-performance apps.
+
+## What is WebAssembly?
+
+WebAssembly is:
+- A binary format for the web
+- Designed for speed and efficiency
+- Executed in a safe, sandboxed environment
+- Meant to work alongside JavaScript
+
+It’s not meant to replace JavaScript, but to handle tasks where performance is critical—like image manipulation, games, simulations, or video editing.
+
+## Why WebAssembly Matters
+
+- It allows reuse of existing C/C++/Rust codebases on the web.
+- It dramatically improves performance for CPU-intensive tasks.
+- It expands what’s possible in the browser.
+
+## Basic JavaScript Interop
+
+Once a `.wasm` file is compiled, you can load and run it with JavaScript:
+
+```js
+const fs = require("fs");
+
+const wasmBuffer = fs.readFileSync("./example.wasm");
+
+WebAssembly.instantiate(wasmBuffer).then(wasmModule => {
+  const result = wasmModule.instance.exports.add(10, 15);
+  console.log(result); // 25
+});
+```
+
+## A Simple Example in C
+
+This C code compiles to WebAssembly:
+
+```c
+int add(int a, int b) {
+  return a + b;
+}
+```
+
+You can use a tool like Emscripten to compile it:
+
+```bash
+emcc add.c -s WASM=1 -o add.wasm
+```
+
+Then call it from JavaScript as shown above.
+
+## Use Cases
+
+- Game engines and emulators
+- Real-time audio/video processing
+- Image processing
+- Scientific simulations
+- Running existing C/C++ libraries in the browser
+
+---
+
+WebAssembly opened up a new world of performance for the web. It’s not just for C++ developers—it’s a tool that front-end devs can use to unlock new capabilities.

@@ -1,0 +1,95 @@
+---
+title: Building a Design System – How We Standardized Our UI
+date: 2018-09-18
+summary: A guide on how we created a shared component library to improve consistency, reuse, and communication across our frontend team.
+tags: [design-systems, storybook, components, ui]
+---
+
+Many teams were turning to design systems to bring consistency and scalability to their interfaces. We decided to create our own simple system to unify the UI across our frontend projects.
+
+## Why We Started a Design System
+
+We noticed:
+- Repeated UI patterns across different features
+- Small visual inconsistencies between pages
+- Slower onboarding of new developers and designers
+
+A shared design system helped us:
+- Reduce duplication
+- Keep design consistent
+- Document rules and patterns
+- Improve collaboration between devs and designers
+
+## First Steps
+
+We started by identifying repeatable components:
+- Buttons
+- Form inputs
+- Modals
+- Cards
+- Alerts
+
+Each one had:
+- A consistent naming structure
+- Props for variations (size, type, icon, etc.)
+- Styles built using our color and spacing tokens
+
+## Using Storybook
+
+To document and test components in isolation, we used Storybook:
+
+```bash
+npx sb init
+npm run storybook
+```
+
+Each component had a `*.stories.js` file:
+
+```js
+import React from 'react';
+import { Button } from './Button';
+
+export default { title: 'Button' };
+
+export const Primary = () => <Button type="primary">Save</Button>;
+export const Secondary = () => <Button type="secondary">Cancel</Button>;
+```
+
+Storybook made it easier to:
+- Showcase different states
+- Review components with designers
+- Test visual regressions
+
+## Guidelines and Tokens
+
+We created a `tokens.js` file for spacing, colors, and typography:
+
+```js
+export const spacing = {
+  xs: '4px',
+  sm: '8px',
+  md: '16px',
+  lg: '24px',
+};
+
+export const colors = {
+  primary: '#0070f3',
+  secondary: '#1c1c1e',
+  background: '#ffffff',
+  text: '#111111',
+};
+```
+
+Tokens kept styles consistent and easy to update.
+
+## Results
+
+After a few weeks of effort:
+- We reused components across multiple apps
+- New devs had examples to follow
+- Designers gave feedback directly in Storybook
+- QA had clear expectations for UI behavior
+
+---
+
+Building a small design system brought structure to our UI and sped up development. It didn’t need to be fancy—it just needed to be consistent and shared.

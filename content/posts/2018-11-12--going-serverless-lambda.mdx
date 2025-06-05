@@ -1,0 +1,79 @@
+---
+title: Going Serverless – Front-End Meets AWS Lambda
+date: 2018-11-12
+summary: Learn how to use AWS Lambda to handle backend logic without setting up a full server, perfect for simple tasks from your frontend app.
+tags: [serverless, aws, lambda, netlify, nodejs]
+---
+
+Serverless is a way to run backend code without managing servers. Instead of maintaining a backend service, you write small functions that are deployed to the cloud and run on demand.
+
+This approach works great for front-end developers who need to:
+- Send form data
+- Store emails
+- Call third-party APIs
+- Run small tasks
+
+## What Is Serverless?
+
+You write a function and deploy it to a provider like:
+- AWS Lambda
+- Netlify Functions
+- Vercel Functions
+
+The function runs only when it’s called. You pay only for usage. There’s no always-on server.
+
+## Example: Form Submission with AWS Lambda
+
+Let’s say we want to send a contact form.
+
+### 1. The Lambda Function
+
+Save this in `submitForm.js`:
+
+```js
+exports.handler = async (event) => {
+  const { name, email, message } = JSON.parse(event.body);
+
+  // Do something with the data (e.g., send email, store in DB)
+  console.log(name, email, message);
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ success: true }),
+  };
+};
+```
+
+### 2. Deploy with AWS CLI
+
+```bash
+zip function.zip submitForm.js
+
+aws lambda create-function --function-name submitForm   --zip-file fileb://function.zip --handler submitForm.handler   --runtime nodejs12.x --role YOUR_IAM_ROLE_ARN
+```
+
+### 3. Call from Front-End
+
+```js
+fetch('https://your-api-endpoint/submitForm', {
+  method: 'POST',
+  body: JSON.stringify({
+    name: 'Luiz',
+    email: 'luiz@example.com',
+    message: 'Hello!',
+  }),
+})
+  .then(res => res.json())
+  .then(data => console.log(data));
+```
+
+## Benefits of Serverless for Front-End Devs
+
+- Easy to add backend logic without full server setup
+- Scales automatically
+- Cheap for low-traffic or personal projects
+- Works well with static sites and JAMstack
+
+---
+
+Serverless lets you stay in the frontend but still build powerful full-stack features. It’s a practical way to extend what your app can do with minimal setup.

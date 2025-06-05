@@ -1,0 +1,108 @@
+---
+title: Moving from REST to GraphQL – A Case Study
+date: 2018-08-20
+summary: A practical look at replacing REST with GraphQL in a real frontend project using Apollo Client and query-based data fetching.
+tags: [graphql, apollo, rest, frontend]
+---
+
+GraphQL’s flexibility in allowing clients to request exactly what they need has been a game changer. This post walks through the process of migrating from REST APIs to GraphQL in a real-world frontend project.
+
+## Why We Considered GraphQL
+
+REST was working, but we were facing some problems:
+- Over-fetching or under-fetching data
+- Multiple roundtrips to load related entities
+- Rigid server endpoints and response formats
+
+GraphQL offered:
+- A single endpoint
+- Control over the shape of the data returned
+- Strong tooling and type safety
+
+## Setting Up Apollo Client
+
+We used Apollo Client for data management on the frontend. Basic setup looked like this:
+
+```bash
+npm install @apollo/client graphql
+```
+
+```js
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+
+const client = new ApolloClient({
+  uri: '/graphql',
+  cache: new InMemoryCache(),
+});
+```
+
+Then we wrapped the app with the provider:
+
+```jsx
+<ApolloProvider client={client}>
+  <App />
+</ApolloProvider>
+```
+
+## Writing Queries
+
+Instead of calling multiple endpoints, we used queries like this:
+
+```graphql
+query GetUser {
+  user(id: "123") {
+    name
+    email
+    posts {
+      title
+      createdAt
+    }
+  }
+}
+```
+
+Apollo gave us `useQuery` to fetch this easily:
+
+```js
+import { useQuery, gql } from '@apollo/client';
+
+const GET_USER = gql`
+  query GetUser {
+    user(id: "123") {
+      name
+      email
+      posts {
+        title
+        createdAt
+      }
+    }
+  }
+`;
+
+const { loading, error, data } = useQuery(GET_USER);
+```
+
+## Mutations
+
+Updating data was just as clean:
+
+```graphql
+mutation AddPost($title: String!) {
+  addPost(title: $title) {
+    id
+    title
+  }
+}
+```
+
+## Benefits Observed
+
+After switching:
+- Fewer network requests overall
+- Easier frontend development
+- Better performance on low-bandwidth devices
+- Stronger type safety across the stack
+
+---
+
+Migrating to GraphQL simplified data handling and improved developer experience. It wasn’t instant, but the gains were clear once we integrated it into real features.

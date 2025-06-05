@@ -1,0 +1,78 @@
+---
+title: JAMstack in Action – Building a Static Site with Gatsby
+date: 2018-04-10
+summary: Learn how to build a fast, secure static site using Gatsby and the JAMstack approach.
+tags: [jamstack, gatsby, static-site]
+---
+
+In recent years, the JAMstack architecture has gained popularity for building fast and secure websites. JAMstack stands for JavaScript, APIs, and Markup. It emphasizes decoupling the frontend from the backend, pre-rendering pages for speed and security.
+
+Gatsby is a React-based static site generator that aligns well with the JAMstack philosophy. It allows developers to build static websites using modern tools and practices.
+
+## Getting Started with Gatsby
+
+To create a new Gatsby site, you'll need Node.js installed. Then, you can use the Gatsby CLI to set up your project.
+
+```bash
+npm install -g gatsby-cli
+gatsby new my-gatsby-site
+cd my-gatsby-site
+gatsby develop
+```
+
+This will start a development server at `http://localhost:8000`, where you can view your site.
+
+## Creating Pages
+
+Gatsby uses React components for pages. Create a new file at `src/pages/about.js`:
+
+```jsx
+import React from "react"
+
+export default function About() {
+  return <div>About us</div>
+}
+```
+
+This will create a page accessible at `http://localhost:8000/about`.
+
+## Adding Markdown Content
+
+You can source content from Markdown files using plugins. First, install the necessary plugins:
+
+```bash
+npm install gatsby-source-filesystem gatsby-transformer-remark
+```
+
+Then, configure them in `gatsby-config.js`:
+
+```js
+module.exports = {
+  plugins: [
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `pages`,
+        path: `${__dirname}/src/pages/`,
+      },
+    },
+    `gatsby-transformer-remark`,
+  ],
+}
+```
+
+Now, you can create Markdown files in `src/pages/`, and Gatsby will transform them into pages.
+
+## Deploying the Site
+
+Once your site is ready, you can build it:
+
+```bash
+gatsby build
+```
+
+This will generate static files in the `public` directory, which you can deploy to any static hosting service.
+
+---
+
+By leveraging Gatsby and the JAMstack architecture, you can build fast, secure, and scalable websites with modern development practices.
