@@ -1,0 +1,94 @@
+---
+title: Bringing AI to the Front-End – Integrating GPT APIs
+date: 2023-03-01
+summary: A tutorial on integrating GPT APIs into front-end applications with a simple chatbot example.
+tags: [ai, frontend, chat, javascript, openai]
+---
+
+AI is no longer a back-end-only topic. It’s showing up in UIs—from autocomplete to smart assistants. This post shows how to build a simple chatbot UI that talks to a GPT model through an API.
+
+## What we’ll build
+
+- A front-end chat interface
+- A simple call to a GPT API using `fetch`
+- Handling loading states and errors
+
+## 1. Setting up the UI
+
+We’ll start with a basic input and message history.
+
+```js
+function Chat() {
+  const [messages, setMessages] = React.useState([]);
+  const [input, setInput] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+
+  const sendMessage = async () => {
+    if (!input) return;
+    setLoading(true);
+    const userMessage = { role: "user", content: input };
+    const newMessages = [...messages, userMessage];
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: newMessages }),
+      });
+      const data = await res.json();
+      const botMessage = { role: "assistant", content: data.reply };
+      setMessages([...newMessages, botMessage]);
+    } catch (err) {
+      console.error("Error:", err);
+    } finally {
+      setLoading(false);
+      setInput("");
+    }
+  };
+
+  return (
+    <div>
+      <div>
+        {messages.map((m, i) => (
+          <p key={i}><strong>{m.role}:</strong> {m.content}</p>
+        ))}
+      </div>
+      <input value={input} onChange={e => setInput(e.target.value)} />
+      <button onClick={sendMessage} disabled={loading}>Send</button>
+    </div>
+  );
+}
+```
+
+## 2. Backend handler (Next.js example)
+
+```js
+// pages/api/chat.js
+export default async function handler(req, res) {
+  const messages = req.body.messages;
+
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer YOUR_API_KEY`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages
+    })
+  });
+
+  const data = await response.json();
+  res.status(200).json({ reply: data.choices[0].message.content });
+}
+```
+
+## 3. Final thoughts
+
+This is just the start. You could:
+- Add streaming responses
+- Save chat history
+- Support tools or actions with function calling
+
+Using AI in the front-end opens a lot of creative space. From simple assistants to personalized content, the line between static UI and smart UI keeps blurring.
