@@ -1,0 +1,56 @@
+---
+title: Next.js for Production – Hybrid Rendering and Incremental Static Regeneration
+date: 2021-03-15
+summary: Exploring how Next.js combines SSR, SSG, and ISR for high-performance production apps.
+tags: [nextjs, react, ssr, ssg, isr]
+---
+
+Next.js keeps evolving as the go-to framework for building fast React apps. One of its biggest advantages is supporting multiple rendering strategies in the same app:
+
+- Static Site Generation (SSG)
+- Server-Side Rendering (SSR)
+- Client-Side Rendering (CSR)
+- Incremental Static Regeneration (ISR)
+
+This flexibility lets you serve content based on your use case—fast static content, dynamic content when needed, and everything in between.
+
+## Hybrid Rendering in Practice
+
+You can mix SSR and SSG in the same project. For example:
+
+- A homepage rendered statically at build time
+- A product page rendered with SSR for real-time pricing
+- A blog post page updated every 10 minutes with ISR
+
+This gives you speed **and** freshness.
+
+## Incremental Static Regeneration (ISR)
+
+ISR allows you to update static pages **after** deployment without rebuilding the whole site. You set a `revalidate` time per page, and Next.js handles the regeneration in the background.
+
+```js
+export async function getStaticProps() {
+  const data = await fetchData();
+
+  return {
+    props: { data },
+    revalidate: 600, // Regenerate the page every 10 minutes
+  };
+}
+```
+
+The first request after the revalidate time triggers the update. Users never see a loading state.
+
+## Example Use Case
+
+Let’s say you're building an e-commerce site:
+
+- `/products` can use SSG for performance.
+- `/products/[id]` can use SSR or ISR to show real-time stock or price.
+- `/checkout` uses CSR for dynamic interaction.
+
+This setup improves speed, SEO, and developer experience without sacrificing flexibility.
+
+## Final Thoughts
+
+Next.js makes high-performance React apps easier to build. With features like ISR, you can have the best of both worlds—fast, static-like performance with dynamic data updates when needed.

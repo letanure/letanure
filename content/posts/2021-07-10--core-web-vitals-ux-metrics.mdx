@@ -1,0 +1,56 @@
+---
+title: Core Web Vitals – Optimizing for Google’s UX Metrics
+date: 2021-07-10
+summary: Learn how to improve user experience and SEO by focusing on Google's Core Web Vitals LCP, FID, and CLS.
+tags: [performance, core-web-vitals, lighthouse, ux]
+---
+
+Core Web Vitals are a set of metrics defined by Google to evaluate the user experience of a web page. They focus on loading speed, interactivity, and visual stability.
+
+These three metrics became especially important for front-end developers when they started to influence search ranking.
+
+## What are Core Web Vitals?
+
+- **Largest Contentful Paint (LCP)**: Measures loading performance. A good score is under 2.5 seconds.
+- **First Input Delay (FID)**: Measures interactivity. A good score is under 100ms.
+- **Cumulative Layout Shift (CLS)**: Measures visual stability. A good score is below 0.1.
+
+## Tips to Improve Core Web Vitals
+
+### Improving LCP
+
+- Use lazy loading for images and videos
+- Optimize critical rendering path
+- Serve images in modern formats like WebP
+- Reduce server response times
+
+### Improving FID
+
+- Minimize main-thread blocking time
+- Reduce JavaScript bundle size
+- Use web workers for heavy computation
+- Split code using dynamic `import()`
+
+### Improving CLS
+
+- Always include width and height on images and videos
+- Reserve space for ads and embeds
+- Avoid injecting content above existing content
+- Use CSS `aspect-ratio` to maintain size stability
+
+## How to Measure Core Web Vitals
+
+You can test your site using:
+
+- Lighthouse (in Chrome DevTools)
+- PageSpeed Insights
+- Web Vitals Chrome Extension
+- Real-user monitoring tools
+
+```bash
+# Run Lighthouse in CLI
+npm install -g lighthouse
+lighthouse https://your-site.com
+```
+
+Improving these metrics not only helps SEO but also provides a better experience for users across devices and connection speeds.

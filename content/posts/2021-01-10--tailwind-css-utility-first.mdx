@@ -1,0 +1,78 @@
+---
+title: Tailwind CSS – Utility-First CSS in Action
+date: 2021-01-10
+summary: How Tailwind CSS changed the way we style components with utility-first classes.
+tags: [tailwind, css, frontend]
+---
+
+Tailwind CSS is a utility-first CSS framework that encourages building UIs directly in your HTML using small, reusable utility classes.
+
+Unlike traditional frameworks like Bootstrap that give you components, Tailwind gives you the building blocks. You style elements by composing utility classes right in your markup.
+
+## Why Tailwind?
+
+- Encourages consistency without writing custom CSS
+- Lets you prototype fast
+- Avoids naming confusion with class names
+- Supports dark mode, responsive design, and variants out of the box
+
+## Getting Started
+
+Install Tailwind using npm:
+
+```bash
+npm install tailwindcss
+npx tailwindcss init
+```
+
+Configure the generated `tailwind.config.js` file if needed.
+
+Set up Tailwind to process your CSS:
+
+```css
+/* ./src/styles.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+And in your build tool (like PostCSS):
+
+```bash
+npx tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch
+```
+
+## Example: Card Component
+
+```html
+<div class="max-w-sm rounded overflow-hidden shadow-lg">
+  <img class="w-full" src="/img/card-top.jpg" alt="Card image">
+  <div class="px-6 py-4">
+    <div class="font-bold text-xl mb-2">Tailwind Card</div>
+    <p class="text-gray-700 text-base">
+      This is a simple card built with Tailwind utility classes.
+    </p>
+  </div>
+</div>
+```
+
+## Design Without Leaving HTML
+
+One of Tailwind’s main ideas is: design and implementation should happen in the same place. You don't write new class names in CSS files. You compose them using existing utilities:
+
+- `text-center`, `text-lg`, `font-semibold`
+- `bg-blue-500`, `hover:bg-blue-700`, `text-white`
+
+## Responsive Design
+
+Tailwind uses a mobile-first approach with simple prefixes:
+
+```html
+<div class="text-base md:text-lg lg:text-xl">Responsive text</div>
+```
+
+## Final Thoughts
+
+Tailwind CSS promotes a shift from traditional CSS thinking. Instead of writing custom styles and managing class names, you rely on predefined building blocks.
+
+It feels strange at first but once you get used to it, the speed and consistency are hard to beat.

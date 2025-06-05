@@ -1,0 +1,71 @@
+---
+title: Mastering CSS Grid + Flexbox Combo
+date: 2021-09-20
+summary: Learn how to combine CSS Grid and Flexbox for powerful, responsive layouts with practical patterns.
+tags: [css, flexbox, grid, layout]
+---
+
+Using CSS Grid and Flexbox together can solve many layout challenges in modern web design. Both are powerful on their own, but combining them gives you full control over both macro and micro layout structures.
+
+## Why combine Grid and Flexbox?
+
+- **Grid** is best for overall page structure.
+- **Flexbox** is ideal for layout within a component or single row/column.
+- Together, they replace many old hacks (like nested floats or complex margins).
+
+## Example: Holy Grail Layout
+
+Use Grid for the main layout, Flexbox inside the header and sidebar.
+
+```css
+body {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "header header"
+    "sidebar main"
+    "footer footer";
+  min-height: 100vh;
+}
+
+header {
+  grid-area: header;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #eee;
+}
+
+aside {
+  grid-area: sidebar;
+  background: #f4f4f4;
+}
+
+main {
+  grid-area: main;
+  padding: 2rem;
+}
+
+footer {
+  grid-area: footer;
+  text-align: center;
+  padding: 1rem;
+  background: #ddd;
+}
+```
+
+## Design Patterns
+
+- **Dashboard layouts**: Use Grid for structure, Flexbox inside widgets/cards
+- **Navigation bars**: Flexbox helps align logo, links, and user menu
+- **Marketing pages**: Grid defines rows and sections, Flexbox inside each block
+
+## Tips
+
+- Don’t overuse nesting. Use Grid at top-level layout, Flexbox where you need fine control
+- Use `minmax()` and `auto-fit` in Grid for fluid layouts
+- Test on different screen sizes early
+
+This combo is now a go-to for clean, responsive design.

@@ -1,0 +1,69 @@
+---
+title: Svelte & SvelteKit – Exploring a Different UI Paradigm
+date: 2021-06-10
+summary: A walkthrough of building a project with SvelteKit, highlighting its simplicity and performance through compile-time optimizations.
+tags: [svelte, sveltekit, javascript, ssr, frontend]
+---
+
+SvelteKit is the official application framework for Svelte. It builds on the ideas of Sapper but brings a more modern setup with better performance and flexibility.
+
+Unlike frameworks like React or Vue, Svelte compiles your code at build time. That means less JavaScript in the browser and faster runtime performance.
+
+## Getting Started
+
+To scaffold a new SvelteKit project:
+
+```bash
+npm create svelte@latest my-app
+cd my-app
+npm install
+npm run dev
+```
+
+This sets up:
+
+- File-based routing (routes are defined by the filesystem)
+- Server-side rendering by default
+- Svelte components with zero runtime overhead
+
+## Example Component
+
+A simple counter component in Svelte:
+
+```javascript
+<script>
+  let count = 0;
+  function increment() {
+    count += 1;
+  }
+</script>
+
+<button on:click={increment}>
+  Clicks: {count}
+</button>
+```
+
+This syntax is minimal and reactive out of the box.
+
+## File-Based Routing
+
+To add a new page, just create a `.svelte` file under `src/routes`.
+
+```bash
+touch src/routes/about.svelte
+```
+
+The file `about.svelte` becomes accessible at `/about`.
+
+## Why SvelteKit?
+
+- Less client-side JavaScript
+- Built-in SSR and static site generation
+- Simpler mental model
+- Flexible deployment (static or dynamic)
+
+SvelteKit projects can also integrate with TypeScript, environment variables, and endpoints easily.
+
+## Conclusion
+
+SvelteKit brings a refreshing developer experience with good defaults, fast builds, and clear separation of concerns. It’s worth exploring if you're looking for something faster and simpler than traditional UI frameworks.
