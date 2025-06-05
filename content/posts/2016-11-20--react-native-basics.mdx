@@ -1,0 +1,93 @@
+---
+title: Going Mobile with React Native (Basics)
+date: 2016-11-20
+summary: Use familiar React skills to build your first native mobile app.
+tags: [react native, mobile, tutorial]
+---
+
+React Native lets you write JavaScript and render **real native** UI components on iOS and Android.  
+By late 2016 the framework had stabilised (v0.39, November 2016) and many teams moved prototypes to production.
+
+## Why React Native
+
+- Share business logic with web React projects.  
+- Hot Reload speeds up iteration without recompiling Xcode or Android Studio.  
+- Access native APIs (camera, GPS) through a growing library ecosystem.  
+- Performance close to fully native, thanks to true platform widgets.
+
+## Install the CLI
+
+```bash
+# Global CLI (historical 2.x line)
+npm install -g react-native-cli@2
+
+# Create a project
+react-native init HelloMobile
+cd HelloMobile
+```
+
+Open the project in one terminal and run:
+
+```bash
+# iOS simulator (macOS only)
+npx react-native run-ios
+
+# Android emulator
+npx react-native run-android
+```
+
+## Hello World component
+
+Edit **App.js**
+
+```jsx
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Hello React Native</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  title: { fontSize: 24, color: '#333' }
+});
+```
+
+`View` and `Text` are native equivalents of `<div>` and text nodes.  
+`StyleSheet.create` uses a subset of CSS with camel‑cased properties.
+
+## Parallels with web React
+
+- Components and props work the same.  
+- State and hooks/API (`useState`, `useEffect`) behave identically.  
+- Instead of HTML, you compose native primitives (`View`, `ScrollView`, `TextInput`).  
+- Styling uses inline objects rather than external CSS files.  
+- Navigation handled by libraries like **react‑navigation**, similar to React Router.
+
+## Next steps
+
+1. Add interaction with `Button` and `Alert`.  
+2. Fetch data using `fetch` (same API as browsers).  
+3. Try **Expo** for a zero‑build workflow and over‑the‑air updates.  
+4. Explore native modules to access sensors or platform features.
+
+React Native bridges the gap between web experience and native performance, opening mobile development to anyone who already knows React.
+
+{/*
+Sources:
+- React Native 0.39 release notes (Nov 2016) https://github.com/facebook/react-native/releases/tag/v0.39.0 citeturn0search5
+- Official getting started 2016 docs https://reactnative.dev/blog/2016/07/06/toward-better-documentation.html citeturn0search1
+- React Native Wikipedia overview https://en.wikipedia.org/wiki/React_Native citeturn0search3
+- Facebook engineering announcement 2015 introducing RN concepts https://engineering.fb.com/2015/03/26/android/react-native-bringing-modern-web-techniques-to-mobile/ citeturn0search4
+- React Native CLI usage 2016 StackOverflow answers (init, run-ios) https://reactnative.dev/docs/environment-setup citeturn0search7
+- Expo pro tips 2016 blog https://blog.expo.dev/react-native-pro-tips-summer-2016-386f1c7ade69 citeturn0search8
+- Create React Native App announcement 2017 for comparison https://reactnative.dev/blog/2017/03/13/introducing-create-react-native-app citeturn0search6
+- F8 open source announcement of RN 2015 https://engineering.fb.com/2015/03/26/android/f8-big-technology-bets-and-open-source-announcements/ citeturn0search9
+- React Native versions list https://reactnative.dev/versions citeturn0search0
+- Wired article on Facebook tech impact including React Native https://www.wired.com/story/how-facebook-has-changed-computing citeturn0news50
+*/}

@@ -1,0 +1,128 @@
+---
+title: State Management with Redux – Managing App State Made Easier
+date: 2016-06-15
+summary: Learn Redux core ideas and wire it into a small React app.
+tags: [redux, react, javascript]
+---
+
+Redux became the most popular Flux‑inspired state library during 2016, thanks to Dan Abramov’s time‑travel demo at React Europe and rapid community adoption.
+
+---
+
+## Core concepts
+
+- **Store** – holds one immutable state tree.  
+- **Action** – plain object that describes “what happened”.  
+- **Reducer** – pure function `(state, action) ⇒ newState`.  
+- **Dispatch** – send an action to update state.  
+- **Provider** – React binding that makes the store available.
+
+---
+
+## Install and set up
+
+```bash
+# Add Redux and React bindings
+npm install redux react-redux --save
+```
+
+Create **src/store.js**
+
+```js
+import { createStore } from 'redux';
+import rootReducer from './reducer';
+
+const store = createStore(rootReducer);
+export default store;
+```
+
+---
+
+## Write a reducer
+
+```js
+// src/reducer.js
+const initial = { count: 0 };
+
+export default function reducer(state = initial, action) {
+  switch (action.type) {
+    case 'counter/inc':
+      return { ...state, count: state.count + 1 };
+    default:
+      return state;
+  }
+}
+```
+
+Reducers return new objects; they never mutate the old state.
+
+---
+
+## Define an action creator
+
+```js
+export const inc = () => ({ type: 'counter/inc' });
+```
+
+Actions are serialisable, making time‑travel debugging possible.
+
+---
+
+## Wire Redux into React
+
+```jsx
+import React from 'react';
+import { Provider, useSelector, useDispatch } from 'react-redux';
+import store, { inc } from './store';
+
+function Counter() {
+  const count = useSelector(s => s.count);
+  const dispatch = useDispatch();
+  return (
+    <button onClick={() => dispatch(inc())}>
+      Clicked {count}
+    </button>
+  );
+}
+
+export default function App() {
+  return (
+    <Provider store={store}>
+      <Counter />
+    </Provider>
+  );
+}
+```
+
+`useSelector` reads from the store, and `dispatch` sends actions. React components stay stateless; Redux owns the data flow.
+
+---
+
+## Why Redux gained traction
+
+- **Predictability** – single source of truth and pure reducers make bugs easier to trace.  
+- **DevTools time travel** – rewind and replay actions while editing code.  
+- **Tiny API** – just a handful of functions compared with heavier Flux variants.  
+- **Strong React pairing** – `react-redux` 5.0 landed late 2016, optimised for React 15+.  
+- **Community learning** – free Egghead course and countless tutorials helped newcomers.  
+- **Survey love** – State of JS 2016 showed Redux leading satisfaction charts.  
+
+---
+
+## Keep it simple
+
+Start with one reducer; split later with `combineReducers`.  
+Avoid over‑architecting small apps—Redux shines when state is shared across many components.
+
+{/*
+Sources:
+- Redux Wikipedia history and maintainers turn0search1
+- GitHub releases timeline turn0search2
+- React‑Redux 5.0 release dates turn0search3
+- Redux official tutorial on state/actions/reducers turn0search4
+- State of JS 2016 state management section turn0search5
+- History and design page turn0search6
+- Dan Abramov Egghead course turn0search7
+- Flux vs Redux Medium post turn1search0
+- Hot Reloading talk React Europe video turn1search1
+*/}

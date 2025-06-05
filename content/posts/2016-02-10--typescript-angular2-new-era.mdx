@@ -1,0 +1,102 @@
+---
+title: TypeScript and Angular 2 – A New Era of Front‑End
+date: 2016-02-10
+summary: TypeScript becomes the language of choice for Angular 2, bringing static typing and better tooling to the framework.
+tags: [typescript, angular, javascript]
+---
+
+Angular 2's adoption of **TypeScript** as its primary language marks a significant shift in front-end development. The combination brings static typing, better tooling, and improved maintainability to large-scale applications.
+
+---
+
+## Why TypeScript matters
+
+- **Static typing** – catch errors at compile time rather than runtime
+- **Better IDE support** – autocomplete, refactoring, and navigation
+- **Enhanced maintainability** – self-documenting code and clearer interfaces
+- **Future-proof** – TypeScript implements ECMAScript proposals early
+
+---
+
+## Key TypeScript features in Angular 2
+
+- **Decorators** for component and module definitions
+- **Interfaces** for type-safe dependency injection
+- **Generics** for reusable components and services
+- **Type definitions** for better third-party library integration
+
+```typescript
+@Component({
+  selector: 'app-hero',
+  template: `
+    <h2>{{hero.name}} details!</h2>
+    <div><label>id: </label>{{hero.id}}</div>
+    <div>
+      <label>name: </label>
+      <input [(ngModel)]="hero.name" placeholder="name">
+    </div>
+  `
+})
+export class HeroComponent {
+  hero: Hero = {
+    id: 1,
+    name: 'Windstorm'
+  };
+}
+```
+
+---
+
+## Migration path
+
+1. Start with JavaScript files and add type annotations gradually
+2. Use the TypeScript compiler's `--allowJs` flag to mix JS and TS
+3. Enable strict mode once the codebase is fully typed
+4. Leverage Angular CLI for TypeScript configuration
+
+---
+
+## Best practices
+
+- Keep interfaces close to their implementations
+- Use type inference where possible
+- Leverage union types for flexible APIs
+- Document complex types with JSDoc comments
+
+```typescript
+interface Hero {
+  id: number;
+  name: string;
+  power?: string;  // Optional property
+}
+
+type HeroResponse = Hero | Error;  // Union type
+
+async function getHero(id: number): Promise<HeroResponse> {
+  try {
+    const response = await fetch(`/api/heroes/${id}`);
+    return await response.json();
+  } catch (error) {
+    return new Error('Failed to fetch hero');
+  }
+}
+```
+
+---
+
+## Tooling improvements
+
+- **VS Code** integration with TypeScript
+- **Angular Language Service** for template type checking
+- **Source maps** for debugging
+- **Tree shaking** for smaller bundles
+
+The combination of TypeScript and Angular 2 represents a maturing of front-end development, bringing enterprise-grade tooling and practices to web applications.
+
+{/*
+Sources:
+- Angular 2 TypeScript documentation https://angular.io/docs/ts/latest/
+- TypeScript official documentation https://www.typescriptlang.org/docs/
+- Angular 2 release notes https://angular.io/docs/ts/latest/guide/releases.html
+- TypeScript 1.8 release notes https://www.typescriptlang.org/docs/handbook/release-notes/typescript-1-8.html
+*/}

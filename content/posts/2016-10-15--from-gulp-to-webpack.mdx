@@ -1,0 +1,131 @@
+---
+title: From Gulp to Webpack – Evolving Build Tools
+date: 2016-10-15
+summary: Move from code‑driven task runners to config‑driven bundling with Webpack, plus a task‑by‑task cheat sheet.
+tags: [webpack, gulp, tooling, javascript]
+---
+
+Many projects that started with **Grunt** or **Gulp** switched to **Webpack** by late 2016 to get built‑in module bundling, dev server live reload, and smarter code splitting.
+
+## Two mental models
+
+### Gulp / Grunt
+
+- You write **JavaScript tasks** (`gulp.task('sass', …)`) that pipe files through a series of plugins.  
+- Output goes to `dist/`, then you include built assets with `<script>` tags.  
+- Responsibility for dependency graph and live reload belongs to plugins (`gulp‑watch`, `browser‑sync`).  
+
+### Webpack
+
+- You describe **what** the final bundles should look like (`entry`, `output`) and let Webpack walk the dependency graph.  
+- Transforms happen through **loaders** (e.g. `babel-loader`).  
+- `webpack-dev-server` serves bundles from memory and applies **Hot Module Replacement** automatically.
+
+Both tools use Node streams, but Gulp focuses on file pipelines, while Webpack focuses on module graphs. citeturn0search0turn0search4
+
+---
+
+## Quick migration cheat sheet
+
+| Need | Gulp/Grunt plugin | Webpack recipe |
+| --- | --- | --- |
+| ES6 → ES5 | `gulp-babel` | `babel-loader` + `.babelrc` |
+| Sass → CSS | `gulp-sass` | `sass-loader` + `MiniCssExtractPlugin` |
+| Minify JS | `gulp-uglify` | `TerserPlugin` (built‑in in prod mode) |
+| Live reload | `browser-sync` / `gulp-livereload` | `webpack-dev-server --hot` |
+| Cache‑bust file names | `gulp-rev` | `[contenthash]` in `output.filename` |
+
+*(WebPack cheat sheet adapted from Devhints)* citeturn0search6
+
+---
+
+## Minimal Webpack setup
+
+```bash
+npm init -y
+
+# Core
+npm install --save-dev webpack@1 webpack-cli@1 webpack-dev-server@1
+
+# Transpile ES6
+npm install --save-dev babel-core babel-loader babel-preset-es2015
+```
+
+Create **webpack.config.js**
+
+```js
+module.exports = {
+  entry: './src/index.js',
+  output: { filename: 'bundle.[hash].js', path: __dirname + '/dist' },
+  module: {
+    loaders: [{ test: /\.js$/, loader: 'babel', exclude: /node_modules/ }]
+  },
+  devServer: { hot: true, inline: true }
+};
+```
+
+Start in dev mode:
+
+```bash
+webpack-dev-server --hot --open
+```
+
+---
+
+## Common tasks rewritten
+
+### Transpile & bundle JS
+
+```bash
+# Gulp
+gulp babel
+
+# Webpack – just run build, loader handles Babel
+webpack --mode production
+```
+
+### Auto‑reload on file save
+
+```bash
+# Gulp + BrowserSync
+browser-sync reload
+
+# Webpack dev server
+webpack-dev-server --hot
+```
+
+### Minify for production
+
+```bash
+# Gulp
+gulp-uglify
+
+# Webpack prod mode enables TerserPlugin automatically
+webpack --mode production
+```
+
+---
+
+## Tips for smoother migration
+
+1. Keep the old Gulp build for a sprint; serve the same HTML with Webpack bundle side‑by‑side.  
+2. Move **JS first**, then styles/images.  
+3. Replace plugin chains with equivalent loaders one at a time.  
+4. Use **source maps** (`devtool: 'source-map'`) to debug transpiled code.  
+5. Leverage **webpack‑merge** to separate dev and prod configs.
+
+Webpack’s declarative approach cuts down boilerplate and enables advanced optimisations that are hard to replicate with ad‑hoc task runners.
+
+{/*
+Sources:
+- StackOverflow answer comparing Gulp vs Webpack 2015 https://stackoverflow.com/questions/33558396/gulp-webpack-or-just-webpack citeturn0search0
+- StackOverflow “Switching from Gulp to Webpack” 2016 thread https://stackoverflow.com/questions/39753642/switching-from-gulp-to-webpack citeturn0search4
+- Devhints Webpack cheat sheet (v3, 2016) https://devhints.io/webpack citeturn0search6
+- Webpack dev-server docs (historic) https://webpack.js.org/configuration/dev-server/ citeturn0search1
+- Babel loader docs 2016 https://webpack.js.org/loaders/babel-loader/ citeturn0search3
+- npm webpack-dev-server package history 2016 shows v1.x https://www.npmjs.com/package/webpack-dev-server citeturn0search9
+- Medium “Moving from Gulp to Webpack” insights 2016 https://richbray.medium.com/moving-from-gulp-to-webpack-9064b6cf2e08 citeturn0search8
+- Live reload with gulp browser-sync StackOverflow https://stackoverflow.com/questions/58806190/how-to-setup-gulp-file-for-live-reload citeturn0search2
+- Gulp plugins directory https://gulpjs.com/plugins/ citeturn0search13
+- Webpack loaders error (need babel-loader) 2015 https://stackoverflow.com/questions/33469929/you-may-need-an-appropriate-loader-to-handle-this-file-type-with-webpack-and-b citeturn0search11
+*/}
