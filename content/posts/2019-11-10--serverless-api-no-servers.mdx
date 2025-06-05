@@ -1,0 +1,89 @@
+---
+title: Going Serverless Part 2 – Building a REST API with No Servers
+date: 2019-11-10
+summary: A tutorial on using serverless functions to build a simple REST API without managing backend infrastructure.
+tags: [serverless, api, lambda, netlify]
+---
+
+This post continues the exploration of serverless by showing how to create a REST API using serverless functions.
+
+## What Is Serverless?
+
+Serverless doesn't mean there's no server. It means:
+
+- You don't manage the server.
+- You write functions that respond to HTTP events.
+- They scale automatically and only run when called.
+
+## Example Project: Guestbook API
+
+Create an API to:
+
+- `GET /entries` – fetch all guestbook entries
+- `POST /entries` – add a new entry
+
+## Option 1: Netlify Functions
+
+### 1. Setup
+
+```bash
+npm install netlify-cli -g
+netlify init
+netlify functions:create
+```
+
+Create a file at `netlify/functions/entries.js`:
+
+```js
+exports.handler = async (event) => {
+  if (event.httpMethod === "GET") {
+    return {
+      statusCode: 200,
+      body: JSON.stringify([{ name: "Luiz", message: "Great blog!" }]),
+    };
+  }
+
+  if (event.httpMethod === "POST") {
+    const data = JSON.parse(event.body);
+    return {
+      statusCode: 201,
+      body: JSON.stringify({ saved: true, data }),
+    };
+  }
+
+  return { statusCode: 405 };
+};
+```
+
+Run locally:
+
+```bash
+netlify dev
+```
+
+Call from front-end with fetch:
+
+```js
+fetch("/.netlify/functions/entries")
+  .then(res => res.json())
+  .then(data => console.log(data));
+```
+
+## Option 2: AWS Lambda + API Gateway
+
+This requires more setup, but is useful for production:
+
+- Use AWS SAM or Serverless Framework
+- Define function handler and route via API Gateway
+- Deploy with AWS CLI
+
+## Benefits
+
+- No server provisioning or maintenance
+- Scales automatically
+- Pay per request
+- Works well with static frontends (like JAMstack sites)
+
+---
+
+Serverless is more than just a trend. It’s a solid way to build real APIs without the weight of traditional backend stacks.

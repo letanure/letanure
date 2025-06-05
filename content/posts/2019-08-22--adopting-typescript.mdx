@@ -1,0 +1,89 @@
+---
+title: Adopting TypeScript – Tips from Our Transition
+date: 2019-08-22
+summary: Lessons learned while migrating a JavaScript project to TypeScript, with practical tips for a smoother transition.
+tags: [typescript, migration, javascript, gradual-typing]
+---
+
+Switching from JavaScript to TypeScript doesn’t have to be all at once. We migrated a mid-size project over several weeks and learned a lot along the way.
+
+## Why Move to TypeScript?
+
+- Catches common bugs at compile time
+- Improves code editor support (autocomplete, refactoring)
+- Makes collaboration easier with better-defined types
+
+## Step 1: Enable Gradual Typing
+
+Use `allowJs` to let JavaScript and TypeScript files coexist:
+
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "outDir": "./dist",
+    "target": "es6",
+    "module": "commonjs"
+  },
+  "include": ["src/**/*"]
+}
+```
+
+This way, we converted files incrementally.
+
+## Step 2: Add JSDoc for Existing JS
+
+For files not yet converted, add basic JSDoc types:
+
+```js
+/**
+ * @param {string} name
+ * @returns {string}
+ */
+function greet(name) {
+  return `Hello, ${name}`;
+}
+```
+
+This gave us editor type checking without converting everything to `.ts`.
+
+## Step 3: Convert Files Slowly
+
+We started by converting utility functions and new files to `.ts`.
+
+- Kept `.js` files untouched where stable
+- Converted shared types to `.d.ts` or `.ts` files
+- Used type aliases and `any` when stuck, then refined
+
+## Step 4: Deal with Third-Party Types
+
+Many packages don’t ship types. Use DefinitelyTyped:
+
+```bash
+npm install --save-dev @types/lodash
+```
+
+Or add your own quick fix in `types.d.ts`:
+
+```ts
+declare module 'my-untagged-lib';
+```
+
+## Wins We Saw Early
+
+- Found bugs like undefined props
+- Simplified debugging with better autocomplete
+- Cleaner function contracts and return types
+
+## Common Tips
+
+- Don’t rewrite the app all at once
+- Use `any` and `@ts-ignore` only temporarily
+- Start with the files that get touched the most
+- Define shared interfaces and types early
+
+---
+
+The migration wasn’t free, but TypeScript brought real, daily benefits. If your team is on the fence, try a partial rollout and see how it improves the workflow.

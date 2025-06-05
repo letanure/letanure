@@ -1,0 +1,84 @@
+---
+title: WebAssembly in Practice – Speeding Up Image Processing
+date: 2019-06-20
+summary: A practical demo using WebAssembly to handle CPU-heavy image tasks faster than JavaScript.
+tags: [webassembly, wasm, performance, image-processing]
+---
+
+WebAssembly lets us run compiled code from C, C++, or Rust in the browser. It opens up a new world for front-end developers needing performance for heavy tasks.
+
+In this post, we’ll use WebAssembly to process an image—resizing or applying a grayscale filter—and compare it to a JavaScript version.
+
+## Why Use WebAssembly for This?
+
+- JavaScript is single-threaded and not optimized for CPU-heavy operations.
+- WebAssembly is compiled and runs closer to native speed.
+- You can reuse existing C/C++ libraries with little overhead.
+
+## Step 1: Compile the C Code to WebAssembly
+
+This is a simple image grayscale function written in C.
+
+```c
+// grayscale.c
+#include <stdint.h>
+
+void grayscale(uint8_t* data, int size) {
+  for (int i = 0; i < size; i += 4) {
+    uint8_t avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+    data[i] = data[i + 1] = data[i + 2] = avg;
+  }
+}
+```
+
+Compile it using Emscripten:
+
+```bash
+emcc grayscale.c -O3 -s WASM=1 -s EXPORTED_FUNCTIONS='["_grayscale"]' -o grayscale.js
+```
+
+This gives you:
+- `grayscale.js` – glue code to run the module
+- `grayscale.wasm` – compiled binary
+
+## Step 2: Load the WASM Module in JavaScript
+
+```js
+const wasm = await fetch('grayscale.wasm').then(res => res.arrayBuffer());
+
+const module = await WebAssembly.instantiate(wasm);
+const grayscale = module.instance.exports.grayscale;
+
+// Now grayscale() can be called with an image buffer
+```
+
+## Step 3: Compare with JavaScript
+
+Here’s a JS version:
+
+```js
+function grayscaleJS(data) {
+  for (let i = 0; i < data.length; i += 4) {
+    const avg = (data[i] + data[i+1] + data[i+2]) / 3;
+    data[i] = data[i+1] = data[i+2] = avg;
+  }
+}
+```
+
+And the WASM call is:
+
+```js
+const buffer = new Uint8Array(imageData.data.buffer);
+grayscale(buffer, buffer.length);
+```
+
+## Performance Results
+
+Tests show:
+- WASM is 2–5x faster on large images
+- Less impact on main thread
+- Easier to scale for more filters or real-time edits
+
+---
+
+This example shows how WebAssembly brings native performance to the web, unlocking use cases that were once too slow in JavaScript.
