@@ -1,0 +1,66 @@
+name: Validate Content
+
+on:
+  push:
+    paths:
+      - 'content/**'
+      - '.github/workflows/validate-content.yml'
+  pull_request:
+    paths:
+      - 'content/**'
+      - '.github/workflows/validate-content.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm install -g markdownlint-cli2
+          npm install -g @textlint/markdown-to-ast
+          npm install -g front-matter
+
+      - name: Validate frontmatter
+        run: |
+          for file in content/posts/*.mdx; do
+            echo "Validating $file"
+            if ! grep -q "^---" "$file" || ! grep -q "^---" <(tail -n +2 "$file"); then
+              echo "Error: $file is missing frontmatter"
+              exit 1
+            fi
+            if ! grep -q "title:" "$file" || ! grep -q "date:" "$file" || ! grep -q "summary:" "$file" || ! grep -q "tags:" "$file"; then
+              echo "Error: $file is missing required frontmatter fields"
+              exit 1
+            fi
+          done
+
+      - name: Lint markdown
+        run: |
+          markdownlint-cli2 "content/**/*.mdx" "#node_modules"
+
+      - name: Check for broken links
+        run: |
+          for file in content/posts/*.mdx; do
+            echo "Checking links in $file"
+            if grep -q "\[.*\]\(.*\)" "$file"; then
+              echo "Warning: $file contains markdown links. Please verify they are valid."
+            fi
+          done
+
+      - name: Validate tags
+        run: |
+          for file in content/posts/*.mdx; do
+            echo "Validating tags in $file"
+            if ! grep -q "tags: \[.*\]" "$file"; then
+              echo "Error: $file is missing tags array"
+              exit 1
+            fi
+          done 
