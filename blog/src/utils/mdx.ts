@@ -5,7 +5,7 @@ import type { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import rehypePrism from "rehype-prism-plus";
 
-const POSTS_PATH = path.join(process.cwd(), "src/content/posts");
+const POSTS_PATH = path.join(process.cwd(), "..", "content", "posts");
 
 export type PostMeta = {
 	slug: string;
