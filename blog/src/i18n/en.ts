@@ -1,8 +1,8 @@
 export const en = {
 	// Site metadata
 	site: {
-		name: "Your Name",
-		title: "Your Name - Personal Blog",
+		name: "Luiz Tanure",
+		title: "Luiz Tanure - Personal Blog",
 		description:
 			"A personal blog about web development, programming, and technology.",
 	},
