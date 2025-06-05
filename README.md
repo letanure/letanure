@@ -43,7 +43,3 @@ I care deeply about elegant UX, productive DX, and keeping things simple and mai
 
 - [LinkedIn](https://www.linkedin.com/in/letanure/)
 - [Personal Blog](https://letanure.dev)
-
----
-
-*This README is inspired by [thmsgbrt's profile](https://github.com/thmsgbrt/thmsgbrt/blob/master/README.md).*
