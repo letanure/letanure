@@ -1,0 +1,103 @@
+---
+title: Progressive Web Apps – Installable & Offline Web Experiences
+date: 2017-01-12
+summary: Make a site work offline, show an install prompt, and feel like a native app.
+tags: [pwa, service-worker, web-apps]
+---
+
+Progressive Web Apps (PWAs) combine the reach of the web with the smooth feel of native apps, offering offline support, install prompts, and push notifications.
+
+## What defines a PWA?
+
+- Site served over **HTTPS**  
+- **Web App Manifest** for install metadata  
+- **Service Worker** controlling requests and caching assets  
+- Optional **Push Notifications** for re‑engagement  
+- Good performance scores in tools like Lighthouse
+
+---
+
+## 1 – Create a manifest
+
+**manifest.json**
+
+```json
+{
+  "name": "Todo PWA",
+  "short_name": "Todo",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1976d2",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
+```
+
+Add in your HTML head:
+
+```html
+<link rel="manifest" href="/manifest.json" />
+```
+
+---
+
+## 2 – Register a service worker
+
+```js
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js');
+  });
+}
+```
+
+---
+
+## 3 – Cache assets
+
+**sw.js**
+
+```js
+const CACHE = 'v1';
+const ASSETS = [
+  '/',
+  '/index.html',
+  '/styles.css',
+  '/app.js'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE).then(cache => cache.addAll(ASSETS))
+  );
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request).then(resp => resp || fetch(event.request))
+  );
+});
+```
+
+---
+
+## 4 – Add push notifications (optional)
+
+1. Ask permission with `Notification.requestPermission()`.  
+2. Subscribe using `registration.pushManager.subscribe()`.  
+3. Send messages from your server with Web Push.
+
+---
+
+## 5 – Test your PWA
+
+- Run Lighthouse with the PWA preset.  
+- Switch Chrome DevTools to *Offline* and reload; content should still display.  
+- Visit twice, then look for an *Install* option in the browser’s menu.
+
+---
+
+PWAs shine in areas with spotty connectivity and on sites that want repeat engagement without forcing app‑store installs.

@@ -1,0 +1,120 @@
+---
+title: Vue.js for Beginners – Building Your First Component
+date: 2017-03-15
+summary: Create a simple to‑do list in Vue 2 and learn its template syntax and reactivity model.
+tags: [vue, javascript, tutorial]
+---
+
+Vue gained major attention in 2017 for its balance of simplicity and power.  
+This guide walks through building a tiny to‑do list using **Vue 2**.
+
+---
+
+## Why Vue feels approachable
+
+- Script tag drops you straight into coding; no build needed.  
+- HTML‑based templates with `{{ }}` interpolation feel natural.  
+- Reactive data binding updates the DOM automatically.  
+- Component API is small—just `data`, `methods`, and lifecycle hooks.  
+- File size is light compared with other frameworks of the time.
+
+---
+
+## Set up
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/vue@2.2.6/dist/vue.js"></script>
+
+<div id="app">
+  <h1>My Todos</h1>
+
+  <form v-on:submit.prevent="add">
+    <input v-model="newTodo" placeholder="Add item" />
+    <button>Add</button>
+  </form>
+
+  <ul>
+    <li v-for="(todo, i) in todos" :key="i">
+      {{ todo.text }}
+      <button v-on:click="remove(i)">×</button>
+    </li>
+  </ul>
+</div>
+
+<script>
+new Vue({
+  el: '#app',
+  data: {
+    newTodo: '',
+    todos: []
+  },
+  methods: {
+    add() {
+      if (this.newTodo.trim()) {
+        this.todos.push({ text: this.newTodo.trim() });
+        this.newTodo = '';
+      }
+    },
+    remove(index) {
+      this.todos.splice(index, 1);
+    }
+  }
+});
+</script>
+```
+
+### Key parts
+
+- `v-model` binds the input value to `newTodo`.  
+- `v-on:submit.prevent` intercepts the form submit.  
+- `v-for` renders list items reactively.  
+- Direct DOM updates are not needed; Vue tracks changes.
+
+---
+
+## Extending with components
+
+```html
+<script>
+Vue.component('todo-item', {
+  props: ['todo', 'index'],
+  template: `
+    <li>
+      {{ todo.text }}
+      <button @click="$emit('remove', index)">×</button>
+    </li>
+  `
+});
+</script>
+```
+
+Replace the `<li>` in the previous template with:
+
+```html
+<todo-item
+  v-for="(todo, i) in todos"
+  :key="i"
+  :todo="todo"
+  :index="i"
+  @remove="remove"
+/>
+```
+
+Components help split the UI into reusable pieces while keeping state in the parent.
+
+---
+
+## Reactivity behind the scenes
+
+Vue converts each property in `data` to a getter and setter.  
+When you read `this.todos`, Vue records the dependency; when you push or splice, it triggers an update.
+
+---
+
+## Next steps
+
+1. Persist todos with `localStorage` in the `created` hook.  
+2. Move to Single‑File Components with `.vue` files and a build tool.  
+3. Explore Vuex for larger apps requiring shared state.
+
+Vue’s gentle learning curve and clear data flow make it a strong first framework for newcomers, while still scaling up with components, CLI tooling, and ecosystem add‑ons.

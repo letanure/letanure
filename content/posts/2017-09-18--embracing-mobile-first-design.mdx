@@ -1,0 +1,78 @@
+---
+title: Embracing Mobile‑First Design
+date: 2017-09-18
+summary: Start layouts on small screens, then enhance upward for speed, usability, and Google’s mobile‑first index.
+tags: [responsive design, mobile-first, css]
+---
+
+Google moved to **mobile‑first indexing** in 2017, using the mobile version of pages for ranking and crawling. This shift echoed traffic trends showing mobile visits overtaking desktop early that year.
+
+Designing **mobile‑first** means writing base CSS for narrow screens first, then layering on styles for larger breakpoints. It results in smaller payloads and faster first paints on phones.
+
+---
+
+## Step‑by‑step example
+
+### Base (mobile) styles
+
+```css
+/* styles.css */
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+}
+
+.card {
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+```
+
+### Enhance for tablets
+
+```css
+@media (min-width: 600px) {
+  .cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .card {
+    flex: 1 1 calc(50% - 1rem);
+    border: 1px solid #ddd;
+  }
+}
+```
+
+### Desktop upgrade
+
+```css
+@media (min-width: 960px) {
+  .card {
+    flex: 1 1 calc(33.333% - 1rem);
+  }
+}
+```
+
+Media queries add complexity *after* the core experience works, keeping small‑screen CSS lean.
+
+---
+
+## Practical checklist
+
+- **Content first**: prioritise copy and actions most important on phones.  
+- **Fluid images**: set `img { max-width: 100%; height: auto; }`.  
+- **Touch targets**: minimum 48 × 48 px tap area.  
+- **Font sizes**: avoid fixed pixel fonts; use `rem` or viewport units.  
+- **Test real devices**: DevTools emulation catches layout, not touch ergonomics.  
+- **Performance budgets**: keep initial CSS under 14 KB uncompressed to fit the first TCP round‑trip.  
+
+---
+
+## SEO and analytics reminders
+
+Google’s crawler evaluates mobile HTML for ranking, so parity between mobile and desktop markup is crucial. Check Search Console for the “Mobile‑first indexing enabled” flag. Use analytics segments to confirm that mobile now dominates sessions on most sites.
+
+---
+
+Mobile‑first design aligns code weight with user reality: phones lead traffic, and search engines judge mobile output first. Starting small and enhancing upward keeps experiences fast and inclusive.

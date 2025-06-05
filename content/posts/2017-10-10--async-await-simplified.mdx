@@ -1,0 +1,64 @@
+---
+title: Async/Await – Simplifying Asynchronous JavaScript
+date: 2017-10-10
+summary: Refactor promise chains into clean async functions with try/catch error handling.
+tags: [javascript, async-await, tutorial]
+---
+
+`async` and `await` landed in ES2017, letting developers write asynchronous code that reads like synchronous steps.
+
+## Before: Promise chain
+
+```js
+function fetchUser(id) {
+  return fetch(`/api/users/${id}`)
+    .then(res => res.json())
+    .then(data => {
+      console.log('User:', data);
+    })
+    .catch(err => console.error(err));
+}
+```
+
+Nested `.then()` calls grow quickly and push error handling to the end.
+
+## After: async / await
+
+```js
+async function fetchUser(id) {
+  try {
+    const res = await fetch(`/api/users/${id}`);
+    const data = await res.json();
+    console.log('User:', data);
+  } catch (err) {
+    console.error(err);
+  }
+}
+```
+
+### How it works
+
+- `async` marks the function, returning a promise automatically.
+- `await` pauses execution until the promise resolves, yielding the result.
+- `try/catch` handles both network errors and thrown exceptions.
+
+## Sequential vs parallel
+
+```js
+// sequential
+await stepOne();
+await stepTwo();
+
+// parallel
+const [a, b] = await Promise.all([stepOne(), stepTwo()]);
+```
+
+Use `Promise.all` to start tasks together, then await their combined result.
+
+## Tips
+
+- Always wrap awaited code in `try/catch` for proper error handling.
+- Combine with `Promise.allSettled` for bulk operations where some may fail.
+- Keep `async` functions small; extract chunks to maintain readability.
+
+Async/await became mainstream in 2017, replacing many callback and promise chains with clear top‑to‑bottom control flow.
