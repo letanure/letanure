@@ -1,0 +1,33 @@
+---
+title: Babel 6 – First Look at the New Transpiler
+date: 2015-11-02
+summary: Babel 6 just landed. See what changed and how to upgrade.
+tags: [babel, javascript, tooling]
+---
+
+**Babel 6** was released on **2015‑10‑29**.
+
+The team rewrote the tool into smaller, scoped packages and added presets.
+
+## Key changes
+
+- No single `babel` package. Use scoped packages instead  
+- Everything is a plugin; nothing happens by default  
+- Presets (like `@babel/preset-env`) group common plugins  
+
+## Fresh setup
+
+```bash
+npm install --save-dev @babel/core @babel/cli @babel/preset-env @babel/preset-react
+echo '{ "presets": ["@babel/preset-env", "@babel/preset-react"] }' > .babelrc
+npx babel src --out-dir dist
+```
+
+## Upgrade tip from Babel 5
+
+```bash
+npm uninstall babel
+npm install --save-dev @babel/core
+```
+
+Swap the old `es2015` preset for `@babel/preset-env`.

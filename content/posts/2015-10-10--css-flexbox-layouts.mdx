@@ -1,0 +1,159 @@
+---
+title: Flexible Layouts Made Easy with CSS Flexbox
+date: 2015-10-10
+summary: Build responsive navbars, columns, and centered blocks with the Flexbox module.
+tags: [css, flexbox, layout, responsive]
+---
+
+Flexbox gives you a one‑dimensional layout system that aligns, distributes, and reorders items with just a few lines of CSS.  
+By late 2015 most evergreen browsers shipped full Flexbox support, replacing many float or table hacks. {/* Can I Use shows broad support from Chrome 29+, Firefox 28+, Safari 9+  citeturn0search0 */}
+
+---
+
+## Core ideas
+
+- A **flex container** establishes a new layout context using `display: flex` or `inline-flex`.  
+- Items inside can grow, shrink, and wrap automatically along the **main axis**. {/* W3C spec §3  citeturn0search3 */}
+- Alignment happens along two axes with `justify-content` and `align-items`. {/* MDN flex property docs  citeturn0search2 */}
+- The order of items is independent of source order via the `order` property. {/* W3C revision note  citeturn0search8 */}
+
+---
+
+## Common patterns
+
+### 1. Perfect centering
+
+```css
+.centered {
+  display: flex;
+  justify-content: center; /* horizontal */
+  align-items: center;     /* vertical   */
+  min-height: 100vh;
+}
+```
+
+```html
+<div class="centered">
+  <p>Centered with Flexbox</p>
+</div>
+```
+
+### 2. Responsive navbar
+
+```css
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+.navbar ul {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 600px) {
+  .navbar ul {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+```
+
+```html
+<header class="navbar">
+  <strong>Logo</strong>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/">Docs</a></li>
+    <li><a href="/">About</a></li>
+  </ul>
+</header>
+```
+
+The menu shifts from a row to a stacked column on narrow screens without extra markup. {/* Pattern inspired by early CSS‑Tricks guides  citeturn0search1 */}
+
+### 3. Simple equal‑height columns
+
+```css
+.columns {
+  display: flex;
+  gap: 1rem;
+}
+
+.columns > article {
+  flex: 1;              /* same width */
+  background: #fafafa;
+  padding: 1rem;
+}
+```
+
+```html
+<section class="columns">
+  <article>Left</article>
+  <article>Center</article>
+  <article>Right</article>
+</section>
+```
+
+Each column stretches to the same height because flex items default to `align-stretch`. {/* Explained in “Don’t Overthink Flexbox Grids”  citeturn0search6 */}
+
+### 4. Auto‑wrapping card grid
+
+```css
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card {
+  flex: 1 1 200px; /* grow, shrink, base width */
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 1rem;
+}
+```
+
+```html
+<div class="grid">
+  <div class="card">Card</div>
+  <div class="card">Card</div>
+  <div class="card">Card</div>
+  <!-- more cards -->
+</div>
+```
+
+`flex-wrap: wrap` lets items flow to a new line once they hit the minimum `200px` size, ideal for gallery or dashboard layouts. {/* `flex-basis` support confirmed across browsers by 2015  citeturn0search7 */}
+
+---
+
+## Tips
+
+- Use `gap` to add consistent spacing between items; fallback with margins for very old browsers. {/* Gap became safe after Edge 16  citeturn0search11 */}
+- Keep `flex: 1` shorthand as `flex: grow shrink basis` (`auto` for basis by default).  
+- Provide a graceful fallback (`display: block`) for IE9 and below. {/* SO answer on fallbacks  citeturn0search10 */}
+- For complex grids, combine Flexbox with media queries or move to CSS Grid once support is stable. {/* Smashing Magazine case study  citeturn0search4 */}
+
+---
+
+Flexbox removes many layout headaches, bringing concise, predictable rules to everyday UI patterns.
+
+{/*
+Sources:
+- Can I Use Flexbox support table (broad support by 2015)  citeturn0search0
+- CSS‑Tricks “Guide to Flexbox” (continually updated, first published 2013)  citeturn0search1
+- MDN flex property docs (compat since 2015)  citeturn0search2
+- W3C Flexbox Level 1 spec  citeturn0search3
+- Smashing Magazine Flexbox Interfaces case study (Nov 2015)  citeturn0search4
+- CSS‑Tricks “Don’t Overthink Flexbox Grids” (2014)  citeturn0search6
+- MDN flex‑basis docs (notes on availability)  citeturn0search7
+- W3C Flexbox Last Call 2014 (alignment and reordering)  citeturn0search8
+- Smashing Magazine flexbox article series  citeturn0search9
+- StackOverflow fallback discussion  citeturn0search10
+- CSS‑Tricks article on gap support  citeturn0search11
+*/}

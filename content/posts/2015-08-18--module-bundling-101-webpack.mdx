@@ -1,0 +1,135 @@
+---
+title: Module Bundling 101 with Webpack
+date: 2015-08-18
+summary: Learn why bundling matters and set up Webpack 1 for a small ES6 app with hot‑reload.
+tags: [webpack, tooling, javascript]
+---
+
+Webpack is a **module bundler** that crawls your dependency graph, applies transforms, and emits one or more bundles ready for the browser. [Docs](/)  
+
+## Why bundle?
+
+- Resolve `import` / `require()` at build‑time so browsers get plain scripts.  
+- Combine many files into fewer HTTP requests which speeds up first load.  
+- Transform code with **loaders** (e.g. Babel turns ES6 → ES5, Sass → CSS, images → base64).  
+- Optimise output with minification, dead‑code elimination, and code‑splitting.  
+- Enable live editing with **Hot Module Replacement (HMR)** — update modules in‑place without a full refresh.  
+
+## Key terms
+
+| Term      | Purpose                                                      |
+|-----------|--------------------------------------------------------------|
+| Entry     | Starting file for building the dependency graph              |
+| Output    | Where Webpack writes the final bundle files                  |
+| Loader    | Function that transforms matched file types during the build |
+| Plugin    | Hook that extends Webpack (minification, env vars, etc.)     |
+| Dev Server| Memory‑only server that serves bundles and supports HMR      |
+| HMR       | Runtime patching of changed modules without page reload      |
+
+## Project structure
+
+```
+my-app/
+├─ src/
+│  ├─ index.js
+│  └─ message.js
+├─ dist/
+└─ webpack.config.js
+```
+
+## Install Webpack 1 and Babel
+
+```bash
+# Initialise package.json
+npm init -y
+
+# Core bundler and dev server
+npm install --save-dev webpack@1 webpack-dev-server@1
+
+# Transpile ES6 to ES5
+npm install --save-dev babel-core babel-loader babel-preset-es2015
+```
+
+Create a **.babelrc**:
+
+```json
+{
+  "presets": ["es2015"]
+}
+```
+
+## webpack.config.js
+
+```js
+const path = require('path');
+
+module.exports = {
+  entry: './src/index.js',
+
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'bundle.js'
+  },
+
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        loader: 'babel',
+        exclude: /node_modules/
+      }
+    ]
+  },
+
+  devServer: {
+    static: 'dist',
+    inline: true,
+    hot: true
+  }
+};
+```
+
+## Demo code
+
+**src/index.js**
+
+```js
+import message from './message';
+
+document.body.innerHTML = `<h1>${message}</h1>`;
+```
+
+**src/message.js**
+
+```js
+export default 'Hello, Webpack!';
+```
+
+## Build and run
+
+```bash
+# Production bundle
+webpack --mode production
+
+# Development server with hot‑reload
+webpack-dev-server --hot --open
+```
+
+Open the local URL printed in the terminal, edit `src/message.js`, and watch HMR update the page instantly.
+
+---
+
+
+{/*
+Sources:
+- Webpack concepts overview https://webpack.js.org/concepts/  turn0search6
+- Webpack docs 2015 site https://webpack.github.io/  turn0search2
+- Hot Module Replacement guide https://webpack.js.org/guides/hot-module-replacement/ turn0search1
+- thoughtbot blog setup with HMR 2015 https://thoughtbot.com/blog/setting-up-webpack-for-react-and-hot-module-replacement  turn0search4
+- Beginner's guide to Webpack Medium 2015 https://medium.com/javascript-training/beginner-s-guide-to-webpack-b1f1a3638460 turn0search7
+- babel-loader docs https://webpack.js.org/loaders/babel-loader/  turn0search3
+- Medium article Webpack and Babel with React https://medium.com/@agzuniverse/webpack-and-babel-what-are-they-and-how-to-use-them-with-react-5807afc82ca8 turn0search14
+- CSS Tricks introduction entry/output/loaders/plugins https://css-tricks.com/introduction-webpack-entry-output-loaders-plugins/ turn0search13
+- JavaScriptStuff HMR tutorial https://www.javascriptstuff.com/webpack-hmr-tutorial/ (not retrieved but referencing)
+- Webpack Dev Server & HMR video 2023 (excluded)
+*/}

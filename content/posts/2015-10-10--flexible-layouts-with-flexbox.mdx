@@ -1,0 +1,166 @@
+---
+title: Flexible Layouts Made Easy with CSS Flexbox
+date: 2015-10-10
+summary: Learn core Flexbox properties and build navbars, columns, and centered elements without floats.
+tags: [css, flexbox, layout]
+---
+
+Flexbox (the **Flexible Box Layout Module**) simplifies responsive design.  
+By late 2015 it was supported in all evergreen browsers, replacing many float and table hacks.
+
+---
+
+## Core ideas
+
+- Container and items: set `display: flex` on a parent, then its children become flex items.  
+- Main axis vs cross axis: direction depends on `flex-direction`.  
+- Space distribution and alignment happen with a small set of properties.
+
+---
+
+## Essential container properties
+
+- `display: flex` — activate Flexbox on the parent.  
+- `flex-direction` — row (default) or column layout.  
+- `flex-wrap` — allow items to wrap onto multiple lines.  
+- `justify-content` — align items on the **main axis** (`flex-start`, `center`, `space-between`, etc.).  
+- `align-items` — align items on the **cross axis** (perpendicular to main).  
+- `align-content` — multi‑line cross‑axis spacing (only when wrapping).  
+
+---
+
+## Essential item properties
+
+- `flex` — shorthand for `flex-grow flex-shrink flex-basis`.  
+- `flex-basis` — preferred size before free space is distributed.  
+- `align-self` — override `align-items` for a single item.  
+- `order` — change visual order without changing markup.  
+
+---
+
+## Pattern 1 – Center anything
+
+```css
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+```
+
+```html
+<div class="center">
+  <p>Perfectly centred</p>
+</div>
+```
+
+---
+
+## Pattern 2 – Responsive navbar
+
+```css
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav ul {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+```
+
+```html
+<header class="nav">
+  <h1>Logo</h1>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/blog">Blog</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</header>
+```
+
+Items stay in a single row, and spacing adjusts automatically.
+
+---
+
+## Pattern 3 – Equal‑height columns
+
+```css
+.columns {
+  display: flex;
+  gap: 1rem;
+}
+
+.columns > article {
+  flex: 1;        /* all articles share free space equally */
+  padding: 1rem;
+  background: #f3f3f3;
+}
+```
+
+```html
+<section class="columns">
+  <article>One</article>
+  <article>Two</article>
+  <article>Three</article>
+</section>
+```
+
+Each column grows to the same height without extra hacks.
+
+---
+
+## Pattern 4 – Simple card grid with wrap
+
+```css
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card {
+  flex: 1 1 200px; /* grow, shrink, basis */
+  background: #fff;
+  border: 1px solid #ccc;
+}
+```
+
+```html
+<div class="cards">
+  <div class="card">Card 1</div>
+  <div class="card">Card 2</div>
+  <div class="card">Card 3</div>
+  <div class="card">Card 4</div>
+</div>
+```
+
+Cards wrap automatically as the viewport shrinks.
+
+---
+
+## Browser support
+
+- Chrome, Firefox, Safari, Edge (Chromium) support the final syntax.  
+- Older IE 10/11 versions use an outdated spec with vendor prefixes; check before dropping floats completely.
+
+---
+
+## Further reading
+
+- CSS Tricks **“A Guide to Flexbox”** – complete reference with visuals.  
+- MDN **flexbox** docs – property‑by‑property explanations.
+
+{/*
+Sources:
+- CSS‑Tricks flexbox guide 2015 version https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+- MDN Flexbox docs archived 2015 https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox
+- Can I Use flexbox support data 2015 https://caniuse.com/flexbox
+*/}
