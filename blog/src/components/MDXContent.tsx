@@ -3,10 +3,14 @@
 import { MDXRemote } from "next-mdx-remote";
 import type { MDXRemoteSerializeResult } from "next-mdx-remote";
 
-interface Props {
-	source: MDXRemoteSerializeResult;
+interface MDXContentProps {
+	source: any;
 }
 
-export default function MDXContent({ source }: Props) {
-	return <MDXRemote {...source} />;
+export default function MDXContent({ source }: MDXContentProps) {
+	return (
+		<div className="prose prose-lg max-w-none">
+			<MDXRemote {...source} />
+		</div>
+	);
 }

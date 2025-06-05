@@ -30,7 +30,6 @@ export default async function BlogPostPage({
 				<h1>{meta.title}</h1>
 				<p className="text-gray-500 text-sm mb-4">{meta.date}</p>
 				<MDXContent source={content} />
-				aaa
 			</article>
 		);
 	} catch {

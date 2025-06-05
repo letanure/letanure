@@ -3,6 +3,7 @@ import path from "node:path";
 import matter from "gray-matter";
 import type { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
+import rehypePrism from "rehype-prism-plus";
 
 const POSTS_PATH = path.join(process.cwd(), "src/content/posts");
 
@@ -27,7 +28,12 @@ export async function getPostBySlug(slug: string): Promise<{
 	const filePath = path.join(POSTS_PATH, `${slug}.mdx`);
 	const source = fs.readFileSync(filePath, "utf8");
 	const { content, data } = matter(source);
-	const mdxSource = await serialize(content, { scope: data });
+	const mdxSource = await serialize(content, {
+		scope: data,
+		mdxOptions: {
+			rehypePlugins: [rehypePrism],
+		},
+	});
 	return {
 		meta: {
 			slug,
