@@ -1,6 +1,15 @@
-import Link from "next/link";
+import type { Metadata } from "next";
 import { getAllPostsMeta } from "@/utils/mdx";
+import Link from "next/link";
+import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
 import TagCounts from "@/components/TagCounts";
+
+export const metadata: Metadata = generateSiteMetadata({
+	title: "Blog",
+	description:
+		"Read my latest blog posts about web development, programming, and technology.",
+	path: "/blog",
+});
 
 function formatDate(dateString: string) {
 	return new Date(dateString).toLocaleDateString("en-US", {

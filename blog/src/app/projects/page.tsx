@@ -1,6 +1,14 @@
-import React from "react";
+import type { Metadata } from "next";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
+
+export const metadata: Metadata = generateSiteMetadata({
+	title: "Projects",
+	description:
+		"Explore my current and past projects in web development and technology.",
+	path: "/projects",
+});
 
 async function getProjectsContent(locale = "en") {
 	const filePath = path.join(

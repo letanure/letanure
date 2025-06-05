@@ -1,10 +1,8 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import { defaultMetadata } from "./metadata";
+import Link from "next/link";
 
-export const metadata: Metadata = {
-	title: "My Blog",
-	description: "A personal blog built with Next.js 14",
-};
+export const metadata = defaultMetadata;
 
 export default function RootLayout({
 	children,
@@ -14,28 +12,38 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className="bg-white text-gray-900 min-h-screen">
-				<header className="py-6 px-4 border-b">
-					<nav className="max-w-3xl mx-auto flex justify-between items-center">
-						<a href="/" className="font-bold text-xl">
-							My Blog
-						</a>
-						<div className="space-x-4">
-							<a href="/blog" className="hover:underline">
-								Blog
-							</a>
-							<a href="/about" className="hover:underline">
-								About
-							</a>
-							<a href="/now" className="hover:underline">
-								Now
-							</a>
-							<a href="/projects" className="hover:underline">
-								Projects
-							</a>
-						</div>
+				<header className="border-b">
+					<nav className="max-w-2xl mx-auto p-4">
+						<ul className="flex gap-4">
+							<li>
+								<Link href="/" className="hover:underline">
+									Home
+								</Link>
+							</li>
+							<li>
+								<Link href="/blog" className="hover:underline">
+									Blog
+								</Link>
+							</li>
+							<li>
+								<Link href="/about" className="hover:underline">
+									About
+								</Link>
+							</li>
+							<li>
+								<Link href="/now" className="hover:underline">
+									Now
+								</Link>
+							</li>
+							<li>
+								<Link href="/projects" className="hover:underline">
+									Projects
+								</Link>
+							</li>
+						</ul>
 					</nav>
 				</header>
-				<main className="max-w-3xl mx-auto px-4 py-8">{children}</main>
+				<main className="p-4">{children}</main>
 			</body>
 		</html>
 	);
