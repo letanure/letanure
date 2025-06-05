@@ -12,6 +12,7 @@ export type PostMeta = {
 	title: string;
 	date: string;
 	summary: string;
+	tags: string[];
 };
 
 export async function getPostSlugs(): Promise<string[]> {
@@ -40,6 +41,7 @@ export async function getPostBySlug(slug: string): Promise<{
 			title: data.title || slug,
 			date: data.date || "",
 			summary: data.summary || "",
+			tags: data.tags || [],
 		},
 		content: mdxSource,
 	};
@@ -56,8 +58,20 @@ export async function getAllPostsMeta(): Promise<PostMeta[]> {
 			title: data.title || slug,
 			date: data.date || "",
 			summary: data.summary || "",
+			tags: data.tags || [],
 		};
 	});
 	// Sort by date descending
 	return posts.sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
+export async function getAllTags(): Promise<string[]> {
+	const posts = await getAllPostsMeta();
+	const tags = new Set(posts.flatMap((post) => post.tags));
+	return Array.from(tags).sort();
+}
+
+export async function getPostsByTag(tag: string): Promise<PostMeta[]> {
+	const posts = await getAllPostsMeta();
+	return posts.filter((post) => post.tags.includes(tag));
 }
