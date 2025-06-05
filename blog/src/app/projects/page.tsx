@@ -72,52 +72,58 @@ export default async function ProjectsPage() {
 					{content.body}
 				</div>
 				{content.projects && content.projects.length > 0 ? (
-					<div className="mt-12 grid gap-8 sm:grid-cols-2">
+					<div className="mt-12 space-y-12">
 						{content.projects.map((project) => (
 							<div
 								key={project.title}
-								className="relative flex flex-col rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900"
+								className="relative border-b border-gray-200 pb-12 dark:border-gray-800 last:border-0 last:pb-0"
 							>
-								<h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-									{project.title}
-								</h3>
-								<p className="mt-2 text-gray-600 dark:text-gray-300">
-									{project.description}
-								</p>
-								<div className="mt-4 flex flex-wrap gap-2">
-									{project.technologies.map((tech) => (
-										<span
-											key={tech}
-											className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800 dark:bg-gray-800 dark:text-gray-200"
-										>
-											{tech}
-										</span>
-									))}
+								<div className="flex flex-col gap-4">
+									<div className="flex items-start justify-between">
+										<div>
+											<h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
+												{project.title}
+											</h3>
+											<p className="mt-2 text-lg text-gray-600 dark:text-gray-300">
+												{project.description}
+											</p>
+										</div>
+										{project.link && (
+											<a
+												href={project.link}
+												target="_blank"
+												rel="noopener noreferrer"
+												className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+											>
+												View Project
+												<svg
+													className="h-4 w-4"
+													fill="none"
+													stroke="currentColor"
+													viewBox="0 0 24 24"
+													aria-hidden="true"
+												>
+													<path
+														strokeLinecap="round"
+														strokeLinejoin="round"
+														strokeWidth={2}
+														d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+													/>
+												</svg>
+											</a>
+										)}
+									</div>
+									<div className="flex flex-wrap gap-2">
+										{project.technologies.map((tech) => (
+											<span
+												key={tech}
+												className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+											>
+												{tech}
+											</span>
+										))}
+									</div>
 								</div>
-								{project.link && (
-									<a
-										href={project.link}
-										target="_blank"
-										rel="noopener noreferrer"
-										className="mt-4 inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
-									>
-										View Project
-										<svg
-											className="ml-1 h-4 w-4"
-											fill="none"
-											stroke="currentColor"
-											viewBox="0 0 24 24"
-											aria-hidden="true"
-										>
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth={2}
-												d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-											/>
-										</svg>
-									</a>
-								)}
 							</div>
 						))}
 					</div>

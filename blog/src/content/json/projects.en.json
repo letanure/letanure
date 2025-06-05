@@ -1,4 +1,30 @@
 {
 	"title": "Projects",
-	"body": "This is the projects page. List and describe your current and past projects here."
+	"body": "Here are some of the projects I've worked on. Each project represents a unique challenge and learning opportunity in web development and technology.",
+	"projects": [
+		{
+			"title": "Personal Blog",
+			"description": "A modern blog built with Next.js 15, TypeScript, and Tailwind CSS. Features MDX support, dark mode, and responsive design.",
+			"technologies": ["Next.js", "TypeScript", "Tailwind CSS", "MDX"],
+			"link": "https://github.com/letanure/blog"
+		},
+		{
+			"title": "Task Management App",
+			"description": "A full-stack task management application with real-time updates, user authentication, and team collaboration features.",
+			"technologies": ["React", "Node.js", "MongoDB", "Socket.io"],
+			"link": "https://github.com/letanure/task-manager"
+		},
+		{
+			"title": "Weather Dashboard",
+			"description": "A weather dashboard that displays current conditions and forecasts using multiple weather APIs. Features interactive maps and historical data.",
+			"technologies": ["Vue.js", "OpenWeather API", "Chart.js", "Leaflet"],
+			"link": "https://github.com/letanure/weather-dashboard"
+		},
+		{
+			"title": "E-commerce Platform",
+			"description": "A scalable e-commerce platform with product management, shopping cart, payment processing, and order tracking.",
+			"technologies": ["Next.js", "Stripe", "PostgreSQL", "Redis"],
+			"link": "https://github.com/letanure/ecommerce"
+		}
+	]
 }
