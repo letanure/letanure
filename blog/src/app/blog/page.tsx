@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAllPostsMeta } from "@/utils/mdx";
+import TagCounts from "@/components/TagCounts";
 
 function formatDate(dateString: string) {
 	return new Date(dateString).toLocaleDateString("en-US", {
@@ -14,6 +15,7 @@ export default async function BlogIndexPage() {
 	return (
 		<section className="max-w-2xl mx-auto">
 			<h1 className="text-3xl font-bold mb-6">Blog</h1>
+			<TagCounts posts={posts} />
 			<ul className="space-y-6">
 				{posts.map((post) => (
 					<li key={post.slug} className="border-b pb-4">

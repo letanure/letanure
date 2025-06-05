@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
-import { getPostsByTag, getAllTags } from "@/utils/mdx";
+import { getPostsByTag, getAllTags, getAllPostsMeta } from "@/utils/mdx";
 import Link from "next/link";
+import TagCounts from "@/components/TagCounts";
 
 function formatDate(dateString: string) {
 	return new Date(dateString).toLocaleDateString("en-US", {
@@ -22,6 +23,7 @@ export default async function TagPage({
 }) {
 	const { tag } = params;
 	const posts = await getPostsByTag(tag);
+	const allPosts = await getAllPostsMeta();
 
 	if (posts.length === 0) {
 		notFound();
@@ -30,6 +32,7 @@ export default async function TagPage({
 	return (
 		<div className="max-w-2xl mx-auto">
 			<h1 className="text-3xl font-bold mb-8">Posts tagged with #{tag}</h1>
+			<TagCounts posts={allPosts} />
 			<div className="space-y-8">
 				{posts.map((post) => (
 					<article key={post.slug} className="border-b pb-8">
