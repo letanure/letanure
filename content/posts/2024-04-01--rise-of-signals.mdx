@@ -1,0 +1,68 @@
+---
+title: The Rise of Signals – Solid, Qwik, and React’s New RFC
+date: 2024-04-01
+summary: A look into how signals are changing state management in modern frameworks like Solid, Qwik, and even React.
+tags: [signals, reactivity, solidjs, qwik, react]
+---
+
+Signals are becoming one of the most discussed ideas in front-end frameworks lately.
+
+They offer a lightweight, fine-grained reactivity model. Unlike traditional state systems like `useState` in React, signals let you track and react to changes at a lower cost.
+
+## What Are Signals?
+
+A signal is a reactive value. You create it once, and when it changes, everything that uses it updates automatically.
+
+In SolidJS:
+
+```js
+import { createSignal } from "solid-js"
+
+const [count, setCount] = createSignal(0)
+
+// Reactive usage
+<p>Count: {count()}</p>
+<button onClick={() => setCount(count() + 1)}>Increment</button>
+```
+
+This is different from React’s model, which needs rerendering the whole component to update the UI.
+
+## Why Use Signals?
+
+- Fine-grained updates (only parts that need to change will change)
+- Better performance for large or reactive UIs
+- More declarative and less boilerplate
+
+## Qwik and Resumability
+
+Qwik also uses signals at its core, but it adds resumability on top. That means it doesn’t hydrate the whole app—only the parts the user interacts with.
+
+```ts
+import { component$, useSignal } from "@builder.io/qwik"
+
+export const Counter = component$(() => {
+  const count = useSignal(0)
+
+  return (
+    <button onClick$={() => count.value++}>
+      Count: {count.value}
+    </button>
+  )
+})
+```
+
+This makes Qwik fast even on large apps, as only interactive components are hydrated.
+
+## React’s Signals RFC?
+
+React’s core team is also considering a signals-like pattern. While it's still early, the discussion shows interest in moving toward more efficient reactivity in the long run.
+
+## Developer Satisfaction
+
+Frameworks like Solid and Qwik consistently report very high satisfaction in developer surveys. Once developers try signals, they often don’t want to go back.
+
+## Final Thoughts
+
+Signals aren’t just a trend. They represent a shift toward more efficient, scalable UI logic. Whether you’re using Solid, Qwik, or waiting for React’s version, it’s worth learning this pattern now.
+
+{/* File: 2024-04-01--rise-of-signals.mdx */}
