@@ -1,0 +1,87 @@
+---
+title: Monorepos and PNPM – Managing Multiple Apps Efficiently
+date: 2022-11-01
+summary: Learn how to set up a front-end monorepo using PNPM workspaces to manage multiple apps and shared packages efficiently.
+tags: [pnpm, monorepo, frontend, tooling]
+---
+
+Managing multiple front-end projects or packages in a single codebase can be a pain. That’s where **monorepos** come in.
+
+Monorepos allow you to keep multiple apps and shared packages (like a design system) in the same repository, with a unified workflow. In 2022, PNPM and its **workspace** feature became one of the most popular ways to manage monorepos in JavaScript/TypeScript projects.
+
+## Why use a monorepo?
+
+- Easier dependency management (one lockfile)
+- Easier to share and reuse components or utilities
+- Better consistency across packages
+- Simplified CI/CD pipelines
+
+## Why PNPM?
+
+PNPM uses a content-addressable store and symlinks instead of copying node_modules. That means:
+
+- Much faster install times
+- Less disk space usage
+- Better hoisting behavior
+
+Compared to Yarn and npm, PNPM’s performance and workspace isolation made it a strong candidate for monorepo setups.
+
+## Setting up a monorepo with PNPM
+
+Let’s create a basic structure:
+
+```bash
+mkdir my-monorepo
+cd my-monorepo
+pnpm init
+```
+
+Now set up `pnpm-workspace.yaml`:
+
+```yaml
+packages:
+  - "apps/*"
+  - "packages/*"
+```
+
+Then create folders:
+
+```bash
+mkdir -p apps/web
+mkdir -p packages/ui
+```
+
+Inside each, add a `package.json`:
+
+```json
+{
+  "name": "web",
+  "version": "1.0.0",
+  "private": true
+}
+```
+
+```json
+{
+  "name": "ui",
+  "version": "1.0.0",
+  "main": "index.js"
+}
+```
+
+Now you can install and link packages:
+
+```bash
+pnpm install
+pnpm add ui --filter web
+```
+
+This links the `ui` package into `web`, all locally.
+
+## Tips
+
+- Use `pnpm dev` or scripts in the root to run across packages
+- Combine with tools like TurboRepo or Nx for more control
+- Keep each package isolated and documented
+
+Monorepos with PNPM are a great way to keep large projects organized and fast. Whether you're building multiple apps or just sharing a design system, it's worth trying.

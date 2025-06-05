@@ -1,0 +1,70 @@
+---
+title: Qwik – The Quest for Instant-Load Web Apps
+date: 2022-09-01
+summary: Exploring Qwik's resumability model and how it challenges traditional hydration to deliver near-instant web app interactions.
+tags: [qwik, frontend, web performance, resumability]
+---
+
+Qwik is a new front-end framework introduced in 2022 with a bold goal: make websites load instantly, no matter how complex they are.
+
+Instead of using client-side hydration like React or Vue, Qwik introduces a new concept: **resumability**. The app doesn’t rehydrate — it continues execution exactly where the server left off.
+
+## How It Works
+
+When a Qwik app is rendered on the server:
+
+- It serializes the entire application state and event listeners into the HTML.
+- When the browser loads the page, no JavaScript runs immediately.
+- Only when a user interacts (e.g., clicks a button), Qwik lazily loads the needed code for that interaction.
+
+This results in:
+
+- Very fast first paint (HTML is ready to go).
+- Very small JavaScript payload on initial load.
+- Fine-grained lazy-loading.
+
+## Example: Simple Counter
+
+Here’s what a basic counter component looks like in Qwik:
+
+```tsx
+import {{ component$, useStore }} from '@builder.io/qwik';
+
+export const Counter = component$(() => {
+  const state = useStore({ count: 0 });
+
+  return (
+    <button onClick$={() => state.count++}>
+      Count: {{ state.count }}
+    </button>
+  );
+});
+```
+
+This button won’t hydrate until it’s clicked. Before that, it’s just static HTML.
+
+## Key Concepts
+
+- **component$**: Qwik components use the `$` suffix to denote lazy-load boundaries.
+- **useStore**: A reactive state hook.
+- **onClick$**: Event handlers are lazy-loaded too.
+
+## Why It Matters
+
+Qwik addresses problems many SPAs face:
+
+- Large JavaScript bundles
+- Long Time-to-Interactive
+- Poor performance on low-end devices
+
+By shifting the responsibility of interaction setup to the moment it’s needed, Qwik minimizes unnecessary code execution.
+
+## Should You Use It?
+
+Qwik is still young and evolving. It’s ideal for:
+
+- Content-heavy websites (blogs, docs, landing pages)
+- Apps where SEO and performance are key
+- Projects that need fast cold-start time
+
+It might not be ready for every use case, especially complex web apps that rely on deep client-side state. But it’s worth watching — resumability could be the next big paradigm shift in front-end development.

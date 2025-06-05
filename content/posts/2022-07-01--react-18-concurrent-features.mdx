@@ -1,0 +1,73 @@
+---
+title: What's New in React 18 – Concurrent Features
+date: 2022-07-01
+summary: A practical guide to React 18’s new concurrent features like automatic batching, startTransition, and Suspense improvements.
+tags: [react, react18, concurrency]
+---
+
+React 18 brought major changes to how React works under the hood, focusing on better user experience and performance with **concurrent rendering**.
+
+### Key Features in React 18
+
+- **Automatic Batching**  
+  Multiple state updates inside events, timeouts, or native handlers are now batched by default. This reduces unnecessary re-renders.
+
+```js
+setCount(c => c + 1)
+setFlag(f => !f)
+// These are now batched automatically
+```
+
+- **startTransition**  
+  Marks updates as non-urgent, so React can keep the UI responsive.
+
+```js
+import { startTransition } from 'react'
+
+startTransition(() => {
+  setSearchQuery(input)
+})
+```
+
+Use this for things like filtering lists, background tab updates, or lazy-loaded components.
+
+- **Improved Suspense**  
+  Suspense works more broadly now. It’s especially useful with streaming server rendering in frameworks like Next.js.
+
+```js
+<Suspense fallback={<Loading />}>
+  <Comments />
+</Suspense>
+```
+
+- **New Root API**  
+  You must now use `createRoot` from `react-dom/client`.
+
+```js
+import { createRoot } from 'react-dom/client'
+
+const root = createRoot(document.getElementById('root'))
+root.render(<App />)
+```
+
+- **Concurrent Rendering**  
+  Under the hood, React 18 introduces a concurrent renderer. It enables React to interrupt rendering to prioritize urgent tasks and continue where it left off.
+
+This means:
+
+- React can render updates in the background.
+- Low-priority updates won’t block more important ones.
+- UIs feel faster and more responsive.
+
+### Breaking Changes to Know
+
+- **useEffect Timing**  
+  Effects now run after the layout and paint phase, closer to how the browser handles rendering. This change avoids blocking the browser's ability to paint updated content.
+
+- **Third-Party Library Compatibility**  
+  Some older React libraries may need updates to fully support concurrent features.
+
+### Final Thoughts
+
+React 18 doesn’t force you to change your code, but to take full advantage of the new features, you’ll need to gradually adopt the new APIs. If you're using a framework like Next.js or Remix, many of these features are already baked in.
+
