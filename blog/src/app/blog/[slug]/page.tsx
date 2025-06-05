@@ -5,6 +5,8 @@ import MDXContent from "@/components/MDXContent";
 import Link from "next/link";
 import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
 import { getTranslation } from "@/i18n";
+import { generateBlogPostSchema } from "@/utils/schema";
+import { siteConfig } from "@/config/site";
 
 const t = getTranslation();
 
@@ -48,43 +50,62 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
 	try {
 		const { meta, content } = await getPostBySlug(params.slug);
+		const postUrl = `${siteConfig.url}/blog/${params.slug}`;
+		const schema = generateBlogPostSchema({
+			title: meta.title,
+			description: meta.summary,
+			date: meta.date,
+			url: postUrl,
+			tags: meta.tags,
+		});
+
 		return (
-			<article className="prose max-w-2xl mx-auto" aria-labelledby="post-title">
-				<header>
-					<h1
-						id="post-title"
-						className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl"
-					>
-						{meta.title}
-					</h1>
-					<p
-						className="text-gray-500 text-sm mb-4"
-						aria-label={t.a11y.publicationDate}
-					>
-						{formatDate(meta.date)}
-					</p>
-					{meta.tags && meta.tags.length > 0 && (
-						<nav className="flex gap-2 mb-6" aria-label={t.a11y.postTags}>
-							{meta.tags.map((tag) => (
-								<Link
-									key={tag}
-									href={`/blog/tag/${tag}`}
-									className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-									aria-label={`${t.a11y.viewTaggedPosts.replace("{tag}", tag)}`}
-								>
-									#{tag}
-								</Link>
-							))}
-						</nav>
-					)}
-				</header>
-				<div
-					className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300"
-					aria-label={t.a11y.postContent}
+			<>
+				<script
+					type="application/ld+json"
+					suppressHydrationWarning
+					{...{ __html: JSON.stringify(schema) }}
+				/>
+				<article
+					className="prose max-w-2xl mx-auto"
+					aria-labelledby="post-title"
 				>
-					<MDXContent source={content} />
-				</div>
-			</article>
+					<header>
+						<h1
+							id="post-title"
+							className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl"
+						>
+							{meta.title}
+						</h1>
+						<p
+							className="text-gray-500 text-sm mb-4"
+							aria-label={t.a11y.publicationDate}
+						>
+							{formatDate(meta.date)}
+						</p>
+						{meta.tags && meta.tags.length > 0 && (
+							<nav className="flex gap-2 mb-6" aria-label={t.a11y.postTags}>
+								{meta.tags.map((tag) => (
+									<Link
+										key={tag}
+										href={`/blog/tag/${tag}`}
+										className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+										aria-label={`${t.a11y.viewTaggedPosts.replace("{tag}", tag)}`}
+									>
+										#{tag}
+									</Link>
+								))}
+							</nav>
+						)}
+					</header>
+					<div
+						className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300"
+						aria-label={t.a11y.postContent}
+					>
+						<MDXContent source={content} />
+					</div>
+				</article>
+			</>
 		);
 	} catch (error) {
 		console.error("Error loading blog post:", error);

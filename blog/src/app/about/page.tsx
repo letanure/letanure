@@ -4,6 +4,8 @@ import path from "node:path";
 import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
 import { getTranslation } from "@/i18n";
 import type { AboutContent } from "@/types/content";
+import { generateWebPageSchema, generatePersonSchema } from "@/utils/schema";
+import { siteConfig } from "@/config/site";
 
 const t = getTranslation();
 
@@ -40,24 +42,44 @@ async function getAboutContent(locale = "en"): Promise<AboutContent> {
 export default async function AboutPage() {
 	try {
 		const content = await getAboutContent();
+		const aboutUrl = `${siteConfig.url}/about`;
+		const pageSchema = generateWebPageSchema({
+			title: content.title,
+			description: t.about.description,
+			url: aboutUrl,
+		});
+		const personSchema = generatePersonSchema();
+
 		return (
-			<article
-				className="prose prose-gray dark:prose-invert max-w-none"
-				aria-labelledby="about-title"
-			>
-				<h1
-					id="about-title"
-					className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl"
+			<>
+				<script
+					type="application/ld+json"
+					suppressHydrationWarning
+					{...{ __html: JSON.stringify(pageSchema) }}
+				/>
+				<script
+					type="application/ld+json"
+					suppressHydrationWarning
+					{...{ __html: JSON.stringify(personSchema) }}
+				/>
+				<article
+					className="prose prose-gray dark:prose-invert max-w-none"
+					aria-labelledby="about-title"
 				>
-					{content.title}
-				</h1>
-				<div
-					className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300"
-					aria-label={t.a11y.postContent}
-				>
-					{content.body}
-				</div>
-			</article>
+					<h1
+						id="about-title"
+						className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl"
+					>
+						{content.title}
+					</h1>
+					<div
+						className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300"
+						aria-label={t.a11y.postContent}
+					>
+						{content.body}
+					</div>
+				</article>
+			</>
 		);
 	} catch (error) {
 		console.error("Error loading about content:", error);
