@@ -50,6 +50,30 @@ export const en = {
 		description:
 			"Explore my current and past projects in web development and technology.",
 	},
+
+	// Accessibility
+	a11y: {
+		skipToContent: "Skip to main content",
+		postContent: "Post content",
+		postTags: "Post tags",
+		viewTaggedPosts: "View posts tagged with {tag}",
+		publicationDate: "Publication date",
+		technologiesUsed: "Technologies used in {project}",
+		noProjects: "No projects available at the moment",
+		errorMessage: "Error message",
+	},
+
+	// Error messages
+	errors: {
+		loadingProjects:
+			"Sorry, there was an error loading the projects. Please try again later.",
+		loadingAbout:
+			"Sorry, there was an error loading the about content. Please try again later.",
+		loadingNow:
+			"Sorry, there was an error loading the now content. Please try again later.",
+		loadingPost:
+			"Sorry, there was an error loading the blog post. Please try again later.",
+	},
 } as const;
 
 export type Translation = typeof en;

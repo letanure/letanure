@@ -64,86 +64,82 @@ export default async function ProjectsPage() {
 	try {
 		const content = await getProjectsContent();
 		return (
-			<article className="prose prose-gray dark:prose-invert max-w-none">
-				<h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+			<article
+				className="prose prose-gray dark:prose-invert max-w-none"
+				aria-labelledby="projects-title"
+			>
+				<h1
+					id="projects-title"
+					className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl"
+				>
 					{content.title}
 				</h1>
-				<div className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
+				<div
+					className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300"
+					aria-label={t.a11y.postContent}
+				>
 					{content.body}
 				</div>
 				{content.projects && content.projects.length > 0 ? (
-					<div className="mt-12 space-y-12">
+					<ul className="mt-8 space-y-8 list-none">
 						{content.projects.map((project) => (
-							<div
+							<li
 								key={project.title}
-								className="relative border-b border-gray-200 pb-12 dark:border-gray-800 last:border-0 last:pb-0"
+								className="border-b border-gray-200 dark:border-gray-800 pb-8 last:border-0"
 							>
-								<div className="flex flex-col gap-4">
-									<div className="flex items-start justify-between">
-										<div>
-											<h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
-												{project.title}
-											</h3>
-											<p className="mt-2 text-lg text-gray-600 dark:text-gray-300">
-												{project.description}
-											</p>
-										</div>
-										{project.link && (
-											<a
-												href={project.link}
-												target="_blank"
-												rel="noopener noreferrer"
-												className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
-											>
-												View Project
-												<svg
-													className="h-4 w-4"
-													fill="none"
-													stroke="currentColor"
-													viewBox="0 0 24 24"
-													aria-hidden="true"
-												>
-													<path
-														strokeLinecap="round"
-														strokeLinejoin="round"
-														strokeWidth={2}
-														d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-													/>
-												</svg>
-											</a>
-										)}
-									</div>
-									<div className="flex flex-wrap gap-2">
+								<div className="space-y-4">
+									<h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+										{project.title}
+									</h2>
+									<p className="text-gray-600 dark:text-gray-300">
+										{project.description}
+									</p>
+									<ul
+										className="flex flex-wrap gap-2 list-none"
+										aria-label={`${t.a11y.technologiesUsed.replace("{project}", project.title)}`}
+									>
 										{project.technologies.map((tech) => (
-											<span
+											<li
 												key={tech}
 												className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
 											>
 												{tech}
-											</span>
+											</li>
 										))}
-									</div>
+									</ul>
 								</div>
-							</div>
+							</li>
 						))}
-					</div>
+					</ul>
 				) : (
-					<div className="mt-8 text-gray-600 dark:text-gray-400">
-						No projects available at the moment.
-					</div>
+					<output
+						className="mt-8 text-gray-600 dark:text-gray-400 block"
+						aria-label={t.a11y.noProjects}
+					>
+						{t.a11y.noProjects}
+					</output>
 				)}
 			</article>
 		);
 	} catch (error) {
 		console.error("Error loading projects:", error);
 		return (
-			<article className="prose prose-gray dark:prose-invert max-w-none">
-				<h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+			<article
+				className="prose prose-gray dark:prose-invert max-w-none"
+				aria-labelledby="error-title"
+			>
+				<h1
+					id="error-title"
+					className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl"
+				>
 					{t.projects.title}
 				</h1>
-				<div className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
-					Sorry, there was an error loading the projects. Please try again
-					later.
+				<div
+					className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300"
+					role="alert"
+					aria-label={t.a11y.errorMessage}
+				>
+					{t.errors.loadingProjects}
 				</div>
 			</article>
 		);
