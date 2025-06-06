@@ -1,20 +1,49 @@
 export const siteConfig = {
 	name: "Luiz Tanure",
+	email: "letanure@gmail.com",
 	url: "https://letanure.dev",
-	logo: "https://letanure.dev/logo.png",
+	description: "Frontend Developer & Tech Enthusiast",
+	links: {
+		twitter: "https://twitter.com/letanure",
+		github: "https://github.com/letanure",
+		linkedin: "https://linkedin.com/in/letanure",
+	},
 	author: {
 		name: "Luiz Tanure",
-		title: "Software Engineer",
-		url: "https://letanure.com",
-		socials: [
-			"https://github.com/letanure",
-			"https://twitter.com/letanure",
-			"https://linkedin.com/in/letanure",
+		email: "letanure@gmail.com",
+		url: "https://letanure.dev",
+	},
+	metadata: {
+		title: {
+			default: "Luiz Tanure - Personal Blog",
+			template: "%s | Luiz Tanure",
+		},
+		description:
+			"A personal blog about web development, programming, and technology.",
+		keywords: [
+			"web development",
+			"programming",
+			"technology",
+			"frontend",
+			"react",
+			"next.js",
+			"typescript",
 		],
 	},
-	socials: [
-		"https://github.com/letanure",
-		"https://twitter.com/letanure",
-		"https://linkedin.com/in/letanure",
-	],
-};
+	social: {
+		twitter: {
+			handle: "@letanure",
+			url: "https://twitter.com/letanure",
+		},
+		github: {
+			handle: "letanure",
+			url: "https://github.com/letanure",
+		},
+		linkedin: {
+			handle: "letanure",
+			url: "https://linkedin.com/in/letanure",
+		},
+	},
+} as const;
+
+export type SiteConfig = typeof siteConfig;

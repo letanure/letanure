@@ -24,6 +24,7 @@ export function generateBlogPostSchema({
 			"@type": "Person",
 			name: siteConfig.author.name,
 			url: siteConfig.url,
+			sameAs: siteConfig.author.socials,
 		},
 		publisher: {
 			"@type": "Organization",
@@ -32,12 +33,18 @@ export function generateBlogPostSchema({
 				"@type": "ImageObject",
 				url: `${siteConfig.url}/logo.png`,
 			},
+			sameAs: siteConfig.socials,
 		},
 		mainEntityOfPage: {
 			"@type": "WebPage",
 			"@id": url,
 		},
 		keywords: tags?.join(", "),
+		// image: {
+		// 	"@type": "ImageObject",
+		// 	url: `${siteConfig.url}/og/${url.split("/").pop()}.png`,
+		// },
+		// wordCount: 0,
 	};
 }
 

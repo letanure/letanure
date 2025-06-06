@@ -1,98 +1,68 @@
 import type { Metadata } from "next";
-import { getTranslation } from "@/i18n";
+import { siteConfig } from "@/config/site";
 
-const t = getTranslation();
-
-const siteConfig = {
-	name: t.site.name,
-	title: t.site.title,
-	description: t.site.description,
-	url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-	author: t.site.name,
-	twitterHandle: "@yourhandle",
-	defaultLanguage: "en",
-};
-
-export const defaultMetadata: Metadata = {
-	metadataBase: new URL(siteConfig.url),
-	title: {
-		default: siteConfig.title,
-		template: `%s | ${siteConfig.name}`,
-	},
-	description: siteConfig.description,
-	authors: [{ name: siteConfig.author }],
-	creator: siteConfig.author,
-	openGraph: {
-		type: "website",
-		locale: siteConfig.defaultLanguage,
-		url: siteConfig.url,
-		title: siteConfig.title,
-		description: siteConfig.description,
-		siteName: siteConfig.name,
-	},
-	twitter: {
-		card: "summary_large_image",
-		title: siteConfig.title,
-		description: siteConfig.description,
-		creator: siteConfig.twitterHandle,
-	},
-	robots: {
-		index: true,
-		follow: true,
-		googleBot: {
-			index: true,
-			follow: true,
-			"max-video-preview": -1,
-			"max-image-preview": "large",
-			"max-snippet": -1,
-		},
-	},
-	verification: {
-		// Add your verification tokens here
-		// google: 'your-google-site-verification',
-		// yandex: 'your-yandex-verification',
-	},
-};
+interface GenerateMetadataProps {
+	title?: string;
+	description?: string;
+	path?: string;
+	image?: string;
+}
 
 export function generateMetadata({
 	title,
 	description,
 	path,
 	image,
-}: {
-	title?: string;
-	description?: string;
-	path?: string;
-	image?: string;
-}): Metadata {
-	const url = path ? `${siteConfig.url}${path}` : siteConfig.url;
-	const ogImage = image
-		? `${siteConfig.url}${image}`
-		: `${siteConfig.url}/og-image.png`;
-
-	return {
-		...defaultMetadata,
-		title: title ? `${title} | ${siteConfig.name}` : siteConfig.title,
-		description: (description ?? undefined) || siteConfig.description,
+}: GenerateMetadataProps = {}): Metadata {
+	const metadata: Metadata = {
+		title: title
+			? siteConfig.metadata.title.template.replace("%s", title)
+			: siteConfig.metadata.title.default,
+		description: description || siteConfig.metadata.description,
+		keywords: [...siteConfig.metadata.keywords],
+		authors: [
+			{
+				name: siteConfig.author.name,
+				url: siteConfig.author.url,
+			},
+		],
+		creator: siteConfig.author.name,
 		openGraph: {
-			...defaultMetadata.openGraph,
-			url,
-			title: title ? `${title} | ${siteConfig.name}` : siteConfig.title,
-			description: (description ?? undefined) || siteConfig.description,
-			images: [
-				{
-					url: ogImage,
-					width: 1200,
-					height: 630,
-					alt: title || siteConfig.name,
-				},
-			],
+			type: "website",
+			locale: "en_US",
+			url: path ? `${siteConfig.url}${path}` : siteConfig.url,
+			title: title
+				? siteConfig.metadata.title.template.replace("%s", title)
+				: siteConfig.metadata.title.default,
+			description: description || siteConfig.metadata.description,
+			siteName: siteConfig.name,
+			images: image
+				? [
+						{
+							url: image,
+							width: 1200,
+							height: 630,
+							alt: title || siteConfig.name,
+						},
+					]
+				: [],
 		},
 		twitter: {
-			...defaultMetadata.twitter,
-			title: title ? `${title} | ${siteConfig.name}` : siteConfig.title,
-			description: (description ?? undefined) || siteConfig.description,
-			images: [ogImage],
+			card: "summary_large_image",
+			title: title
+				? siteConfig.metadata.title.template.replace("%s", title)
+				: siteConfig.metadata.title.default,
+			description: description || siteConfig.metadata.description,
+			images: image ? [image] : [],
+			creator: siteConfig.social.twitter.handle,
 		},
+		icons: {
+			icon: "/favicon.ico",
+			shortcut: "/favicon-16x16.png",
+			apple: "/apple-touch-icon.png",
+		},
+		manifest: "/site.webmanifest",
 	};
+
+	return metadata;
 }

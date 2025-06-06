@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation";
-// import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
-// import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
+import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
 import { getTranslation } from "@/i18n";
 import { generateBlogPostSchema } from "@/utils/schema";
 import { siteConfig } from "@/config/site";
-import { formatDate, getBlogPosts } from "@/app/blog/utils";
+import { formatDate } from "@/app/blog/utils";
 
 const t = getTranslation();
 
@@ -18,27 +18,27 @@ const t = getTranslation();
 // }
 
 interface Props {
-	params: Promise<{ slug: string }>;
+	params: { slug: string };
 }
 
-// export async function generateMetadata({ params }: Props): Promise<Metadata> {
-// 	try {
-// 		const { slug } = params;
-// 		const post = await import(`@/content/mdx/${slug}.mdx`);
-// 		return generateSiteMetadata({
-// 			title: post.metadata.title,
-// 			description: post.metadata.summary,
-// 			path: `/blog/${slug}`,
-// 		});
-// 	} catch (error) {
-// 		console.error("Error generating metadata:", error);
-// 		return generateSiteMetadata({
-// 			title: t.blog.title,
-// 			description: t.blog.description,
-// 			path: "/blog",
-// 		});
-// 	}
-// }
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	try {
+		const { slug } = params;
+		const post = await import(`@/content/mdx/${slug}.mdx`);
+		return generateSiteMetadata({
+			title: post.metadata.title,
+			description: post.metadata.summary,
+			path: `/blog/${slug}`,
+		});
+	} catch (error) {
+		console.error("Error generating metadata:", error);
+		return generateSiteMetadata({
+			title: t.blog.title,
+			description: t.blog.description,
+			path: "/blog",
+		});
+	}
+}
 
 // export async function generateStaticParams() {
 // 	const posts = await import.meta.glob<{
