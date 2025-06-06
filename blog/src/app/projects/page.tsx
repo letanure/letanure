@@ -65,7 +65,7 @@ export default async function ProjectsPage() {
 		const content = await getProjectsContent();
 		return (
 			<article
-				className="prose prose-gray dark:prose-invert max-w-none"
+				className=" -gray dark:-invert max-w-none"
 				aria-labelledby="projects-title"
 			>
 				<h1
@@ -81,14 +81,14 @@ export default async function ProjectsPage() {
 					{content.body}
 				</div>
 				{content.projects && content.projects.length > 0 ? (
-					<ul className="mt-8 space-y-8 list-none">
+					<ul className="mt-8 space-y-8 list-none pl-0 marker:hidden">
 						{content.projects.map((project) => (
 							<li
+								className="marker:hidden rounded-md border border-gray-200 dark:border-gray-700 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition"
 								key={project.title}
-								className="border-b border-gray-200 dark:border-gray-800 pb-8 last:border-0"
 							>
-								<div className="space-y-4">
-									<h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+								<div className="space-y-1">
+									<h2 className="text-base font-medium text-gray-900 dark:text-white mb-1">
 										{project.title}
 									</h2>
 									<p className="text-gray-600 dark:text-gray-300">
@@ -125,7 +125,7 @@ export default async function ProjectsPage() {
 		console.error("Error loading projects:", error);
 		return (
 			<article
-				className="prose prose-gray dark:prose-invert max-w-none"
+				className="  dark:-invert max-w-none"
 				aria-labelledby="error-title"
 			>
 				<h1
