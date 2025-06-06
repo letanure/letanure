@@ -6,6 +6,7 @@ import Link from "next/link";
 import { getTranslation } from "@/i18n";
 import SkipNavigation from "@/components/SkipNavigation";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +22,7 @@ export default function RootLayout({
 	return (
 		<html lang="en" className="h-full">
 			<Analytics />
+			<SpeedInsights />
 			<body className={`${inter.className} h-full bg-gray-50 dark:bg-gray-900`}>
 				<SkipNavigation />
 				<header className="bg-white shadow-sm dark:bg-gray-800">
