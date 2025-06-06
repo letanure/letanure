@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 
 type TitleProps = {
 	title?: string;
+	titleId?: string;
 	subtitle?: string;
 	tag?: "h1" | "h2" | "h3";
 	ariaTitle?: string;
@@ -16,6 +17,7 @@ const sizeMap = {
 
 export function Title({
 	title,
+	titleId,
 	subtitle,
 	tag = "h1",
 	ariaTitle,
@@ -27,7 +29,11 @@ export function Title({
 	return (
 		<div className="mb-8">
 			{title && (
-				<Tag className={cn(sizeClass, "font-bold mb-2")} aria-label={ariaTitle}>
+				<Tag
+					id={titleId}
+					className={cn(sizeClass, "font-bold mb-2")}
+					aria-label={ariaTitle}
+				>
 					{title}
 				</Tag>
 			)}

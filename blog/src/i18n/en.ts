@@ -7,6 +7,10 @@ export const en = {
 			"A personal blog about web development, programming, and technology.",
 	},
 
+	general: {
+		tags: "Tags",
+	},
+
 	home: {
 		title: "Hi, I’m Luiz Tanure — a fullstack developer exploring modern web.",
 		subtitle:

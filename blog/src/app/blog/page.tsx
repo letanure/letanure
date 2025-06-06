@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
 import { getTranslation } from "@/i18n";
 import { siteConfig } from "@/config/site";
-import { formatDate } from "@/app/blog/utils";
 import { generateBlogListSchema } from "@/utils/schema";
 import { getBlogPosts } from "@/app/blog/utils";
 import { Title } from "@/components/ui/Title";
 import PostsList from "@/components/PostsList";
+import { TagList } from "@/components/ui/TagList";
 // import type { Post } from "@/types/post";
 
 const t = getTranslation();
@@ -22,28 +21,14 @@ export default async function BlogPage() {
 	const posts = getBlogPosts();
 
 	// Sort posts by date
-	// const sortedPosts = posts;
 	const sortedPosts = posts.sort(
 		(a, b) =>
 			new Date(b.metadata.date as string).getTime() -
 			new Date(a.metadata.date as string).getTime(),
 	);
-	// const sortedPosts = posts.sort((a, b) =>
-	// 	new Date(a.metadata.date) > new Date(b.metadata.date) ? 1 : -1,
-	// );
 
-	// Get unique tags and their counts
-	const tagCounts = sortedPosts.reduce(
-		(acc, post) => {
-			if (Array.isArray(post.metadata.tags)) {
-				for (const tag of post.metadata.tags) {
-					acc[tag] = (acc[tag] || 0) + 1;
-				}
-			}
-			return acc;
-		},
-		{} as Record<string, number>,
-	);
+	// get all tags
+	const allTags = sortedPosts.flatMap((post) => post.metadata.tags || []);
 
 	const schema = generateBlogListSchema({
 		title: t.blog.title,
@@ -85,26 +70,15 @@ export default async function BlogPage() {
 					</div>
 					<div className="lg:col-span-1">
 						<div className="sticky top-8">
-							<h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-								Tags
-							</h2>
-							<nav
+							<Title title={t.general.tags} tag="h3" />
+
+							<TagList
+								as="nav"
+								tags={allTags}
+								showCount={true}
 								className="mt-4 flex flex-wrap gap-2"
 								aria-label={t.a11y.postTags}
-							>
-								{Object.entries(tagCounts)
-									.sort(([, a], [, b]) => b - a)
-									.map(([tag, count]) => (
-										<Link
-											key={tag}
-											href={`/blog/tag/${tag}`}
-											className="relative z-10 rounded-full bg-gray-50 dark:bg-gray-800 px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-											aria-label={`${t.a11y.viewTaggedPosts.replace("{tag}", tag)}`}
-										>
-											{tag} ({count})
-										</Link>
-									))}
-							</nav>
+							/>
 						</div>
 					</div>
 				</div>

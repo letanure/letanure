@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import Link from "next/link";
+
 import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
 import { getTranslation } from "@/i18n";
 import { generateBlogPostSchema } from "@/utils/schema";
 import { siteConfig } from "@/config/site";
 import { formatDate } from "@/app/blog/utils";
+import { ItemSummary } from "@/components/ui/ItemSummary";
 
 const t = getTranslation();
 
@@ -72,34 +73,15 @@ export default async function BlogPostPage({ params }: Props) {
 					className="prose max-w-2xl mx-auto"
 					aria-labelledby="post-title"
 				>
-					<header>
-						<h1
-							id="post-title"
-							className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl"
-						>
-							{metadata.title}
-						</h1>
-						<p
-							className="text-gray-500 text-sm mb-4"
-							aria-label={t.a11y.publicationDate}
-						>
-							{formatDate(metadata.date)}
-						</p>
-						{metadata.tags && metadata.tags.length > 0 && (
-							<nav className="flex gap-2 mb-6" aria-label={t.a11y.postTags}>
-								{metadata.tags.map((tag: string) => (
-									<Link
-										key={tag}
-										href={`/blog/tag/${tag}`}
-										className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-										aria-label={`${t.a11y.viewTaggedPosts.replace("{tag}", tag)}`}
-									>
-										#{tag}
-									</Link>
-								))}
-							</nav>
-						)}
-					</header>
+					<ItemSummary
+						as="header"
+						slug={slug}
+						title={metadata.title}
+						date={formatDate(metadata.date)}
+						tags={metadata.tags}
+						hasBorder={false}
+						isLink={false}
+					/>
 
 					<div
 						className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300"
