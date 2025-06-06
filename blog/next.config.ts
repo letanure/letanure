@@ -1,7 +1,23 @@
-import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
+import rehypePrismPlus from "rehype-prism-plus";
+import remarkFrontmatter from "remark-frontmatter";
+import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+	pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+	extension: /\.mdx?$/,
+	options: {
+		// remarkPlugins: [remarkGfm,
+		rehypePlugins: [[rehypePrismPlus, { ignoreMissing: true }]],
+		remarkPlugins: [
+			remarkFrontmatter,
+			[remarkMdxFrontmatter, { name: "metadata" }],
+		],
+	},
+});
+
+export default withMDX(nextConfig);
