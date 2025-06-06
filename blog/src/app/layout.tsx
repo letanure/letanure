@@ -86,7 +86,7 @@ export default function RootLayout({
 							</p>
 							<div className="flex space-x-6">
 								<a
-									href="https://github.com/yourusername"
+									href="https://github.com/letanure"
 									target="_blank"
 									rel="noopener noreferrer"
 									className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
@@ -107,7 +107,7 @@ export default function RootLayout({
 									</svg>
 								</a>
 								<a
-									href="https://twitter.com/yourusername"
+									href="https://twitter.com/tanure"
 									target="_blank"
 									rel="noopener noreferrer"
 									className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"

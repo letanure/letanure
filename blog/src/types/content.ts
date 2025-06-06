@@ -39,8 +39,22 @@ export interface AboutContent {
 	};
 }
 
-export interface NowContent extends BaseContent {
+export interface NowItem {
+	title: string;
+	description: string;
+	status?: string;
+}
+
+export interface NowCategory {
+	name: string;
+	items: NowItem[];
+}
+
+export interface NowContent {
+	title: string;
+	description: string;
 	lastUpdated: string;
+	categories: NowCategory[];
 }
 
 export interface Project {
