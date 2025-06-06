@@ -20,7 +20,12 @@ export default async function BlogPage() {
 	const posts = getBlogPosts();
 
 	// Sort posts by date
-	const sortedPosts = posts;
+	// const sortedPosts = posts;
+	const sortedPosts = posts.sort(
+		(a, b) =>
+			new Date(b.metadata.date as string).getTime() -
+			new Date(a.metadata.date as string).getTime(),
+	);
 	// const sortedPosts = posts.sort((a, b) =>
 	// 	new Date(a.metadata.date) > new Date(b.metadata.date) ? 1 : -1,
 	// );
