@@ -7,6 +7,13 @@ export const en = {
 			"A personal blog about web development, programming, and technology.",
 	},
 
+	home: {
+		title: "Hi, I’m Luiz Tanure — a fullstack developer exploring modern web.",
+		subtitle:
+			"Thoughts, tutorials, and projects on JavaScript, dev tools, and more.",
+		latestPosts: "Latest Posts",
+	},
+
 	// Navigation
 	nav: {
 		home: "Home",
