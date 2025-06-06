@@ -124,6 +124,10 @@ body {
 	@apply text-gray-600 dark:text-gray-300;
 }
 
+.prose li p {
+	@apply text-gray-600 dark:text-gray-300 mb-0 inline;
+}
+
 .prose blockquote {
 	@apply border-l-4 border-gray-200 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-300 my-6;
 }
