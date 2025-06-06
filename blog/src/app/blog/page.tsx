@@ -84,7 +84,6 @@ export default async function BlogPage() {
 					<div className="lg:w-64 flex-shrink-0">
 						<div className="sticky top-8">
 							<div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-								<h2 className="text-lg font-semibold mb-4">Tags</h2>
 								<TagCounts posts={posts} />
 							</div>
 						</div>
