@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { getPostBySlug, getPostSlugs } from "@/utils/mdx";
 import type { Metadata } from "next";
-import MDXContent from "@/components/MDXContent";
 import Link from "next/link";
 import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
 import { getTranslation } from "@/i18n";
@@ -19,9 +18,7 @@ function formatDate(dateString: string) {
 }
 
 interface Props {
-	params: {
-		slug: string;
-	};
+	params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -31,11 +28,12 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	try {
-		const { meta } = await getPostBySlug(params.slug);
+		const { slug } = await params;
+		const { meta } = await getPostBySlug(slug);
 		return generateSiteMetadata({
 			title: meta.title,
 			description: meta.summary,
-			path: `/blog/${params.slug}`,
+			path: `/blog/${slug}`,
 		});
 	} catch (error) {
 		console.error("Error generating metadata:", error);
@@ -49,8 +47,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
 	try {
-		const { meta, content } = await getPostBySlug(params.slug);
-		const postUrl = `${siteConfig.url}/blog/${params.slug}`;
+		const { slug } = await params;
+		const { meta, content } = await getPostBySlug(slug);
+		const postUrl = `${siteConfig.url}/blog/${slug}`;
 		const schema = generateBlogPostSchema({
 			title: meta.title,
 			description: meta.summary,
@@ -102,7 +101,7 @@ export default async function BlogPostPage({ params }: Props) {
 						className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300"
 						aria-label={t.a11y.postContent}
 					>
-						<MDXContent source={content} />
+						{content}
 					</div>
 				</article>
 			</>

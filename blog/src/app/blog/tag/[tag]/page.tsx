@@ -6,13 +6,11 @@ import TagCounts from "@/components/TagCounts";
 import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
 
 interface Props {
-	params: {
-		tag: string;
-	};
+	params: Promise<{ tag: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-	const { tag } = params;
+	const { tag } = await params;
 	const posts = await getPostsByTag(tag);
 
 	return generateSiteMetadata({
@@ -24,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export async function generateStaticParams() {
 	const tags = await getAllTags();
-	return tags.map((tag) => ({ tag }));
+	return tags.map((tag) => ({ tag: String(tag) }));
 }
 
 function formatDate(dateString: string) {
@@ -36,7 +34,7 @@ function formatDate(dateString: string) {
 }
 
 export default async function TagPage({ params }: Props) {
-	const { tag } = params;
+	const { tag } = await params;
 	const posts = await getPostsByTag(tag);
 	const allPosts = await getAllPostsMeta();
 

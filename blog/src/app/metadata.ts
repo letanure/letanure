@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { getTranslation } from "@/i18n";
 
 const t = getTranslation();
@@ -72,13 +72,13 @@ export function generateMetadata({
 
 	return {
 		...defaultMetadata,
-		title: title ? `${title} | ${siteConfig.name}` : defaultMetadata.title,
-		description: description || defaultMetadata.description,
+		title: title ? `${title} | ${siteConfig.name}` : siteConfig.title,
+		description: (description ?? undefined) || siteConfig.description,
 		openGraph: {
 			...defaultMetadata.openGraph,
 			url,
-			title: title ? `${title} | ${siteConfig.name}` : defaultMetadata.title,
-			description: description || defaultMetadata.description,
+			title: title ? `${title} | ${siteConfig.name}` : siteConfig.title,
+			description: (description ?? undefined) || siteConfig.description,
 			images: [
 				{
 					url: ogImage,
@@ -90,8 +90,8 @@ export function generateMetadata({
 		},
 		twitter: {
 			...defaultMetadata.twitter,
-			title: title ? `${title} | ${siteConfig.name}` : defaultMetadata.title,
-			description: description || defaultMetadata.description,
+			title: title ? `${title} | ${siteConfig.name}` : siteConfig.title,
+			description: (description ?? undefined) || siteConfig.description,
 			images: [ogImage],
 		},
 	};
