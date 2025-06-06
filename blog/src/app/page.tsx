@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import Link from "next/link";
 import { getAllPostsMeta } from "@/utils/mdx";
+import { Title } from "@/components/ui/Title";
 
 function formatDate(dateString: string) {
 	return new Date(dateString).toLocaleDateString("en-US", {
@@ -25,12 +26,11 @@ export default async function HomePage() {
 	const posts = (await getAllPostsMeta()).slice(0, 3);
 	return (
 		<section className="max-w-2xl mx-auto">
-			<div className="mb-8">
-				<h1 className="text-3xl font-bold mb-2">{content.bio}</h1>
-				<p className="text-lg text-gray-700">{content.intro}</p>
-			</div>
+			<Title title={content.title} subtitle={content.subtitle} tag="h1" />
+
 			<div>
-				<h2 className="text-2xl font-semibold mb-4">{content.latestPosts}</h2>
+				<Title title={content.latestPosts} tag="h2" />
+
 				<ul className="space-y-6">
 					{posts.map((post) => (
 						<li key={post.slug} className="border-b pb-4">
