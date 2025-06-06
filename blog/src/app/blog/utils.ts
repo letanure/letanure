@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 type Metadata = {
+	date?: string | number | Date;
 	title: string;
 	publishedAt: string;
 	summary: string;

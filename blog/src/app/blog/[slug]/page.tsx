@@ -10,7 +10,7 @@ import { formatDate } from "@/app/blog/utils";
 const t = getTranslation();
 
 interface Props {
-	params: { slug: string };
+	params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BlogPostPage({ params }: Props) {
 	const { slug } = await params;
 
-	const post = await import(`@/content/mdx/${slug}.mdx`);
+	const post = await import(`../../../../../content/posts/${slug}.mdx`);
 	const { metadata, default: Content } = post;
 
 	if (!post) {

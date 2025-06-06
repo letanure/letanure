@@ -6,7 +6,7 @@ import { siteConfig } from "@/config/site";
 import { formatDate } from "@/app/blog/utils";
 import { generateBlogListSchema } from "@/utils/schema";
 import { getBlogPosts } from "@/app/blog/utils";
-import type { Post } from "@/types/post";
+// import type { Post } from "@/types/post";
 
 const t = getTranslation();
 
@@ -20,16 +20,19 @@ export default async function BlogPage() {
 	const posts = getBlogPosts();
 
 	// Sort posts by date
-	const sortedPosts = posts.sort((a, b) =>
-		new Date(a.metadata.date) > new Date(b.metadata.date) ? 1 : -1,
-	);
+	const sortedPosts = posts;
+	// const sortedPosts = posts.sort((a, b) =>
+	// 	new Date(a.metadata.date) > new Date(b.metadata.date) ? 1 : -1,
+	// );
 
 	// Get unique tags and their counts
 	const tagCounts = sortedPosts.reduce(
 		(acc, post) => {
-			post.metadata.tags.forEach((tag) => {
-				acc[tag] = (acc[tag] || 0) + 1;
-			});
+			if (Array.isArray(post.metadata.tags)) {
+				for (const tag of post.metadata.tags) {
+					acc[tag] = (acc[tag] || 0) + 1;
+				}
+			}
 			return acc;
 		},
 		{} as Record<string, number>,
@@ -39,13 +42,14 @@ export default async function BlogPage() {
 		title: t.blog.title,
 		description: t.blog.description,
 		url: `${siteConfig.url}/blog`,
-		posts: sortedPosts.map((post) => ({
-			title: post.metadata.title,
-			description: post.metadata.summary,
-			date: post.metadata.date,
-			url: `${siteConfig.url}/blog/${post.slug}`,
-			tags: post.metadata.tags,
-		})),
+		posts:
+			sortedPosts.map((post) => ({
+				title: post.metadata.title,
+				description: post.metadata.summary,
+				date: `${post.metadata.date}`,
+				url: `${siteConfig.url}/blog/${post.slug}`,
+				tags: post.metadata.tags || [],
+			})) || [],
 	});
 
 	return (
@@ -74,15 +78,15 @@ export default async function BlogPage() {
 							</p>
 						</div>
 						<div className="space-y-16" aria-label={t.a11y.blogPosts}>
-							{sortedPosts.map((post: Post) => (
+							{sortedPosts.map((post) => (
 								<article key={post.slug} className="flex flex-col items-start">
 									<div className="flex items-center gap-x-4 text-xs">
 										<time
-											dateTime={post.metadata.date}
+											dateTime={`${post.metadata.date}`}
 											className="text-gray-500 dark:text-gray-400"
 											aria-label={t.a11y.publicationDate}
 										>
-											{formatDate(post.metadata.date)}
+											{formatDate(`${post.metadata.date}`)}
 										</time>
 										{post.metadata.tags && post.metadata.tags.length > 0 && (
 											<nav

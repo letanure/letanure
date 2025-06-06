@@ -103,12 +103,12 @@ export function generatePersonSchema() {
 		"@type": "Person",
 		name: siteConfig.author.name,
 		url: siteConfig.url,
-		jobTitle: siteConfig.author.title,
+		// jobTitle: siteConfig.author.title,
 		worksFor: {
 			"@type": "Organization",
 			name: siteConfig.name,
 		},
-		sameAs: siteConfig.author.socials,
+		// sameAs: siteConfig.author.socials,
 	};
 }
 
@@ -142,7 +142,7 @@ export function generateBlogListSchema({
 			datePublished: post.date,
 			dateModified: post.date,
 			url: post.url,
-			keywords: post.tags,
+			keywords: post.tags.join(", "),
 			author: {
 				"@type": "Person",
 				name: "Luiz Tanure",

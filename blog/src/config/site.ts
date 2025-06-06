@@ -3,7 +3,13 @@ export const siteConfig = {
 	email: "letanure@gmail.com",
 	url: "https://letanure.dev",
 	description: "Frontend Developer & Tech Enthusiast",
+	title: "Software Engineer",
 	links: {
+		twitter: "https://twitter.com/letanure",
+		github: "https://github.com/letanure",
+		linkedin: "https://linkedin.com/in/letanure",
+	},
+	socials: {
 		twitter: "https://twitter.com/letanure",
 		github: "https://github.com/letanure",
 		linkedin: "https://linkedin.com/in/letanure",

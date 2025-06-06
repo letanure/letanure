@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
+// import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { defaultMetadata } from "./metadata";
+// import { defaultMetadata } from "./metadata";
 import Link from "next/link";
 import { getTranslation } from "@/i18n";
 import SkipNavigation from "@/components/SkipNavigation";
@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 const t = getTranslation();
 
-export const metadata: Metadata = defaultMetadata;
+// export const metadata: Metadata = defaultMetadata;
 
 export default function RootLayout({
 	children,
