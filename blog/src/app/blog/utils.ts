@@ -6,6 +6,7 @@ type Metadata = {
 	publishedAt: string;
 	summary: string;
 	image?: string;
+	tags?: string[];
 };
 
 function parseFrontmatter(fileContent: string) {
@@ -23,13 +24,14 @@ function parseFrontmatter(fileContent: string) {
 		let value = valueArr.join(": ").trim();
 		value = value.replace(/^['"](.*)['"]$/, "$1"); // Remove quotes
 		const cleanKey = key.trim();
+
 		if (cleanKey === "tags") {
-			metadata[cleanKey as keyof Metadata] = value
+			metadata.tags = value
 				.replace(/^\[|\]$/g, "")
 				.split(",")
 				.map((tag) => tag.trim());
 		} else {
-			metadata[cleanKey as keyof Metadata] = value;
+			(metadata as Record<string, string>)[cleanKey] = value;
 		}
 	});
 
@@ -68,7 +70,8 @@ function getMDXData(dir: fs.PathLike) {
 }
 
 export function getBlogPosts() {
-	return getMDXData(path.join(process.cwd(), "src", "content", "mdx"));
+	const blogRoot = path.join(process.cwd(), ".."); // Go one level up from blog directory
+	return getMDXData(path.join(blogRoot, "content", "posts"));
 }
 
 export function formatDate(date: string, includeRelative = false) {
