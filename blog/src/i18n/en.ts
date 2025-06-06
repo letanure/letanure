@@ -19,8 +19,7 @@ export const en = {
 	// Blog
 	blog: {
 		title: "Blog",
-		description:
-			"Read my latest blog posts about web development, programming, and technology.",
+		description: "Thoughts, stories and ideas.",
 		readMore: "Read more",
 		publishedOn: "Published on",
 		tags: "Tags",
@@ -59,8 +58,12 @@ export const en = {
 		viewTaggedPosts: "View posts tagged with {tag}",
 		publicationDate: "Publication date",
 		technologiesUsed: "Technologies used in {project}",
-		noProjects: "No projects available at the moment",
+		noProjects: "No projects found",
 		errorMessage: "Error message",
+		blogDescription: "Blog description",
+		blogPosts: "Blog posts",
+		readPost: "Read post: {title}",
+		postSummary: "Post summary",
 	},
 
 	// Error messages

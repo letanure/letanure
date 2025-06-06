@@ -1,4 +1,5 @@
 import { siteConfig } from "@/config/site";
+import type { BlogPostSchema, BlogListSchema } from "@/types/schema";
 
 export function generateBlogPostSchema({
 	title,
@@ -11,8 +12,8 @@ export function generateBlogPostSchema({
 	description: string;
 	date: string;
 	url: string;
-	tags?: string[];
-}) {
+	tags: string[];
+}): BlogPostSchema {
 	return {
 		"@context": "https://schema.org",
 		"@type": "BlogPosting",
@@ -20,31 +21,13 @@ export function generateBlogPostSchema({
 		description,
 		datePublished: date,
 		dateModified: date,
+		url,
+		keywords: tags.join(", "),
 		author: {
 			"@type": "Person",
-			name: siteConfig.author.name,
-			url: siteConfig.url,
-			sameAs: siteConfig.author.socials,
+			name: "Luiz Tanure",
+			url: "https://letanure.dev",
 		},
-		publisher: {
-			"@type": "Organization",
-			name: siteConfig.name,
-			logo: {
-				"@type": "ImageObject",
-				url: `${siteConfig.url}/logo.png`,
-			},
-			sameAs: siteConfig.socials,
-		},
-		mainEntityOfPage: {
-			"@type": "WebPage",
-			"@id": url,
-		},
-		keywords: tags?.join(", "),
-		// image: {
-		// 	"@type": "ImageObject",
-		// 	url: `${siteConfig.url}/og/${url.split("/").pop()}.png`,
-		// },
-		// wordCount: 0,
 	};
 }
 
@@ -126,5 +109,45 @@ export function generatePersonSchema() {
 			name: siteConfig.name,
 		},
 		sameAs: siteConfig.author.socials,
+	};
+}
+
+export function generateBlogListSchema({
+	title,
+	description,
+	url,
+	posts,
+}: {
+	title: string;
+	description: string;
+	url: string;
+	posts: Array<{
+		title: string;
+		description: string;
+		date: string;
+		url: string;
+		tags: string[];
+	}>;
+}): BlogListSchema {
+	return {
+		"@context": "https://schema.org",
+		"@type": "Blog",
+		name: title,
+		description,
+		url,
+		blogPost: posts.map((post) => ({
+			"@type": "BlogPosting",
+			headline: post.title,
+			description: post.description,
+			datePublished: post.date,
+			dateModified: post.date,
+			url: post.url,
+			keywords: post.tags,
+			author: {
+				"@type": "Person",
+				name: "Luiz Tanure",
+				url: "https://letanure.dev",
+			},
+		})),
 	};
 }

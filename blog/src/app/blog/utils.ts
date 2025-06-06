@@ -22,7 +22,15 @@ function parseFrontmatter(fileContent: string) {
 		const [key, ...valueArr] = line.split(": ");
 		let value = valueArr.join(": ").trim();
 		value = value.replace(/^['"](.*)['"]$/, "$1"); // Remove quotes
-		metadata[key.trim() as keyof Metadata] = value;
+		const cleanKey = key.trim();
+		if (cleanKey === "tags") {
+			metadata[cleanKey as keyof Metadata] = value
+				.replace(/^\[|\]$/g, "")
+				.split(",")
+				.map((tag) => tag.trim());
+		} else {
+			metadata[cleanKey as keyof Metadata] = value;
+		}
 	});
 
 	return { metadata: metadata as Metadata, content };
@@ -41,6 +49,14 @@ function getMDXData(dir: fs.PathLike) {
 	const mdxFiles = getMDXFiles(dir);
 	return mdxFiles.map((file) => {
 		const { metadata, content } = readMDXFile(path.join(dir as string, file));
+		if (typeof metadata.tags === "string") {
+			try {
+				metadata.tags = JSON.parse(metadata.tags);
+			} catch {
+				metadata.tags = [];
+			}
+		}
+
 		const slug = path.basename(file, path.extname(file));
 
 		return {

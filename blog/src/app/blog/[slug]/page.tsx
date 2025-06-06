@@ -23,7 +23,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	try {
-		const { slug } = params;
+		const { slug } = await params;
 		const post = await import(`@/content/mdx/${slug}.mdx`);
 		return generateSiteMetadata({
 			title: post.metadata.title,

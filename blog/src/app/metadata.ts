@@ -61,7 +61,7 @@ export function generateMetadata({
 			shortcut: "/favicon-16x16.png",
 			apple: "/apple-touch-icon.png",
 		},
-		manifest: "/site.webmanifest",
+		// manifest: "/site.webmanifest",
 	};
 
 	return metadata;
