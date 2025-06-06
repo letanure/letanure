@@ -6,6 +6,8 @@ import { siteConfig } from "@/config/site";
 import { formatDate } from "@/app/blog/utils";
 import { generateBlogListSchema } from "@/utils/schema";
 import { getBlogPosts } from "@/app/blog/utils";
+import { Title } from "@/components/ui/Title";
+import PostsList from "@/components/PostsList";
 // import type { Post } from "@/types/post";
 
 const t = getTranslation();
@@ -69,67 +71,16 @@ export default async function BlogPage() {
 				<div className="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-3">
 					<div className="lg:col-span-2">
 						<div className="mb-16">
-							<h1
-								className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl"
-								id="blog-title"
-							>
-								{t.blog.title}
-							</h1>
-							<p
-								className="mt-2 text-lg leading-8 text-gray-600 dark:text-gray-300"
-								aria-label={t.a11y.blogDescription}
-							>
-								{t.blog.description}
-							</p>
+							<Title
+								title={t.blog.title}
+								tag="h1"
+								subtitle={t.blog.description}
+								// ariaTitle={t.a11y.blogTitle}
+								ariaSubtitle={t.a11y.blogDescription}
+							/>
 						</div>
 						<div className="space-y-16" aria-label={t.a11y.blogPosts}>
-							{sortedPosts.map((post) => (
-								<article key={post.slug} className="flex flex-col items-start">
-									<div className="flex items-center gap-x-4 text-xs">
-										<time
-											dateTime={`${post.metadata.date}`}
-											className="text-gray-500 dark:text-gray-400"
-											aria-label={t.a11y.publicationDate}
-										>
-											{formatDate(`${post.metadata.date}`)}
-										</time>
-										{post.metadata.tags && post.metadata.tags.length > 0 && (
-											<nav
-												className="flex flex-wrap gap-2"
-												aria-label={t.a11y.postTags}
-											>
-												{post.metadata.tags.map((tag: string) => (
-													<Link
-														key={tag}
-														href={`/blog/tag/${tag}`}
-														className="relative z-10 rounded-full bg-gray-50 dark:bg-gray-800 px-3 py-1.5 font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-														aria-label={`${t.a11y.viewTaggedPosts.replace("{tag}", tag)}`}
-													>
-														{tag}
-													</Link>
-												))}
-											</nav>
-										)}
-									</div>
-									<div className="group relative">
-										<h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 dark:text-white group-hover:text-gray-600 dark:group-hover:text-gray-300">
-											<Link
-												href={`/blog/${post.slug}`}
-												aria-label={`${t.a11y.postContent.replace("{title}", post.metadata.title)}`}
-											>
-												<span className="absolute inset-0" />
-												{post.metadata.title}
-											</Link>
-										</h3>
-										<p
-											className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600 dark:text-gray-300"
-											aria-label={t.a11y.postSummary}
-										>
-											{post.metadata.summary}
-										</p>
-									</div>
-								</article>
-							))}
+							<PostsList />
 						</div>
 					</div>
 					<div className="lg:col-span-1">

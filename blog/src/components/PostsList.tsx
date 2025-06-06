@@ -9,8 +9,13 @@ function formatDate(dateString: string) {
 	});
 }
 
-export default async function LatestPosts() {
-	const posts = (await getAllPostsMeta()).slice(0, 3);
+type PostsListProps = {
+	limit?: number | null;
+};
+
+export default async function PostsList({ limit }: PostsListProps) {
+	const allPosts = await getAllPostsMeta();
+	const posts = limit ? allPosts.slice(0, limit) : allPosts;
 	return (
 		<ul className="space-y-6">
 			{posts.map((post) => (

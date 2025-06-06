@@ -1,5 +1,5 @@
 import { Title } from "@/components/ui/Title";
-import LatestPosts from "@/components/LatestPosts";
+import PostsList from "@/components/PostsList";
 
 import { getTranslation } from "@/i18n";
 
@@ -12,7 +12,7 @@ export default async function HomePage() {
 
 			<div>
 				<Title title={t.home.latestPosts} tag="h2" />
-				<LatestPosts />
+				<PostsList limit={3} />
 			</div>
 		</section>
 	);
