@@ -3,7 +3,41 @@ export interface BaseContent {
 	body: string;
 }
 
-export type AboutContent = BaseContent;
+export interface AboutContent {
+	title: string;
+	subtitle: string;
+	hero: {
+		image: string;
+		alt: string;
+		brief: string;
+	};
+	skills: {
+		categories: Array<{
+			name: string;
+			items: string[];
+		}>;
+	};
+	experience: Array<{
+		title: string;
+		company: string;
+		period: string;
+		description: string;
+	}>;
+	interests: Array<{
+		title: string;
+		description: string;
+		icon: string;
+	}>;
+	contact: {
+		email: string;
+		location: string;
+		social: Array<{
+			name: string;
+			url: string;
+			icon: string;
+		}>;
+	};
+}
 
 export interface NowContent extends BaseContent {
 	lastUpdated: string;

@@ -1,4 +1,90 @@
 {
 	"title": "About Me",
-	"body": "This is the about page. Here you can write about yourself, your background, and your interests."
+	"subtitle": "Frontend Developer & Tech Enthusiast",
+	"hero": {
+		"image": "/images/profile.jpg",
+		"alt": "Profile picture",
+		"brief": "I'm a passionate frontend developer with over 20 years of experience in building modern web applications. I love creating beautiful, accessible, and performant user interfaces that make a difference."
+	},
+	"skills": {
+		"categories": [
+			{
+				"name": "Frontend",
+				"items": [
+					"React",
+					"Next.js",
+					"TypeScript",
+					"Tailwind CSS",
+					"HTML5",
+					"CSS3"
+				]
+			},
+			{
+				"name": "Backend",
+				"items": ["Node.js", "Express", "PostgreSQL", "MongoDB", "GraphQL"]
+			},
+			{
+				"name": "Tools & Others",
+				"items": ["Git", "Docker", "AWS", "Jest", "Cypress", "Figma"]
+			}
+		]
+	},
+	"experience": [
+		{
+			"title": "Senior Frontend Developer",
+			"company": "Tech Company",
+			"period": "2020 - Present",
+			"description": "Leading frontend development for enterprise applications, mentoring junior developers, and implementing best practices."
+		},
+		{
+			"title": "Frontend Developer",
+			"company": "Digital Agency",
+			"period": "2015 - 2020",
+			"description": "Developed responsive web applications and collaborated with designers to create engaging user experiences."
+		},
+		{
+			"title": "Web Developer",
+			"company": "Startup",
+			"period": "2010 - 2015",
+			"description": "Built and maintained various web applications using modern technologies and frameworks."
+		}
+	],
+	"interests": [
+		{
+			"title": "Open Source",
+			"description": "Contributing to open-source projects and sharing knowledge with the community.",
+			"icon": "code"
+		},
+		{
+			"title": "Photography",
+			"description": "Capturing moments and exploring different photography techniques.",
+			"icon": "camera"
+		},
+		{
+			"title": "Hiking",
+			"description": "Exploring nature trails and enjoying outdoor activities.",
+			"icon": "mountain"
+		}
+	],
+	"contact": {
+		"email": "your.email@example.com",
+		"location": "City, Country",
+		"social": [
+			{
+				"name": "GitHub",
+				"url": "https://github.com/yourusername",
+				"icon": "github"
+			},
+			{
+				"name": "LinkedIn",
+				"url": "https://linkedin.com/in/yourusername",
+				"icon": "linkedin"
+			},
+			{
+				"name": "Twitter",
+				"url": "https://twitter.com/yourusername",
+				"icon": "twitter"
+			}
+		]
+	}
 }
