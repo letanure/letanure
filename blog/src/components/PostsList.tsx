@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAllPostsMeta } from "@/utils/mdx";
+import { Tag } from "@/components/ui/Tag";
 
 function formatDate(dateString: string) {
 	return new Date(dateString).toLocaleDateString("en-US", {
@@ -31,13 +32,7 @@ export default async function PostsList({ limit }: PostsListProps) {
 					{post.tags && post.tags.length > 0 && (
 						<div className="flex gap-2 mt-2">
 							{post.tags.map((tag) => (
-								<Link
-									key={tag}
-									href={`/blog/tag/${tag}`}
-									className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-								>
-									#{tag}
-								</Link>
+								<Tag key={tag} text={tag} href={`/blog/tag/${tag}`} />
 							))}
 						</div>
 					)}
