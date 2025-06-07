@@ -12,6 +12,7 @@ export type ItemSummaryProps = {
 	className?: string;
 	hasBorder?: boolean;
 	isLink?: boolean;
+	showTags?: boolean;
 };
 
 export function ItemSummary({
@@ -23,7 +24,7 @@ export function ItemSummary({
 	as: Component = "div",
 	className,
 	hasBorder = true,
-
+	showTags = true,
 	isLink = true,
 }: ItemSummaryProps) {
 	return (
@@ -45,7 +46,7 @@ export function ItemSummary({
 
 			{summary && <p className="mt-1 text-gray-700">{summary}</p>}
 
-			{tags && tags.length > 0 && (
+			{showTags && tags && tags.length > 0 && (
 				<TagList as="nav" tags={tags} className="mt-2" />
 			)}
 		</Component>

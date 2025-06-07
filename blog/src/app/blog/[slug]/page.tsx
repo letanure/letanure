@@ -5,8 +5,10 @@ import { notFound } from "next/navigation";
 import { getTranslation } from "@/i18n";
 import { generateBlogPostSchema } from "@/lib/schema";
 import { siteConfig } from "@/siteConfig";
-import { dateFormat } from "@/lib/utils";
 import { ItemSummary } from "@/components/ui/ItemSummary";
+import { Title } from "@/components/ui/Title";
+import { TagList } from "@/components/ui/TagList";
+import PostsList from "@/components/PostsList";
 
 const t = getTranslation();
 
@@ -69,27 +71,48 @@ export default async function BlogPostPage({ params }: Props) {
 					// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(schema, null, 2) }}
 				/>
-				<article
-					className="prose max-w-2xl mx-auto"
-					aria-labelledby="post-title"
-				>
-					<ItemSummary
-						as="header"
-						slug={slug}
-						title={metadata.title}
-						date={dateFormat(metadata.date)}
-						tags={metadata.tags}
-						hasBorder={false}
-						isLink={false}
-					/>
 
-					<div
-						className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300"
-						aria-label={t.a11y.postContent}
+				<div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
+					<article
+						aria-labelledby="post-title"
+						className="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-3"
 					>
-						<Content />
-					</div>
-				</article>
+						<div className="lg:col-span-2">
+							<div className="mb-16">
+								<ItemSummary
+									as="header"
+									slug={slug}
+									title={metadata.title}
+									date={metadata.date}
+									tags={metadata.tags}
+									hasBorder={false}
+									isLink={false}
+								/>
+							</div>
+							<div className="space-y-5" aria-label={t.a11y.postContent}>
+								<Content />
+							</div>
+						</div>
+						<div className="lg:col-span-1">
+							<div className="sticky top-8">
+								<div className="space-y-5 mb-15">
+									<Title title="Recent posts" tag="h3" />
+									<PostsList limit={3} showTags={false} />
+								</div>
+								<div className="space-y-5">
+									<Title title={t.general.tags} tag="h3" />
+									<TagList
+										as="nav"
+										tags={metadata.tags}
+										showCount={true}
+										className="mt-4 flex flex-wrap gap-2"
+										aria-label={t.a11y.postTags}
+									/>
+								</div>
+							</div>
+						</div>
+					</article>
+				</div>
 			</>
 		);
 	} catch (error) {

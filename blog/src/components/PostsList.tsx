@@ -3,9 +3,10 @@ import { postMetadataGetAll } from "@/lib/mdx";
 
 type PostsListProps = {
 	limit?: number | null;
+	showTags?: boolean;
 };
 
-export default async function PostsList({ limit }: PostsListProps) {
+export default async function PostsList({ limit, showTags }: PostsListProps) {
 	const allPosts = await postMetadataGetAll();
 	const posts = limit ? allPosts.slice(0, limit) : allPosts;
 	return (
@@ -19,6 +20,7 @@ export default async function PostsList({ limit }: PostsListProps) {
 					summary={post.summary}
 					tags={post.tags}
 					as="li"
+					showTags={showTags}
 				/>
 			))}
 		</ul>
