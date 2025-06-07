@@ -1,6 +1,5 @@
-import { getAllPostsMeta } from "@/utils/mdx";
 import { ItemSummary } from "@/components/ui/ItemSummary";
-import { formatDate } from "@/lib/utils";
+import { formatDate, getAllPostsMeta } from "@/lib/utils";
 
 type PostsListProps = {
 	limit?: number | null;
