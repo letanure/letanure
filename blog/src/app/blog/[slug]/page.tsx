@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { generateMetadata as generateSiteMetadata } from "@/lib/metadata";
 import { getTranslation } from "@/i18n";
 import { generateBlogPostSchema } from "@/lib/schema";
-import { siteConfig } from "@/config/site";
+import { siteConfig } from "@/i18n/en";
 import { dateFormat } from "@/lib/utils";
 import { ItemSummary } from "@/components/ui/ItemSummary";
 

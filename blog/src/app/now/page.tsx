@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { generateMetadata as generateSiteMetadata } from "@/lib/metadata";
 import { generateWebPageSchema } from "@/lib/schema";
-import { siteConfig } from "@/config/site";
+import { siteConfig } from "@/i18n/en";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { dateFormat } from "@/lib/utils";

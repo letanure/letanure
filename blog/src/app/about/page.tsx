@@ -6,7 +6,7 @@ import { generateMetadata as generateSiteMetadata } from "@/lib/metadata";
 import { getTranslation } from "@/i18n";
 import type { AboutContent } from "@/types/content";
 import { generateWebPageSchema, generatePersonSchema } from "@/lib/schema";
-import { siteConfig } from "@/config/site";
+import { siteConfig } from "@/i18n/en";
 
 const t = getTranslation();
 

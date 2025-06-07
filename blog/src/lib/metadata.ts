@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteConfig } from "@/config/site";
+import { siteConfig } from "@/i18n/en";
 
 interface GenerateMetadataProps {
 	title?: string;

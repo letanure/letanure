@@ -1,4 +1,4 @@
-import { siteConfig } from "@/config/site";
+import { siteConfig } from "@/i18n/en";
 import type { BlogPostSchema, BlogListSchema } from "@/types/schema";
 
 export function generateBlogPostSchema({

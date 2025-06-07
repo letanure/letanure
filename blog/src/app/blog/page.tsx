@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { generateMetadata as generateSiteMetadata } from "@/lib/metadata";
 import { getTranslation } from "@/i18n";
-import { siteConfig } from "@/config/site";
+import { siteConfig } from "@/i18n/en";
 import { generateBlogListSchema } from "@/lib/schema";
 import { postAllGet } from "@/lib/mdx";
 import { Title } from "@/components/ui/Title";
