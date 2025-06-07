@@ -1,48 +1,24 @@
 import type { Metadata } from "next";
-import fs from "node:fs/promises";
-import path from "node:path";
 import Image from "next/image";
 import { generateMetadata as generateSiteMetadata } from "@/lib/metadata";
 import { getTranslation } from "@/i18n";
-import type { AboutContent } from "@/types/content";
 import { generateWebPageSchema, generatePersonSchema } from "@/lib/schema";
 import { siteConfig } from "@/i18n/en";
 
 const t = getTranslation();
 
 export const metadata: Metadata = generateSiteMetadata({
-	title: t.about.title,
-	description: t.about.description,
+	title: t.about.titlePage,
+	description: t.about.descriptionPage,
 	path: "/about",
 });
 
-async function getAboutContent(locale = "en"): Promise<AboutContent> {
-	const filePath = path.join(
-		process.cwd(),
-		`src/content/json/about.${locale}.json`,
-	);
-	const data = await fs.readFile(filePath, "utf8");
-	const content = JSON.parse(data);
-
-	// Validate the content structure
-	if (!content || typeof content !== "object") {
-		throw new Error("Invalid about content: content must be an object");
-	}
-
-	if (!content.title || typeof content.title !== "string") {
-		throw new Error("Invalid about content: title must be a string");
-	}
-
-	return content as AboutContent;
-}
-
 export default async function AboutPage() {
 	try {
-		const content = await getAboutContent();
 		const aboutUrl = `${siteConfig.url}/about`;
 		const pageSchema = generateWebPageSchema({
-			title: content.title,
-			description: t.about.description,
+			title: t.about.title,
+			description: t.about.descriptionPage,
 			url: aboutUrl,
 		});
 		const personSchema = generatePersonSchema();
@@ -64,8 +40,8 @@ export default async function AboutPage() {
 					<div className="flex flex-col md:flex-row items-center gap-8 mb-16">
 						<div className="relative w-48 h-48 rounded-full overflow-hidden">
 							<Image
-								src={content.hero.image}
-								alt={content.hero.alt}
+								src={t.about.hero.image}
+								alt={t.about.hero.alt}
 								fill
 								className="object-cover"
 								priority
@@ -73,13 +49,13 @@ export default async function AboutPage() {
 						</div>
 						<div className="flex-1">
 							<h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
-								{content.title}
+								{t.about.title}
 							</h1>
 							<p className="mt-2 text-xl text-gray-600 dark:text-gray-300">
-								{content.subtitle}
+								{t.about.subtitle}
 							</p>
 							<p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
-								{content.hero.brief}
+								{t.about.hero.brief}
 							</p>
 						</div>
 					</div>
@@ -90,7 +66,7 @@ export default async function AboutPage() {
 							Skills & Technologies
 						</h2>
 						<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-							{content.skills.categories.map((category) => (
+							{t.about.skills.categories.map((category) => (
 								<div
 									key={category.name}
 									className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm"
@@ -119,7 +95,7 @@ export default async function AboutPage() {
 							Experience
 						</h2>
 						<div className="space-y-8">
-							{content.experience.map((job) => (
+							{t.about.experience.map((job) => (
 								<div
 									key={`${job.company}-${job.period}`}
 									className="relative pl-8 border-l-2 border-gray-200 dark:border-gray-700"
@@ -145,7 +121,7 @@ export default async function AboutPage() {
 							Interests & Hobbies
 						</h2>
 						<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-							{content.interests.map((interest) => (
+							{t.about.interests.map((interest) => (
 								<div
 									key={interest.title}
 									className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm"
@@ -170,17 +146,17 @@ export default async function AboutPage() {
 							<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
 								<div>
 									<p className="text-gray-600 dark:text-gray-300">
-										{content.contact.location}
+										{t.about.contact.location}
 									</p>
 									<a
-										href={`mailto:${content.contact.email}`}
+										href={`mailto:${t.about.contact.email}`}
 										className="text-blue-600 dark:text-blue-400 hover:underline"
 									>
-										{content.contact.email}
+										{t.about.contact.email}
 									</a>
 								</div>
 								<div className="flex gap-4">
-									{content.contact.social.map((link) => (
+									{t.about.contact.social.map((link) => (
 										<a
 											key={link.name}
 											href={link.url}
