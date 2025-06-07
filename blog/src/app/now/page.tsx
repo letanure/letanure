@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { generateMetadata as generateSiteMetadata } from "@/lib/metadata";
 import { generateWebPageSchema } from "@/lib/schema";
-import { siteConfig } from "@/i18n/en";
+import { siteConfig } from "@/siteConfig";
 import { dateFormat } from "@/lib/utils";
 import { getTranslation } from "@/i18n";
 
@@ -24,6 +24,7 @@ export default async function NowPage() {
 		<article className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
 			<script
 				type="application/ld+json"
+				// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
 			/>
 			<header className="mb-8">

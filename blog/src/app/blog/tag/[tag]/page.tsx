@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { postByTagGet, postTagsAllGet, postMetaAllGet } from "@/lib/mdx";
-import Link from "next/link";
-import TagCounts from "@/components/TagCounts";
+import { postMetadataGetAll } from "@/lib/mdx";
+import PostsList from "@/components/PostsList";
 import { generateMetadata as generateSiteMetadata } from "@/lib/metadata";
+import { Title } from "@/components/ui/Title";
+import { TagList } from "@/components/ui/TagList";
+import { getTranslation } from "@/i18n";
+
+const t = getTranslation();
 
 interface Props {
 	params: Promise<{ tag: string }>;
@@ -11,7 +15,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { tag } = await params;
-	const posts = await postByTagGet(tag);
+	const posts = postMetadataGetAll().filter((post) => post.tags.includes(tag));
 
 	return generateSiteMetadata({
 		title: `Posts tagged with #${tag}`,
@@ -20,63 +24,60 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	});
 }
 
-export async function generateStaticParams() {
-	const tags = await postTagsAllGet();
-	return tags.map((tag) => ({ tag: String(tag) }));
-}
+// export async function generateStaticParams() {
+// 	const tags = await postTagsAllGet();
+// 	return tags.map((tag) => ({ tag: String(tag) }));
+// }
 
-function formatDate(dateString: string) {
-	return new Date(dateString).toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "long",
-		day: "numeric",
-	});
-}
+// function formatDate(dateString: string) {
+// 	return new Date(dateString).toLocaleDateString("en-US", {
+// 		year: "numeric",
+// 		month: "long",
+// 		day: "numeric",
+// 	});
+// }
 
 export default async function TagPage({ params }: Props) {
 	const { tag } = await params;
-	const posts = await postByTagGet(tag);
-	const allPosts = await postMetaAllGet();
+	const postsAll = postMetadataGetAll();
+	const postsWithTag = postsAll.filter((post) => post.tags.includes(tag));
+	const allTags = postsAll.flatMap((post) => post.tags || []);
 
-	if (posts.length === 0) {
+	if (postsWithTag.length === 0) {
 		notFound();
 	}
 
 	return (
-		<div className="max-w-2xl mx-auto">
-			<h1 className="text-3xl font-bold mb-8">Posts tagged with #{tag}</h1>
-			<TagCounts posts={allPosts} />
-			<div className="space-y-8">
-				{posts.map((post) => (
-					<article key={post.slug} className="border-b pb-8">
-						<Link href={`/blog/${post.slug}`}>
-							<h2 className="text-2xl font-semibold hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-								{post.title}
-							</h2>
-						</Link>
-						<p className="text-gray-500 text-sm mt-2">
-							{formatDate(post.date)}
-						</p>
-						<p className="mt-2 text-gray-600 dark:text-gray-300">
-							{post.summary}
-						</p>
-						<div className="flex gap-2 mt-4">
-							{post.tags.map((postTag) => (
-								<Link
-									key={postTag}
-									href={`/blog/tag/${postTag}`}
-									className={`px-3 py-1 text-sm rounded-full transition-colors ${
-										postTag === tag
-											? "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200"
-											: "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
-									}`}
-								>
-									#{postTag}
-								</Link>
-							))}
+		<div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
+			<div className="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-3">
+				<div className="lg:col-span-2">
+					<div className="mb-16">
+						<Title
+							title={`Posts tagged with #${tag}`}
+							tag="h1"
+							// subtitle={t.blog.description}
+							// ariaTitle={t.a11y.blogTitle}
+							// ariaSubtitle={t.a11y.blogDescription}
+						/>
+
+						<div className="space-y-16">
+							<PostsList />
 						</div>
-					</article>
-				))}
+					</div>
+				</div>
+				<div className="lg:col-span-1">
+					<div className="sticky top-8">
+						<Title title={t.general.tags} tag="h3" />
+
+						<TagList
+							as="nav"
+							tags={allTags}
+							showCount={true}
+							className="mt-4 flex flex-wrap gap-2"
+							aria-label={t.a11y.postTags}
+						/>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

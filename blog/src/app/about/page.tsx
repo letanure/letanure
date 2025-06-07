@@ -3,7 +3,7 @@ import Image from "next/image";
 import { generateMetadata as generateSiteMetadata } from "@/lib/metadata";
 import { getTranslation } from "@/i18n";
 import { generateWebPageSchema, generatePersonSchema } from "@/lib/schema";
-import { siteConfig } from "@/i18n/en";
+import { siteConfig } from "@/siteConfig";
 
 const t = getTranslation();
 

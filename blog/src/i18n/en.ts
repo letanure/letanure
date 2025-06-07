@@ -244,8 +244,81 @@ export const en = {
 
 	// Now page
 	now: {
+		titlePage: "Now",
+		descriptionPage:
+			"What I'm currently working on, learning, and focusing on.",
 		title: "Now",
-		description: "What I'm currently working on, learning, and focusing on.",
+		description: "What I'm currently focused on",
+		lastUpdated: "2025-06-01",
+		categories: [
+			{
+				name: "Work & Business",
+				items: [
+					{
+						title: "Web Tools Development",
+						description:
+							"Building tools for flash tattoo organization, image resizing, and faster sheet printing",
+						status: "active",
+					},
+					{
+						title: "Career Change",
+						description:
+							"Actively looking for a new front-end or AI engineering role, preferably remote or hybrid in Berlin",
+						status: "active",
+					},
+				],
+			},
+			{
+				name: "Personal Projects",
+				items: [
+					{
+						title: "Blog Migration",
+						description: "Updating my dev blog with Next.js, MDX, and Supabase",
+						status: "active",
+					},
+					{
+						title: "DIY & Making",
+						description:
+							"Designing projects with laser cutting (xTool, M1 Ultra) and wood painting",
+						status: "active",
+					},
+					{
+						title: "AI Exploration",
+						description:
+							"Studying AI engineering and building simple AI tools using Vercel AI SDK, local LLMs, and custom interfaces",
+						status: "active",
+					},
+				],
+			},
+			{
+				name: "Learning & Growth",
+				items: [
+					{
+						title: "German Language",
+						description:
+							"Learning more about local life in Germany and improving my German (A2)",
+						status: "active",
+					},
+					{
+						title: "Art Studies",
+						description:
+							"Studying 3D toy-like art, Art Nouveau, and folk design for creative output",
+						status: "active",
+					},
+				],
+			},
+			{
+				name: "Personal Development",
+				items: [
+					{
+						title: "Focus & Productivity",
+						description:
+							"Practicing daily focus with better tools, planning and organizing my time",
+						status: "active",
+					},
+				],
+			},
+		],
 	},
 
 	// Projects page

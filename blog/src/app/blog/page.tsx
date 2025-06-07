@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { generateMetadata as generateSiteMetadata } from "@/lib/metadata";
 import { getTranslation } from "@/i18n";
-import { siteConfig } from "@/i18n/en";
+import { siteConfig } from "@/siteConfig";
 import { generateBlogListSchema } from "@/lib/schema";
-import { postAllGet } from "@/lib/mdx";
+import { postMetadataGetAll } from "@/lib/mdx";
 import { Title } from "@/components/ui/Title";
 import PostsList from "@/components/PostsList";
 import { TagList } from "@/components/ui/TagList";
@@ -18,30 +18,14 @@ export const metadata: Metadata = generateSiteMetadata({
 });
 
 export default async function BlogPage() {
-	const posts = postAllGet();
-
-	// Sort posts by date
-	const sortedPosts = posts.sort(
-		(a, b) =>
-			new Date(b.metadata.date as string).getTime() -
-			new Date(a.metadata.date as string).getTime(),
-	);
-
-	// get all tags
-	const allTags = sortedPosts.flatMap((post) => post.metadata.tags || []);
+	const posts = postMetadataGetAll();
+	const allTags = posts.flatMap((post) => post.tags || []);
 
 	const schema = generateBlogListSchema({
 		title: t.blog.title,
 		description: t.blog.description,
 		url: `${siteConfig.url}/blog`,
-		posts:
-			sortedPosts.map((post) => ({
-				title: post.metadata.title,
-				description: post.metadata.summary,
-				date: `${post.metadata.date}`,
-				url: `${siteConfig.url}/blog/${post.slug}`,
-				tags: post.metadata.tags || [],
-			})) || [],
+		posts: posts,
 	});
 
 	return (

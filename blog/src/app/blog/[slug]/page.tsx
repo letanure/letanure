@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 // import { generateMetadata as generateSiteMetadata } from "@/lib/metadata";
 import { getTranslation } from "@/i18n";
 import { generateBlogPostSchema } from "@/lib/schema";
-import { siteConfig } from "@/i18n/en";
+import { siteConfig } from "@/siteConfig";
 import { dateFormat } from "@/lib/utils";
 import { ItemSummary } from "@/components/ui/ItemSummary";
 

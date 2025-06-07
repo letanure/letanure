@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { classNameJoin } from "@/lib/utils";
+import { classNameJoin, dateFormat } from "@/lib/utils";
 import { TagList } from "@/components/ui/TagList";
 
 export type ItemSummaryProps = {
@@ -41,7 +41,7 @@ export function ItemSummary({
 				title && <p className="text-xl font-semibold">{title}</p>
 			)}
 
-			{date && <p className="text-gray-500 text-sm">{date}</p>}
+			{date && <p className="text-gray-500 text-sm">{dateFormat(date)}</p>}
 
 			{summary && <p className="mt-1 text-gray-700">{summary}</p>}
 

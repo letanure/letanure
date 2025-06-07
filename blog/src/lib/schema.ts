@@ -1,5 +1,6 @@
-import { siteConfig } from "@/i18n/en";
+import { siteConfig } from "@/siteConfig";
 import type { BlogPostSchema, BlogListSchema } from "@/types/schema";
+import type { PostMetadata } from "@/types/post";
 
 export function generateBlogPostSchema({
 	title,
@@ -48,7 +49,7 @@ export function generateWebPageSchema({
 		url,
 		publisher: {
 			"@type": "Organization",
-			name: siteConfig.name,
+			name: siteConfig.author.name,
 			logo: {
 				"@type": "ImageObject",
 				url: `${siteConfig.url}/logo.png`,
@@ -81,7 +82,7 @@ export function generateBlogSchema({
 		url,
 		publisher: {
 			"@type": "Organization",
-			name: siteConfig.name,
+			name: siteConfig.author.name,
 			logo: {
 				"@type": "ImageObject",
 				url: `${siteConfig.url}/logo.png`,
@@ -106,7 +107,7 @@ export function generatePersonSchema() {
 		// jobTitle: siteConfig.author.title,
 		worksFor: {
 			"@type": "Organization",
-			name: siteConfig.name,
+			name: siteConfig.author.name,
 		},
 		// sameAs: siteConfig.author.socials,
 	};
@@ -121,13 +122,7 @@ export function generateBlogListSchema({
 	title: string;
 	description: string;
 	url: string;
-	posts: Array<{
-		title: string;
-		description: string;
-		date: string;
-		url: string;
-		tags: string[];
-	}>;
+	posts: PostMetadata[];
 }): BlogListSchema {
 	return {
 		"@context": "https://schema.org",
@@ -138,10 +133,10 @@ export function generateBlogListSchema({
 		blogPost: posts.map((post) => ({
 			"@type": "BlogPosting",
 			headline: post.title,
-			description: post.description,
+			description: post.summary,
 			datePublished: post.date,
 			dateModified: post.date,
-			url: post.url,
+			url: `${siteConfig.url}/blog/${post.slug}`,
 			keywords: post.tags.join(", "),
 			author: {
 				"@type": "Person",
