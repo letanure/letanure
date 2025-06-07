@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { postByTagGet, postTagsAllGet, postMetaAllGet } from "@/lib/utils";
+import { postByTagGet, postTagsAllGet, postMetaAllGet } from "@/lib/mdx";
 import Link from "next/link";
 import TagCounts from "@/components/TagCounts";
 import { generateMetadata as generateSiteMetadata } from "@/app/metadata";

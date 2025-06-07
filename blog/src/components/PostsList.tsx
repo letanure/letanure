@@ -1,5 +1,6 @@
 import { ItemSummary } from "@/components/ui/ItemSummary";
-import { dateFormat, postMetaAllGet } from "@/lib/utils";
+import { dateFormat } from "@/lib/utils";
+import { postMetaAllGet } from "@/lib/mdx";
 
 type PostsListProps = {
 	limit?: number | null;
