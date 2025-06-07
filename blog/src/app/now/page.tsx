@@ -4,7 +4,7 @@ import { generateWebPageSchema } from "@/utils/schema";
 import { siteConfig } from "@/config/site";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { formatDate } from "@/app/blog/utils";
+import { formatDate } from "@/lib/utils";
 import type { NowContent, NowCategory } from "@/types/content";
 
 export const metadata: Metadata = generateSiteMetadata({

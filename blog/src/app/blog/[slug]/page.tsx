@@ -5,7 +5,7 @@ import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
 import { getTranslation } from "@/i18n";
 import { generateBlogPostSchema } from "@/utils/schema";
 import { siteConfig } from "@/config/site";
-import { formatDate } from "@/app/blog/utils";
+import { formatDate } from "@/lib/utils";
 import { ItemSummary } from "@/components/ui/ItemSummary";
 
 const t = getTranslation();
