@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
+import { generateMetadata as generateSiteMetadata } from "@/lib/metadata";
 import { getTranslation } from "@/i18n";
 import { siteConfig } from "@/config/site";
 import { generateBlogListSchema } from "@/lib/schema";

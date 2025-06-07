@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import fs from "node:fs/promises";
 import path from "node:path";
 import Image from "next/image";
-import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
+import { generateMetadata as generateSiteMetadata } from "@/lib/metadata";
 import { getTranslation } from "@/i18n";
 import type { AboutContent } from "@/types/content";
 import { generateWebPageSchema, generatePersonSchema } from "@/lib/schema";

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { postByTagGet, postTagsAllGet, postMetaAllGet } from "@/lib/mdx";
 import Link from "next/link";
 import TagCounts from "@/components/TagCounts";
-import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
+import { generateMetadata as generateSiteMetadata } from "@/lib/metadata";
 
 interface Props {
 	params: Promise<{ tag: string }>;
