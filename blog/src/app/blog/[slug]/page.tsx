@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
 import { getTranslation } from "@/i18n";
-import { generateBlogPostSchema } from "@/utils/schema";
+import { generateBlogPostSchema } from "@/lib/schema";
 import { siteConfig } from "@/config/site";
 import { dateFormat } from "@/lib/utils";
 import { ItemSummary } from "@/components/ui/ItemSummary";

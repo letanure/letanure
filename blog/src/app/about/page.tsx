@@ -5,7 +5,7 @@ import Image from "next/image";
 import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
 import { getTranslation } from "@/i18n";
 import type { AboutContent } from "@/types/content";
-import { generateWebPageSchema, generatePersonSchema } from "@/utils/schema";
+import { generateWebPageSchema, generatePersonSchema } from "@/lib/schema";
 import { siteConfig } from "@/config/site";
 
 const t = getTranslation();
