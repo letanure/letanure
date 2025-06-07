@@ -5,7 +5,7 @@ import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
 import { getTranslation } from "@/i18n";
 import { generateBlogPostSchema } from "@/utils/schema";
 import { siteConfig } from "@/config/site";
-import { formatDate } from "@/lib/utils";
+import { dateFormat } from "@/lib/utils";
 import { ItemSummary } from "@/components/ui/ItemSummary";
 
 const t = getTranslation();
@@ -77,7 +77,7 @@ export default async function BlogPostPage({ params }: Props) {
 						as="header"
 						slug={slug}
 						title={metadata.title}
-						date={formatDate(metadata.date)}
+						date={dateFormat(metadata.date)}
 						tags={metadata.tags}
 						hasBorder={false}
 						isLink={false}

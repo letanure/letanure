@@ -2,19 +2,9 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 
+/* ------------------------------ Types ------------------------------ */
+
 type ClassValue = string | false | null | undefined;
-
-export function cn(...classes: ClassValue[]): string {
-	return classes.filter(Boolean).join(" ");
-}
-
-export function formatDate(dateString: string) {
-	return new Date(dateString).toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "long",
-		day: "numeric",
-	});
-}
 
 type Metadata = {
 	date?: string | number | Date;
@@ -25,72 +15,31 @@ type Metadata = {
 	tags?: string[];
 };
 
-function parseFrontmatter(fileContent: string) {
-	const frontmatterRegex = /---\s*([\s\S]*?)\s*---/;
-	const match = frontmatterRegex.exec(fileContent);
-	// biome-ignore lint/style/noNonNullAssertion: <explanation>
-	const frontMatterBlock = match![1];
-	const content = fileContent.replace(frontmatterRegex, "").trim();
-	const frontMatterLines = frontMatterBlock.trim().split("\n");
-	const metadata: Partial<Metadata> = {};
+export type PostMeta = {
+	slug: string;
+	title: string;
+	date: string;
+	summary: string;
+	tags: string[];
+};
 
-	// biome-ignore lint/complexity/noForEach: <explanation>
-	frontMatterLines.forEach((line) => {
-		const [key, ...valueArr] = line.split(": ");
-		let value = valueArr.join(": ").trim();
-		value = value.replace(/^['"](.*)['"]$/, "$1"); // Remove quotes
-		const cleanKey = key.trim();
+/* -------------------------- Utility functions -------------------------- */
 
-		if (cleanKey === "tags") {
-			metadata.tags = value
-				.replace(/^\[|\]$/g, "")
-				.split(",")
-				.map((tag) => tag.trim());
-		} else {
-			(metadata as Record<string, string>)[cleanKey] = value;
-		}
-	});
-
-	return { metadata: metadata as Metadata, content };
+export function classNameJoin(...classes: ClassValue[]): string {
+	return classes.filter(Boolean).join(" ");
 }
 
-function getMDXFiles(dir: fs.PathLike) {
-	return fs.readdirSync(dir).filter((file) => path.extname(file) === ".mdx");
-}
+/* -------------------------- Date formatting -------------------------- */
 
-function readMDXFile(filePath: fs.PathOrFileDescriptor) {
-	const rawContent = fs.readFileSync(filePath, "utf-8");
-	return parseFrontmatter(rawContent);
-}
-
-function getMDXData(dir: fs.PathLike) {
-	const mdxFiles = getMDXFiles(dir);
-	return mdxFiles.map((file) => {
-		const { metadata, content } = readMDXFile(path.join(dir as string, file));
-		if (typeof metadata.tags === "string") {
-			try {
-				metadata.tags = JSON.parse(metadata.tags);
-			} catch {
-				metadata.tags = [];
-			}
-		}
-
-		const slug = path.basename(file, path.extname(file));
-
-		return {
-			metadata,
-			slug,
-			content,
-		};
+export function dateFormat(dateString: string) {
+	return new Date(dateString).toLocaleDateString("en-US", {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
 	});
 }
 
-export function getBlogPosts() {
-	const blogRoot = path.join(process.cwd(), ".."); // Go one level up from blog directory
-	return getMDXData(path.join(blogRoot, "content", "posts"));
-}
-
-export function formatDate2(date: string, includeRelative = false) {
+export function dateFormatRelative(date: string, includeRelative = false) {
 	const currentDate = new Date();
 	let dateStr = date;
 	if (!dateStr.includes("T")) {
@@ -127,67 +76,139 @@ export function formatDate2(date: string, includeRelative = false) {
 	return `${fullDate} (${formattedDate})`;
 }
 
+/* -------------------------- Frontmatter parsing -------------------------- */
+
+function frontmatterParse(content: string): {
+	metadata: Metadata;
+	content: string;
+} {
+	const { data, content: markdown } = matter(content);
+	return {
+		metadata: data as Metadata,
+		content: markdown.trim(),
+	};
+}
+
+/* -------------------------- MDX file handling -------------------------- */
+
+function mdxFileList(dir: fs.PathLike) {
+	return fs.readdirSync(dir).filter((file) => path.extname(file) === ".mdx");
+}
+
+function mdxFileRead(filePath: fs.PathOrFileDescriptor) {
+	const rawContent = fs.readFileSync(filePath, "utf-8");
+	return frontmatterParse(rawContent);
+}
+
+function mdxFileGetData(dir: fs.PathLike) {
+	const mdxFiles = mdxFileList(dir);
+	return mdxFiles.map((file) => {
+		const { metadata, content } = mdxFileRead(path.join(dir as string, file));
+		if (typeof metadata.tags === "string") {
+			try {
+				metadata.tags = JSON.parse(metadata.tags);
+			} catch {
+				metadata.tags = [];
+			}
+		}
+
+		const slug = path.basename(file, path.extname(file));
+
+		return {
+			metadata,
+			slug,
+			content,
+		};
+	});
+}
+
+/* -------------------------- Blog/Post data functions -------------------------- */
+
 const POSTS_PATH = path.join(process.cwd(), "..", "content", "posts");
 
-export type PostMeta = {
-	slug: string;
-	title: string;
-	date: string;
-	summary: string;
-	tags: string[];
-};
-
-export async function getPostSlugs(): Promise<string[]> {
+export async function postSlugsGet(): Promise<string[]> {
 	return fs
 		.readdirSync(POSTS_PATH)
 		.filter((file) => file.endsWith(".mdx"))
 		.map((file) => file.replace(/\.mdx$/, ""));
 }
 
-export async function getPostBySlug(slug: string): Promise<{
+/**
+ * Utility function to read and parse a post file to extract metadata and content.
+ * This can be reused to reduce duplication in getPostBySlug and getAllPostsMeta.
+ */
+function postFileRead(filePath: string) {
+	const rawContent = fs.readFileSync(filePath, "utf8");
+	// Use parseFrontmatter instead of gray-matter to keep consistency and reduce dependency on gray-matter
+	const { metadata, content } = frontmatterParse(rawContent);
+	// Ensure tags is always an array
+	if (typeof metadata.tags === "string") {
+		try {
+			metadata.tags = JSON.parse(metadata.tags);
+		} catch {
+			metadata.tags = [];
+		}
+	}
+	return { metadata, content };
+}
+
+/**
+ * Note: getPostBySlug and getAllPostsMeta share duplicated logic for reading files,
+ * parsing frontmatter, and extracting metadata. Consider merging or reusing the logic
+ * via a utility function such as readPostFile to reduce redundancy.
+ */
+export async function postBySlugGet(slug: string): Promise<{
 	meta: PostMeta;
 	content: string;
 }> {
 	const filePath = path.join(POSTS_PATH, `${slug}.mdx`);
-	const source = fs.readFileSync(filePath, "utf8");
-	const { content, data } = matter(source);
+	// Using readPostFile to parse frontmatter and content
+	const { metadata, content } = postFileRead(filePath);
 	return {
 		meta: {
 			slug,
-			title: data.title || slug,
-			date: data.date || "",
-			summary: data.summary || "",
-			tags: data.tags || [],
+			title: metadata.title || slug,
+			date: String(metadata.date || ""),
+			summary: metadata.summary || "",
+			tags: metadata.tags || [],
 		},
 		content,
 	};
 }
 
-export async function getAllPostsMeta(): Promise<PostMeta[]> {
-	const slugs = await getPostSlugs();
+/**
+ * getAllPostsMeta also duplicates logic of reading files and parsing metadata.
+ * Using readPostFile here to reduce duplication.
+ */
+export async function postMetaAllGet(): Promise<PostMeta[]> {
+	const slugs = await postSlugsGet();
 	const posts = slugs.map((slug) => {
 		const filePath = path.join(POSTS_PATH, `${slug}.mdx`);
-		const source = fs.readFileSync(filePath, "utf8");
-		const { data } = matter(source);
+		const { metadata } = postFileRead(filePath);
 		return {
 			slug,
-			title: data.title || slug,
-			date: data.date || "",
-			summary: data.summary || "",
-			tags: data.tags || [],
+			title: metadata.title || slug,
+			date: String(metadata.date || ""),
+			summary: metadata.summary || "",
+			tags: metadata.tags || [],
 		};
 	});
 	// Sort by date descending
 	return posts.sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
-export async function getAllTags(): Promise<string[]> {
-	const posts = await getAllPostsMeta();
+export async function postTagsAllGet(): Promise<string[]> {
+	const posts = await postMetaAllGet();
 	const tags = new Set(posts.flatMap((post) => post.tags));
 	return Array.from(tags).sort();
 }
 
-export async function getPostsByTag(tag: string): Promise<PostMeta[]> {
-	const posts = await getAllPostsMeta();
+export async function postByTagGet(tag: string): Promise<PostMeta[]> {
+	const posts = await postMetaAllGet();
 	return posts.filter((post) => post.tags.includes(tag));
+}
+
+export function postAllGet() {
+	const blogRoot = path.join(process.cwd(), ".."); // Go one level up from blog directory
+	return mdxFileGetData(path.join(blogRoot, "content", "posts"));
 }

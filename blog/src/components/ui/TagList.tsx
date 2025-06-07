@@ -1,5 +1,5 @@
 import { Tag } from "@/components/ui/Tag";
-import { cn } from "@/lib/utils";
+import { classNameJoin } from "@/lib/utils";
 
 interface TagListProps {
 	tags: string[];
@@ -27,7 +27,7 @@ export function TagList({
 	const Container = as;
 
 	return (
-		<Container className={cn("flex flex-wrap gap-2", className)}>
+		<Container className={classNameJoin("flex flex-wrap gap-2", className)}>
 			{sortedTags.map(([tag, count]) => {
 				const tagLabel = showCount ? `${tag} (${count})` : tag;
 

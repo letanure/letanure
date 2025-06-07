@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { classNameJoin } from "@/lib/utils";
 
 type TitleProps = {
 	title?: string;
@@ -31,7 +31,7 @@ export function Title({
 			{title && (
 				<Tag
 					id={titleId}
-					className={cn(sizeClass, "font-bold mb-2")}
+					className={classNameJoin(sizeClass, "font-bold mb-2")}
 					aria-label={ariaTitle}
 				>
 					{title}

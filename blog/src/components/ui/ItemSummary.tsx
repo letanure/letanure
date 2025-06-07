@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { classNameJoin } from "@/lib/utils";
 import { TagList } from "@/components/ui/TagList";
 
 export type ItemSummaryProps = {
@@ -27,7 +27,9 @@ export function ItemSummary({
 	isLink = true,
 }: ItemSummaryProps) {
 	return (
-		<Component className={cn(hasBorder && "border-b pb-4", className)}>
+		<Component
+			className={classNameJoin(hasBorder && "border-b pb-4", className)}
+		>
 			{slug && title && isLink ? (
 				<Link
 					href={`/blog/${slug}`}

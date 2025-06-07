@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getPostsByTag, getAllTags, getAllPostsMeta } from "@/lib/utils";
+import { postByTagGet, postTagsAllGet, postMetaAllGet } from "@/lib/utils";
 import Link from "next/link";
 import TagCounts from "@/components/TagCounts";
 import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
@@ -11,7 +11,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { tag } = await params;
-	const posts = await getPostsByTag(tag);
+	const posts = await postByTagGet(tag);
 
 	return generateSiteMetadata({
 		title: `Posts tagged with #${tag}`,
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-	const tags = await getAllTags();
+	const tags = await postTagsAllGet();
 	return tags.map((tag) => ({ tag: String(tag) }));
 }
 
@@ -35,8 +35,8 @@ function formatDate(dateString: string) {
 
 export default async function TagPage({ params }: Props) {
 	const { tag } = await params;
-	const posts = await getPostsByTag(tag);
-	const allPosts = await getAllPostsMeta();
+	const posts = await postByTagGet(tag);
+	const allPosts = await postMetaAllGet();
 
 	if (posts.length === 0) {
 		notFound();

@@ -3,7 +3,7 @@ import { generateMetadata as generateSiteMetadata } from "@/app/metadata";
 import { getTranslation } from "@/i18n";
 import { siteConfig } from "@/config/site";
 import { generateBlogListSchema } from "@/utils/schema";
-import { getBlogPosts } from "@/lib/utils";
+import { postAllGet } from "@/lib/utils";
 import { Title } from "@/components/ui/Title";
 import PostsList from "@/components/PostsList";
 import { TagList } from "@/components/ui/TagList";
@@ -18,7 +18,7 @@ export const metadata: Metadata = generateSiteMetadata({
 });
 
 export default async function BlogPage() {
-	const posts = getBlogPosts();
+	const posts = postAllGet();
 
 	// Sort posts by date
 	const sortedPosts = posts.sort(
