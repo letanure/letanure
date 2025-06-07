@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { generateMetadata as generateSiteMetadata } from "@/lib/metadata";
 import { generateWebPageSchema } from "@/lib/schema";
 import { siteConfig } from "@/i18n/en";
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 import { dateFormat } from "@/lib/utils";
-import type { NowContent, NowCategory } from "@/types/content";
+import { getTranslation } from "@/i18n";
+
+const t = getTranslation();
 
 export const metadata: Metadata = generateSiteMetadata({
 	title: "Now",
@@ -13,16 +13,7 @@ export const metadata: Metadata = generateSiteMetadata({
 	path: "/now",
 });
 
-async function getNowContent(): Promise<NowContent> {
-	const filePath = join(process.cwd(), "src", "content", "json", "now.en.json");
-	const content = await readFile(filePath, "utf-8");
-	return JSON.parse(content);
-}
-
 export default async function NowPage() {
-	const content = await getNowContent();
-	const { categories, lastUpdated } = content;
-
 	const schema = generateWebPageSchema({
 		title: "Now",
 		description: "What I'm currently focused on",
@@ -40,12 +31,12 @@ export default async function NowPage() {
 					Now
 				</h1>
 				<p className="mt-4 text-sm text-gray-500">
-					Last updated: {dateFormat(lastUpdated)}
+					Last updated: {dateFormat(t.now.lastUpdated)}
 				</p>
 			</header>
 
 			<div className="space-y-12">
-				{categories.map((category: NowCategory) => (
+				{t.now.categories.map((category) => (
 					<section key={category.name} className="space-y-4">
 						<h2 className="text-xl font-semibold text-gray-900">
 							{category.name}
