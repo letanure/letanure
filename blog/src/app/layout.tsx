@@ -26,7 +26,7 @@ export default function RootLayout({
 				<Menu />
 				<main
 					id="main-content"
-					className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"
+					className="mx-auto max-w-7xl px-4 pt-24 pb-8 sm:px-6 lg:px-8"
 				>
 					{children}
 				</main>
