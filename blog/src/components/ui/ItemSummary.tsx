@@ -44,7 +44,7 @@ export function ItemSummary({
 
 			{date && <p className="text-gray-500 text-sm">{dateFormat(date)}</p>}
 
-			{summary && <p className="mt-1 text-gray-700">{summary}</p>}
+			{summary && <p className="mt-1 text-gray-700 dark:text-gray-300">{summary}</p>}
 
 			{showTags && tags && tags.length > 0 && (
 				<TagList as="nav" tags={tags} className="mt-2" />
