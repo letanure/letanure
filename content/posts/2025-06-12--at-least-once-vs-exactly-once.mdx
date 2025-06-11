@@ -1,0 +1,106 @@
+---
+title: At-Least-Once vs. Exactly-Once: What Real Systems Actually Guarantee
+date: 2025-06-12
+summary: Understand the difference between at-least-once and exactly-once delivery. Learn why most real-world systems go with retries and idempotency instead of costly guarantees.
+tags: ['system design', 'backend', 'queues', 'supabase', 'jobs']
+---
+
+# 📦 At-Least-Once vs. Exactly-Once: What Real Systems Actually Guarantee
+
+When your system performs a critical action — like sending a webhook, delivering a job, or recording a payment — ask yourself:
+
+> **How many times can this action happen?**
+
+---
+
+## ✅ At-Least-Once
+
+**The system guarantees the action will happen**  
+But it might happen **more than once**
+
+- Common in message queues: RabbitMQ, Kafka, Supabase Realtime
+- Works well **if your action is idempotent**
+- Simple to retry on failure
+
+### Example
+
+```ts
+// Supabase Function receives webhook
+export async function POST(req) {
+  const event = await req.json();
+
+  // ✅ Make this idempotent
+  const alreadyHandled = await supabase
+    .from('webhook_logs')
+    .select('*')
+    .eq('event_id', event.id)
+    .maybeSingle();
+
+  if (alreadyHandled) return new Response('Duplicate', { status: 200 });
+
+  await supabase.from('webhook_logs').insert({
+    event_id: event.id,
+    payload: event,
+  });
+
+  await processEvent(event);
+  return new Response('OK');
+}
+```
+
+If the event is delivered twice, it’s fine — only one result is stored.
+
+---
+
+## ❌ Exactly-Once
+
+**The action happens one time — and never again.**
+
+Sounds great, but:
+
+- It’s **very hard** to guarantee in real systems
+- Requires coordination across retries, state, and networking
+- Slow, complex, and often unnecessary
+
+Even Stripe, Kafka, and AWS **don’t do this by default**  
+They rely on **at-least-once + idempotency**
+
+---
+
+## 🧠 Why it matters
+
+You’ll hit this problem when:
+
+- Sending webhooks
+- Dispatching background jobs
+- Sending emails
+- Triggering side effects (inventory, receipts, payouts)
+
+You can’t **rely** on the request going through  
+You must ask: “What happens if it goes through again?”
+
+---
+
+## 💡 Design for at-least-once
+
+- Always use **idempotent operations**
+- Track job IDs, event IDs, user intents
+- Mark “already handled” before side effects run
+- Use `upsert`, unique constraints, or logs
+
+---
+
+## 📌 Summary
+
+| Delivery Type     | Guarantees            | Real-world Use   |
+|-------------------|------------------------|------------------|
+| At-Least-Once     | Will happen ≥1         | Webhooks, Jobs   |
+| Exactly-Once      | Will happen =1         | Rare, expensive  |
+
+Most of the time, aim for:
+
+> ✅ At-least-once delivery  
+> ✅ Idempotent handlers  
+> ✅ Safe retries
+
+That’s how real systems survive.
