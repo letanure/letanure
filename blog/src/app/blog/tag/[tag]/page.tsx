@@ -15,11 +15,12 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { tag } = await params;
-	const posts = postMetadataGetAll().filter((post) => post.tags.includes(tag));
+	const originalTag = tag.replace(/-/g, ' ');
+	const posts = postMetadataGetAll().filter((post) => post.tags.includes(originalTag));
 
 	return generateSiteMetadata({
-		title: `Posts tagged with #${tag}`,
-		description: `Browse all ${posts.length} posts tagged with #${tag} on my blog.`,
+		title: `Posts tagged with #${originalTag}`,
+		description: `Browse all ${posts.length} posts tagged with #${originalTag} on my blog.`,
 		path: `/blog/tag/${tag}`,
 	});
 }
@@ -39,8 +40,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function TagPage({ params }: Props) {
 	const { tag } = await params;
+	const originalTag = tag.replace(/-/g, ' ');
 	const postsAll = postMetadataGetAll();
-	const postsWithTag = postsAll.filter((post) => post.tags.includes(tag));
+	const postsWithTag = postsAll.filter((post) => post.tags.includes(originalTag));
 	const allTags = postsAll.flatMap((post) => post.tags || []);
 
 	if (postsWithTag.length === 0) {
@@ -53,7 +55,7 @@ export default async function TagPage({ params }: Props) {
 				<div className="lg:col-span-2">
 					<div className="mb-16">
 						<Title
-							title={`Posts tagged with #${tag}`}
+							title={`Posts tagged with #${originalTag}`}
 							tag="h1"
 							// subtitle={t.blog.description}
 							// ariaTitle={t.a11y.blogTitle}

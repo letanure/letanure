@@ -32,19 +32,22 @@ export default function TagCounts({ posts }: TagCountsProps) {
 				Tags
 			</h2>
 			<div className="max-h-[400px] overflow-y-auto pr-2">
-				{sortedTags.map(([tag, count]) => (
-					<Link
-						key={tag}
-						href={`/blog/tag/${tag}`}
-						className="flex items-center justify-between px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors mb-2"
-						aria-label={`${t.a11y.viewTaggedPosts.replace("{tag}", tag)} (${count} posts)`}
-					>
-						<span className="text-gray-700 dark:text-gray-300">#{tag}</span>
-						<span className="text-gray-500 dark:text-gray-400 text-xs">
-							{count}
-						</span>
-					</Link>
-				))}
+				{sortedTags.map(([tag, count]) => {
+					const tagUrl = tag.toLowerCase().replace(/\s+/g, '-');
+					return (
+						<Link
+							key={tag}
+							href={`/blog/tag/${tagUrl}`}
+							className="flex items-center justify-between px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors mb-2"
+							aria-label={`${t.a11y.viewTaggedPosts.replace("{tag}", tag)} (${count} posts)`}
+						>
+							<span className="text-gray-700 dark:text-gray-300">#{tag}</span>
+							<span className="text-gray-500 dark:text-gray-400 text-xs">
+								{count}
+							</span>
+						</Link>
+					);
+				})}
 			</div>
 		</div>
 	);

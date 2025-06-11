@@ -30,13 +30,14 @@ export function TagList({
 		<Container className={classNameJoin("flex flex-wrap gap-2", className)}>
 			{sortedTags.map(([tag, count]) => {
 				const tagLabel = showCount ? `${tag} (${count})` : tag;
+				const tagUrl = tag.toLowerCase().replace(/\s+/g, '-');
 
 				if (as === "nav") {
 					return (
 						<Tag
 							key={tag}
 							text={tagLabel}
-							href={`/blog/tag/${tag}`}
+							href={`/blog/tag/${tagUrl}`}
 							aria-label={`Posts tagged with ${tag}`}
 						/>
 					);
