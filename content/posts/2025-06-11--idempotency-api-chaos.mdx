@@ -1,0 +1,142 @@
+---
+title: How Idempotency Saves Your API from Chaos
+date: 2025-06-11
+summary: Understand idempotency and how it protects users and developers from accidental duplicate actions in web systems. Includes Supabase and Node.js examples.
+tags: ['supabase', 'api', 'webhooks', 'system design', 'nodejs']
+---
+
+# 🔁 Idempotency: Build APIs That Survive the Real World
+
+Idempotency means:
+
+> **Same request, same result — no side effects.**
+
+Not “don’t send it twice.”  
+But: “Send it twice, and the world stays clean.”
+
+---
+
+## 🧨 Real-world problem
+
+Imagine a user tapping **"Confirm Purchase"** on bad Wi-Fi.
+
+- Nothing happens.
+- They tap again.
+- Now they’re charged **twice**.
+
+---
+
+## 🌀 Another common bug: the user reloads the page
+
+Let’s say the app works like this:
+
+1. Page loads → generate `bookingId = uuidv4()`
+2. User clicks “Book” → request sent
+3. But network fails — or UI never shows success
+4. User **reloads** the page
+5. A **new UUID** is generated
+6. They click again → **two bookings created**
+
+Even though their intent was the same.  
+The app didn’t treat it that way.
+
+---
+
+## ✅ The fix: persist the UUID across reloads
+
+You need to **generate once and reuse** the ID until success.
+
+```ts
+// ✅ BookingButton.tsx (client component)
+import { useState, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+
+export function useStableBookingId() {
+  const [bookingId, setBookingId] = useState('');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('booking-id');
+    if (saved) setBookingId(saved);
+    else {
+      const newId = uuidv4();
+      localStorage.setItem('booking-id', newId);
+      setBookingId(newId);
+    }
+  }, []);
+
+  return bookingId;
+}
+```
+
+After a **successful** booking, you can clear it:
+
+```ts
+localStorage.removeItem('booking-id');
+```
+
+Now:
+- User retries = same UUID
+- User reloads = same UUID
+- User spams = same UUID
+
+→ One booking only.
+
+---
+
+## ✅ Why generate UUID on the client?
+
+Because only the client knows **the moment of intent**.
+
+- The server sees the request later (maybe multiple times)
+- The client can **track retries** and **persist intent**
+
+This matches how **Stripe** does it:
+- You set the `Idempotency-Key` header
+- It can be retried safely by the client or proxy
+
+---
+
+## ✅ Example: booking with Supabase
+
+```ts
+// Client sends same bookingId each time
+await fetch('/api/book', {
+  method: 'PUT',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ bookingId }),
+});
+```
+
+```ts
+// Server uses upsert to deduplicate
+await supabase
+  .from('bookings')
+  .upsert(
+    { booking_id: bookingId, status: 'confirmed' },
+    { onConflict: ['booking_id'] }
+  );
+```
+
+---
+
+## 🧠 Best practices
+
+- Always generate **stable IDs** for critical actions
+- Save them in `localStorage`, `cookies`, or session
+- Clear after confirmed success
+- Don’t trust the network to "just work"
+
+---
+
+## 📌 Summary
+
+> Your job isn’t to block duplicates.  
+> Your job is to make sure they don’t hurt anyone.
+
+If the user:
+- Clicks twice
+- Reloads
+- Has a network failure
+
+**Will the result still be correct?**  
+If yes — that’s idempotency.
