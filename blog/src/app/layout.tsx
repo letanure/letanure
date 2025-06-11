@@ -1,4 +1,4 @@
-// import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 // import { defaultMetadata } from "./metadata";
@@ -7,10 +7,16 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Menu from "@/components/Menu";
 import Footer from "@/components/Footer";
+import { Umami } from "@/components/Umami";
 
 const inter = Inter({ subsets: ["latin"] });
 
 // export const metadata: Metadata = defaultMetadata;
+
+export const metadata: Metadata = {
+	title: "Luiz Tanure",
+	description: "A personal blog about web development, programming, and technology.",
+};
 
 export default function RootLayout({
 	children,
@@ -31,6 +37,7 @@ export default function RootLayout({
 					{children}
 				</main>
 				<Footer />
+				<Umami />
 			</body>
 		</html>
 	);
