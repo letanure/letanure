@@ -89,7 +89,7 @@ export default async function BlogPostPage({ params }: Props) {
 									isLink={false}
 								/>
 							</div>
-							<div className="space-y-5" aria-label={t.a11y.postContent}>
+							<div className="prose space-y-5" aria-label={t.a11y.postContent}>
 								<Content />
 							</div>
 						</div>

@@ -18,13 +18,20 @@ body {
 	background: rgb(var(--background-rgb));
 }
 
-/* Markdown Content Styles */
+/* Prose Content Styles */
+.prose {
+	@apply max-w-none;
+}
+
+/* Headings */
 .prose h1 {
-	@apply text-4xl font-bold tracking-tight text-gray-900 dark:text-white mb-8;
+	@apply text-4xl font-bold tracking-tight text-gray-900 dark:text-white mb-8 mt-12;
+	@apply border-b border-gray-200 dark:border-gray-700 pb-4;
 }
 
 .prose h2 {
 	@apply text-3xl font-semibold text-gray-900 dark:text-white mt-12 mb-6;
+	@apply border-b border-gray-200 dark:border-gray-700 pb-2;
 }
 
 .prose h3 {
@@ -35,12 +42,10 @@ body {
 	@apply text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4;
 }
 
+/* Paragraphs and Text */
 .prose p {
 	@apply text-gray-600 dark:text-gray-300 mb-6 leading-7;
-}
-
-.prose a {
-	@apply text-blue-600 dark:text-blue-400 hover:underline;
+	@apply text-lg;
 }
 
 .prose strong {
@@ -51,45 +56,65 @@ body {
 	@apply italic text-gray-900 dark:text-white;
 }
 
+/* Links */
+.prose a {
+	@apply text-blue-600 dark:text-blue-400 hover:underline;
+	@apply transition-colors duration-200;
+}
+
+/* Lists */
 .prose ul {
-	@apply list-disc list-inside mb-6 space-y-2;
+	@apply list-disc list-inside mb-6 space-y-3;
+	@apply text-gray-600 dark:text-gray-300;
 }
 
 .prose ol {
-	@apply list-decimal list-inside mb-6 space-y-2;
+	@apply list-decimal list-inside mb-6 space-y-3;
+	@apply text-gray-600 dark:text-gray-300;
 }
 
 .prose li {
 	@apply text-gray-600 dark:text-gray-300;
+	@apply leading-7;
 }
 
 .prose li p {
 	@apply text-gray-600 dark:text-gray-300 mb-0 inline;
 }
 
+/* Blockquotes */
 .prose blockquote {
-	@apply border-l-4 border-gray-200 dark:border-gray-700 pl-4 italic text-gray-600 dark:text-gray-300 my-6;
+	@apply border-l-4 border-blue-500 dark:border-blue-400 pl-4 italic;
+	@apply text-gray-600 dark:text-gray-300 my-6;
+	@apply bg-gray-50 dark:bg-gray-800/50 p-4 rounded-r-lg;
 }
 
+/* Code Blocks */
 .prose code {
-	@apply font-mono text-sm bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-gray-900 dark:text-gray-100;
+	@apply font-mono text-sm bg-gray-100 dark:bg-gray-800;
+	@apply px-1.5 py-0.5 rounded text-gray-900 dark:text-gray-100;
+	@apply before:content-[''] after:content-[''];
 }
 
 .prose pre {
 	@apply bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto my-6;
+	@apply border border-gray-200 dark:border-gray-700;
 }
 
 .prose pre code {
 	@apply bg-transparent p-0 text-gray-900 dark:text-gray-100;
+	@apply text-sm leading-6;
 }
 
+/* Horizontal Rule */
 .prose hr {
 	@apply my-8 border-gray-200 dark:border-gray-700;
 }
 
-/* Table Styles */
+/* Tables */
 .prose table {
 	@apply w-full border-collapse my-6 text-sm;
+	@apply rounded-lg overflow-hidden;
 }
 
 .prose thead {
@@ -97,31 +122,49 @@ body {
 }
 
 .prose th {
-	@apply border border-gray-200 dark:border-gray-700 px-4 py-2 text-left font-semibold text-gray-900 dark:text-white;
+	@apply px-4 py-3 text-left font-semibold text-gray-900 dark:text-white;
+	@apply border-b border-gray-200 dark:border-gray-700;
 }
 
 .prose td {
-	@apply border border-gray-200 dark:border-gray-700 px-4 py-2 text-gray-600 dark:text-gray-300;
+	@apply px-4 py-3 text-gray-600 dark:text-gray-300;
+	@apply border-b border-gray-200 dark:border-gray-700;
 }
 
-.prose tr:nth-child(even) {
-	@apply bg-gray-50 dark:bg-gray-800/50;
+.prose tr:last-child td {
+	@apply border-b-0;
 }
 
-.prose tr:hover {
-	@apply bg-gray-100 dark:bg-gray-800/70;
-}
-
+/* Images */
 .prose img {
 	@apply rounded-lg my-6;
+	@apply border border-gray-200 dark:border-gray-700;
 }
 
-.prose figure {
-	@apply my-6;
+/* Custom Elements */
+.prose .callout {
+	@apply bg-blue-50 dark:bg-blue-900/20;
+	@apply border-l-4 border-blue-500 dark:border-blue-400;
+	@apply p-4 rounded-r-lg my-6;
 }
 
-.prose figcaption {
-	@apply text-sm text-gray-500 dark:text-gray-400 text-center mt-2;
+.prose .callout p {
+	@apply mb-0;
+}
+
+/* Spacing between sections */
+.prose > * + * {
+	@apply mt-6;
+}
+
+/* First element spacing */
+.prose > *:first-child {
+	@apply mt-0;
+}
+
+/* Last element spacing */
+.prose > *:last-child {
+	@apply mb-0;
 }
 
 /* Code block syntax highlighting */
