@@ -12,7 +12,7 @@ export const en = {
 	},
 
 	home: {
-		title: "Hi, I’m Luiz Tanure — a fullstack developer exploring modern web.",
+		title: "Hi, I'm Luiz Tanure — a fullstack developer exploring modern web.",
 		subtitle:
 			"Thoughts, tutorials, and projects on JavaScript, dev tools, and more.",
 		latestPosts: "Latest Posts",
@@ -22,6 +22,7 @@ export const en = {
 	nav: {
 		home: "Home",
 		blog: "Blog",
+		workshop: "Workshop & DIY",
 		about: "About",
 		now: "Now",
 		projects: "Projects",
@@ -327,7 +328,7 @@ export const en = {
 		descriptionPage:
 			"Explore my current and past projects in web development and technology.",
 		title: "Projects",
-		body: "These are some of the projects I’m currently working on or exploring. They reflect my focus on learning, building useful tools, and experimenting with new ideas in web development and AI.",
+		body: "These are some of the projects I'm currently working on or exploring. They reflect my focus on learning, building useful tools, and experimenting with new ideas in web development and AI.",
 		projects: [
 			{
 				title: "Personal Blog",

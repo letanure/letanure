@@ -41,6 +41,7 @@ export default function Menu() {
 	const navLinks = [
 		{ href: "/", label: t.nav.home },
 		{ href: "/blog", label: t.nav.blog },
+		{ href: "/workshop-diy", label: t.nav.workshop },
 		{ href: "/about", label: t.nav.about },
 		{ href: "/now", label: t.nav.now },
 		{ href: "/projects", label: t.nav.projects },

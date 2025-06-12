@@ -21,7 +21,7 @@ export type PostMeta = {
 
 /* -------------------------- Utility functions -------------------------- */
 
-export function classNameJoin(...classes: ClassValue[]): string {
+export function classNameJoin(...classes: (string | undefined | null | false)[]) {
 	return classes.filter(Boolean).join(" ");
 }
 
@@ -70,4 +70,12 @@ export function dateFormatRelative(date: string, includeRelative = false) {
 	}
 
 	return `${fullDate} (${formattedDate})`;
+}
+
+export function formatDate(date: string) {
+	return new Date(date).toLocaleDateString("en-US", {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	});
 }
