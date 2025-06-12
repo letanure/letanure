@@ -73,10 +73,12 @@ I deliver features end-to-end or collaborate across teams on large systems.
 - [LinkedIn](https://www.linkedin.com/in/letanure/)
 - [Personal Blog](https://letanure.dev)
 
-![visitors](https://visitor-badge.laobi.icu/badge?page_id=letanure.letanure)
 
 ## 🤝 Book a Call
 
 Want to talk about a project, idea, or collaboration?
 
 👉 [Schedule a quick call with me](https://cal.com/letanure)
+
+
+![visitors](https://visitor-badge.laobi.icu/badge?page_id=letanure.letanure)
