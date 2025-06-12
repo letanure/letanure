@@ -16,19 +16,18 @@ I deliver features end-to-end or collaborate across teams on large systems.
 
 ## 🧰 Skills & Technologies
 
-**Languages:** TypeScript, JavaScript, Node.js, Python, PHP, Ruby, Bash  
-**Frameworks:** React, Vue, Svelte, Next.js, Nuxt, Gatsby  
-**Styling:** Tailwind CSS, Styled Components, Emotion, SASS, CSS  
-**Testing:** Jest, Vitest, Cypress, Playwright, Storybook, Testing Library  
-**DevOps & Hosting:** Docker, GitHub Actions, CI/CD, Vercel, Netlify, AWS, GCP  
-**Databases & APIs:** PostgreSQL, MongoDB, Supabase, GraphQL, Contentful, Strapi  
-**Monitoring:** Sentry, Datadog  
-**State:** Redux, Zustand  
-**AI & ML:** OpenAI, LangChain, Whisper, RAG, Vector DBs, OCR, Fine-Tuning, AI SDK, MCP, ML Studio  
-**Other:** Accessibility (WCAG), SEO, Design Systems, Git, D3.js, Three.js
+**Languages & Runtimes:** TypeScript, JavaScript, Node.js, Python, PHP, Ruby, Bash  
+**Front-End:** React, Vue, Svelte, Next.js, Nuxt, Gatsby  
+**Styling & UI:** Tailwind CSS, Styled Components, Emotion, SASS, CSS, D3.js, Three.js  
+**Testing & Quality:** Vitest, Jest, Cypress, Playwright, Storybook, Testing Library  
+**DevOps & Infra:** Docker, GitHub Actions, CI/CD, Vercel, Netlify, AWS, GCP, Turborepo  
+**Databases & APIs:** PostgreSQL, MongoDB, Supabase, GraphQL, Strapi, Contentful  
+**Monitoring & Observability:** Sentry, Datadog  
+**State & DX:** Redux, Zustand, Zod, io-ts  
+**AI & Automation:** OpenAI, LangChain, Whisper, AI SDK, MCP, RAG, ML Studio, OCR, Fine-Tuning 
+**Other:** Accessibility (WCAG), SEO, Design Systems, Git
 
-<details>
-<summary>Tool Badges</summary>
+## Stack
 
 ![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/-React-61DAFB?style=flat-square&logo=react&logoColor=white)
@@ -49,7 +48,6 @@ I deliver features end-to-end or collaborate across teams on large systems.
 ![LM Studio](https://img.shields.io/badge/-LM%20Studio-000000?style=flat-square&logo=lmstudio&logoColor=white)
 ![Perplexity](https://img.shields.io/badge/-Perplexity-000000?style=flat-square&logo=perplexity&logoColor=088F8F)
 
-</details>
 
 ---
 
