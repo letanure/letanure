@@ -10,7 +10,31 @@ export default function Footer() {
 					<p className="text-sm text-gray-500 dark:text-gray-400">
 						© {new Date().getFullYear()} {t.site.name}. All rights reserved.
 					</p>
-					<div className="flex space-x-6">
+					<div className="flex items-center space-x-6">
+						<a
+							href="https://cal.com/letanure"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="inline-flex items-center px-4 py-2 rounded-md bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
+							aria-label="Book a call"
+						>
+							<span className="sr-only">Book a call</span>
+							<svg
+								className="h-5 w-5 mr-2"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+								aria-hidden="true"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+								/>
+							</svg>
+							Book a Call
+						</a>
 						<a
 							href="https://github.com/letanure"
 							target="_blank"
