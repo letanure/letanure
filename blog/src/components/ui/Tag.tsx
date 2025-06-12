@@ -11,7 +11,7 @@ type TagProps = {
 
 export function Tag({ text, href, className }: TagProps) {
 	const baseClass = classNameJoin(
-		"px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors",
+		"inline-flex items-center px-[9px] py-0.5 rounded-[11px] text-[12px] font-normal bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors",
 		className,
 	);
 
