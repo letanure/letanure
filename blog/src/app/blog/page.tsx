@@ -38,7 +38,7 @@ export default async function BlogPage() {
 			/>
 			<div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
 				<div className="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-3">
-					<div className="lg:col-span-2">
+					<div className="prose lg:col-span-2">
 						<div className="mb-16">
 							<Title
 								title={t.blog.title}
