@@ -14,18 +14,6 @@ I deliver features end-to-end or collaborate across teams on large systems.
 
 ---
 
-## 🧰 Skills & Technologies
-
-**Languages & Runtimes:** TypeScript, JavaScript, Node.js, Python, PHP, Ruby, Bash  
-**Front-End:** React, Vue, Svelte, Next.js, Nuxt, Gatsby  
-**Styling & UI:** Tailwind CSS, Styled Components, Emotion, SASS, CSS, D3.js, Three.js  
-**Testing & Quality:** Vitest, Jest, Cypress, Playwright, Storybook, Testing Library  
-**DevOps & Infra:** Docker, GitHub Actions, CI/CD, Vercel, Netlify, AWS, GCP, Turborepo  
-**Databases & APIs:** PostgreSQL, MongoDB, Supabase, GraphQL, Strapi, Contentful  
-**Monitoring & Observability:** Sentry, Datadog  
-**State & DX:** Redux, Zustand, Zod, io-ts  
-**AI & Automation:** OpenAI, LangChain, Whisper, AI SDK, MCP, RAG, ML Studio, OCR, Fine-Tuning 
-**Other:** Accessibility (WCAG), SEO, Design Systems, Git
 
 ## Stack
 
@@ -40,14 +28,24 @@ I deliver features end-to-end or collaborate across teams on large systems.
 ![Vue.js](https://img.shields.io/badge/-Vue.js-4FC08D?style=flat-square&logo=vue.js&logoColor=white)
 ![Nuxt.js](https://img.shields.io/badge/-Nuxt.js-00DC82?style=flat-square&logo=nuxt.js&logoColor=white)
 ![Figma](https://img.shields.io/badge/-Figma-F24E1E?style=flat-square&logo=figma&logoColor=white)
-![LangChain](https://img.shields.io/badge/-LangChain-000000?style=flat-square&logo=langchain&logoColor=white)
-![OpenAI API](https://img.shields.io/badge/-OpenAI%20API-000000?style=flat-square&logo=openai&logoColor=white)
-![Hugging Face](https://img.shields.io/badge/-Hugging%20Face-FFD21F?style=flat-square&logo=huggingface&logoColor=black)
-![PyTorch](https://img.shields.io/badge/-PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
 ![TensorFlow](https://img.shields.io/badge/-TensorFlow-FF6F00?style=flat-square&logo=tensorflow&logoColor=white)
 ![LM Studio](https://img.shields.io/badge/-LM%20Studio-000000?style=flat-square&logo=lmstudio&logoColor=white)
 ![Perplexity](https://img.shields.io/badge/-Perplexity-000000?style=flat-square&logo=perplexity&logoColor=088F8F)
 
+
+
+## 🧰 Skills & Technologies
+
+**Languages & Runtimes:** TypeScript, JavaScript, Node.js, Python, PHP, Ruby, Bash  
+**Front-End:** React, Vue, Svelte, Next.js, Nuxt, Gatsby  
+**Styling & UI:** Tailwind CSS, Styled Components, Emotion, SASS, CSS, D3.js, Three.js  
+**Testing & Quality:** Vitest, Jest, Cypress, Playwright, Storybook, Testing Library  
+**DevOps & Infra:** Docker, GitHub Actions, CI/CD, Vercel, Netlify, AWS, GCP, Turborepo  
+**Databases & APIs:** PostgreSQL, MongoDB, Supabase, GraphQL, Strapi, Contentful  
+**Monitoring & Observability:** Sentry, Datadog  
+**State & DX:** Redux, Zustand, Zod, io-ts  
+**AI & Automation:** OpenAI, LangChain, Whisper, AI SDK, MCP, RAG, ML Studio, OCR, Fine-Tuning 
+**Other:** Accessibility (WCAG), SEO, Design Systems, Git
 
 ---
 
