@@ -14,7 +14,7 @@ export const en = {
 	home: {
 		title: "Hi, I’m Luiz Tanure — a fullstack developer exploring modern web.",
 		subtitle:
-			"Thoughts, tutorials, and projects on JavaScript, dev tools, and more.",
+			"Thoughts, tutorials, and projects on Typescript, JavaScript, Node, dev tools, and more.",
 		latestPosts: "Latest Posts",
 	},
 
