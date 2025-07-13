@@ -1,0 +1,106 @@
+---
+title: Web Accessibility Checklist – Building Inclusive Web Apps
+date: 2020-12-12
+summary: A practical accessibility guide covering key areas like semantic HTML, ARIA roles, keyboard navigation, and testing tools.
+tags: [accessibility, html, ux]
+---
+
+Web accessibility is about making websites usable for everyone, including people with disabilities. This checklist focuses on practical areas where developers can ensure accessibility in their apps.
+
+## Use Semantic HTML
+
+Semantic elements help screen readers and other assistive technologies understand your content:
+
+- Use `<header>`, `<nav>`, `<main>`, `<article>`, `<section>`, and `<footer>`
+- Use `<button>` instead of clickable `<div>` or `<span>`
+- Use `<label>` elements properly linked to `<input>` via `for` and `id`
+
+## Add ALT Text to Images
+
+Every `<img>` must have a meaningful `alt` attribute, or `alt=""` if the image is decorative.
+
+## Ensure Keyboard Navigation
+
+Users should be able to:
+
+- Navigate with the `Tab` key
+- Activate links and buttons with `Enter` or `Space`
+- Avoid getting stuck in keyboard traps
+
+Test this manually or using browser DevTools.
+
+## Use ARIA Roles When Needed
+
+Only when semantic HTML isn’t enough:
+
+```html
+<div role="dialog" aria-labelledby="dialogTitle" aria-describedby="dialogDesc">
+  ...
+</div>
+```
+
+Common roles:
+- `role="button"`
+- `role="dialog"`
+- `role="alert"`
+- `aria-expanded`, `aria-hidden`, etc.
+
+## Ensure Sufficient Color Contrast
+
+Check foreground and background color contrast ratios. Aim for:
+
+- 4.5:1 for normal text
+- 3:1 for large text (18px+ or 14px bold)
+
+Use tools like `color-contrast-checker` or in-browser extensions.
+
+## Provide Focus Styles
+
+Don’t remove focus outlines. If you restyle them, make sure they are clearly visible:
+
+```css
+button:focus {
+  outline: 2px solid #005fcc;
+  outline-offset: 2px;
+}
+```
+
+## Label Form Fields Clearly
+
+- Always associate `<label>`s with form fields
+- Use placeholder text only for hints, not as a label substitute
+- Group related fields using `<fieldset>` and `<legend>`
+
+## Add Skip Links
+
+Provide a way to skip repetitive content:
+
+```html
+<a href="#main-content" class="skip-link">Skip to content</a>
+```
+
+Make the link visible when focused.
+
+## Test with Accessibility Tools
+
+- [axe DevTools] browser extension
+- Lighthouse in Chrome DevTools
+- Screen readers like NVDA (Windows) or VoiceOver (macOS)
+- Keyboard-only navigation
+
+## Think About Motion
+
+Reduce unnecessary animations. Respect user preferences:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+```
+
+---
+
+Accessibility is not a feature. It’s part of good web design. Use this checklist to catch problems early and build more inclusive experiences.

@@ -1,0 +1,92 @@
+---
+title: Next.js for Beginners – Static and Server Rendering
+date: 2020-06-05
+summary: A beginner guide to Next.js with examples of static generation and server-side rendering using getStaticProps.
+tags: [nextjs, react, ssr, ssg, javascript]
+---
+
+Next.js makes it easy to build fast and SEO-friendly React apps. It combines the best parts of static sites and server-rendered apps.
+
+You don’t need extra setup to support static generation (SSG) or server-side rendering (SSR). Next.js handles both out of the box.
+
+## Basic Concepts
+
+- **Pages**: Every file in the `pages` folder becomes a route.
+- **SSG**: Pre-renders pages at build time using `getStaticProps`.
+- **SSR**: Pre-renders pages on each request using `getServerSideProps`.
+
+## Example: Static Blog with getStaticProps
+
+```jsx
+// pages/posts.js
+export async function getStaticProps() {
+  const posts = await fetchPostsFromCMS();
+  return {
+    props: { posts },
+  };
+}
+
+export default function Posts({ posts }) {
+  return (
+    <ul>
+      {posts.map((p) => (
+        <li key={p.id}>{p.title}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+- This will generate the page at build time.
+- Fast load, good SEO.
+
+## Server-Side Example
+
+```jsx
+// pages/dashboard.js
+export async function getServerSideProps() {
+  const data = await fetchSecureDashboardData();
+  return {
+    props: { data },
+  };
+}
+
+export default function Dashboard({ data }) {
+  return <pre>{JSON.stringify(data)}</pre>;
+}
+```
+
+- This page is generated on every request.
+- Use it when data changes often or depends on auth/session.
+
+## Routing and Navigation
+
+Next.js uses file-based routing. For links:
+
+```jsx
+import Link from 'next/link';
+
+<Link href="/about">About</Link>
+```
+
+## Setup
+
+```bash
+npx create-next-app my-app
+cd my-app
+npm run dev
+```
+
+This gives you:
+
+- React 16+
+- File-based routing
+- Fast builds and hot reload
+
+## When to Use What
+
+- Use `getStaticProps` when content doesn’t change often.
+- Use `getServerSideProps` when content is dynamic.
+- Use `getStaticPaths` for dynamic routes.
+
+Next.js became a go-to tool for React devs who want performance, simplicity, and a good developer experience—all without losing flexibility.

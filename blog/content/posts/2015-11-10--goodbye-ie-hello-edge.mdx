@@ -1,0 +1,66 @@
+---
+title: Goodbye IE, Hello Edge – What the End of Internet Explorer Means
+date: 2015-11-10
+summary: Microsoft moves from Internet Explorer to the new Edge browser, easing life for web developers.
+tags: [browsers, microsoft, compatibility]
+---
+
+Windows 10 ships with **Microsoft Edge** as its default browser, replacing Internet Explorer for everyday browsing.  
+Edge started the year under the codename *Project Spartan* and was confirmed as IE's successor at Microsoft's Build conference.  
+
+---
+
+## Why this matters
+
+- **Legacy headaches shrink** – many hacks for Internet Explorer 10 and below can be retired.  
+- **Standards progress** – Edge implements modern APIs (ES6, Flexbox, SVG filters) without the quirks that haunted IE.  
+- **Evergreen updates** – Edge updates through Windows Update, closing the gap with Chrome and Firefox release cycles.  
+- **Security** – dropping IE's outdated engine reduces attack surface.  
+
+---
+
+## What to keep in mind
+
+- Some enterprises still rely on old ActiveX or proprietary features.  
+- IE 11 remains on Windows 10 for legacy needs and can be launched from Edge's *"Open with Internet Explorer"* option.  
+- Always test critical apps in IE 11 until usage stats fall below your project's support threshold.  
+
+---
+
+## Moving forward
+
+1. Audit CSS and JavaScript for IE‑specific work‑arounds.  
+2. Replace conditional comments with feature detection (e.g., `@supports` in CSS, `Modernizr` in JS).  
+3. Use **ES6** and modern layout (Flexbox, soon Grid) with a transpiler/polyfill fallback only where analytics show need.  
+4. Drop obsolete prefixes (e.g., `-ms-`) from new code.  
+
+```css
+/* Was: */
+@media screen and (-ms-high-contrast: none) { … }
+
+/* Now: */
+@supports (display: flex) {
+  .nav { display: flex; }
+}
+```
+
+Edge's standards focus lets developers ship cleaner code sooner.
+
+---
+
+## Timeline highlights
+
+- **Jan 2015** – *Spartan* shown running on Windows 10 phones.  
+- **Apr 2015** – Official name **Microsoft Edge** announced at Build.  
+- **Jul 2015** – Windows 10 launches with Edge set as default and IE 11 kept for compatibility.  
+- **Nov 2015** – Microsoft begins messaging that future features land in Edge, not IE.  
+
+Edge marks a clean break from the legacy that held the web back for years. Developers can start targeting a modern, evergreen browser on Windows and leave many IE‑only fixes behind.
+
+{/*
+Sources:
+- TechCrunch reports Edge name revealed at Build 2015 https://techcrunch.com/2015/04/29/microsofts-new-browser-will-be-called-microsoft-edge/ citeturn1search5
+- The Verge notes Spartan replaces IE in Windows 10 Phone preview https://www.theverge.com/2015/1/21/7869441/windows-10-for-phones-features-hands-on citeturn2search4
+- Ars Technica Windows 10 review on code cleanup from IE legacy https://arstechnica.com/gadgets/2015/07/review-windows-10-is-the-best-version-yet-once-the-bugs-get-fixed/ citeturn2search1
+- Wired on Microsoft ending support for older IE versions and pushing devs to Edge (Jan 2016 article reflecting Nov 2015 messaging) https://www.wired.com/2016/01/the-sorry-legacy-of-microsoft-internet-explorer citeturn2news11
+*/}

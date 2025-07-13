@@ -1,7 +1,5 @@
 import { notFound } from "next/navigation";
-// import type { Metadata } from "next";
 
-// import { generateMetadata as generateSiteMetadata } from "@/lib/metadata";
 import { getTranslation } from "@/i18n";
 import { generateBlogPostSchema } from "@/lib/schema";
 import { siteConfig } from "@/siteConfig";
@@ -47,13 +45,15 @@ interface Props {
 export default async function BlogPostPage({ params }: Props) {
 	const { slug } = await params;
 
-	const post = await import(`../../../../../content/posts/${slug}.mdx`);
-	const { metadata, default: Content } = post;
-
-	if (!post) {
-		notFound();
-	}
 	try {
+		const post = await import(`../../../../content/posts/${slug}.mdx`);
+		const { metadata, default: Content } = post;
+
+		if (!post || !metadata) {
+			console.error("Post or metadata not found for slug:", slug);
+			notFound();
+		}
+
 		const postUrl = `${siteConfig.url}/blog/${slug}`;
 		const schema = generateBlogPostSchema({
 			title: metadata.title,
@@ -117,6 +117,7 @@ export default async function BlogPostPage({ params }: Props) {
 		);
 	} catch (error) {
 		console.error("Error loading blog post:", error);
+		console.error("Slug:", slug);
 		notFound();
 	}
 }

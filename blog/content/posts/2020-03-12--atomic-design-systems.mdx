@@ -1,0 +1,99 @@
+---
+title: Design Systems 2.0 – Atomic Design in Practice
+date: 2020-03-12
+summary: Applying Atomic Design principles to build scalable and consistent design systems using reusable components.
+tags: [design systems, atomic design, ui, style guide]
+---
+
+Atomic Design is a method for creating design systems based on the idea of breaking down UIs into fundamental building blocks. Introduced by Brad Frost, this approach helps teams create scalable, reusable components with a clear hierarchy.
+
+## What is Atomic Design?
+
+Atomic Design structures UI components into five levels:
+
+- **Atoms**: The basic building blocks like buttons, inputs, labels.
+- **Molecules**: Simple combinations of atoms. For example, a form label + input + button.
+- **Organisms**: Complex UI sections composed of molecules and atoms. Example: a navbar or a card.
+- **Templates**: Page-level layouts using organisms and components.
+- **Pages**: Final views with real content.
+
+This structure improves consistency and encourages reuse.
+
+## Setting Up a Design System with Atomic Design
+
+1. **Audit your UI**
+   - List recurring UI elements (buttons, headings, forms).
+   - Identify inconsistencies in spacing, colors, font sizes.
+
+2. **Create your atoms**
+   - Use consistent naming.
+   - Example: `Button`, `InputField`, `TextLabel`.
+
+```js
+// Button.js
+export default function Button({ children, onClick }) {
+  return <button className="btn" onClick={onClick}>{children}</button>
+}
+```
+
+3. **Combine into molecules**
+   - Pair buttons with inputs or labels.
+
+```js
+// SearchBox.js
+import Button from './Button'
+import Input from './InputField'
+
+export default function SearchBox() {
+  return (
+    <div className="search">
+      <Input placeholder="Search..." />
+      <Button>Go</Button>
+    </div>
+  )
+}
+```
+
+4. **Assemble organisms**
+   - Sections like headers, footers, or cards.
+
+```js
+// Header.js
+import Logo from './Logo'
+import NavLinks from './NavLinks'
+
+export default function Header() {
+  return (
+    <header className="site-header">
+      <Logo />
+      <NavLinks />
+    </header>
+  )
+}
+```
+
+5. **Build templates and pages**
+   - Wireframe complete layouts using your component library.
+
+## Document Your Components
+
+Use a tool like Storybook to:
+
+- Preview components in isolation
+- Display usage guidelines
+- Help designers and developers stay aligned
+
+```bash
+# Install Storybook
+npx sb init
+npm run storybook
+```
+
+## Why Atomic Design Helps
+
+- Clear structure and naming
+- Faster prototyping with reusable components
+- Better communication between design and dev
+- Easier to onboard new team members
+
+Atomic Design gives you a mental model to create UIs that scale well across teams and projects.

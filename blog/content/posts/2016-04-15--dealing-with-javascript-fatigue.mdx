@@ -1,0 +1,65 @@
+---
+title: Dealing with JavaScript Fatigue
+date: 2016-04-15
+summary: Strategies to stay productive when new frameworks and tools appear every month.
+tags: [javascript, productivity, career]
+---
+
+By early 2016 developers were talking about **“JavaScript fatigue”**—the feeling of exhaustion caused by the rapid release cycle of frameworks, build tools, and best‑practice articles. The term spread after essays and discussions on Medium, Hacker News, and conference talks that asked whether anyone could keep up with the pace.
+
+## Why fatigue set in
+
+- Tooling stacks grew from jQuery + script tags to complex pipelines involving **Babel, Webpack, ESLint, Karma, and more**. {/* Eric Clemmons “JavaScript Fatigue” essay citeturn0search0 */}
+- Framework churn: Angular → React → Vue → Redux → MobX, each marketed as a must‑know skill. {/* Hacker News deep thread on JS fatigue citeturn0search1 */}
+- Social pressure: blog posts, meet‑ups, and job ads spotlighting the “next big thing.” {/* Segment roots of JS fatigue citeturn0search9 */}
+
+## Signs you might feel it
+
+- Tutorials abandon last month’s setup for a new boilerplate. {/* 2ality “JS fatigue fatigue” citeturn0search10 */}
+- Time spent configuring build scripts outweighs time spent writing features. {/* Telerik podcast on overcoming fatigue citeturn0search7 */}
+- Fear of missing out when a new RFC hits Twitter. {/* Reddit r/javascript thread citeturn0search4 */}
+
+## Five steps to stay sane
+
+1. **Focus on fundamentals**  
+   Vanilla JS, the DOM, CSS, HTTP, and accessibility outlive tooling waves. {/* Auth0 guide on managing fatigue citeturn0search2 */}
+
+2. **Set learning goals**  
+   Pick one stack per project and finish the project before evaluating alternatives.
+
+3. **Use stable presets**  
+   - `create-react-app` for React  
+   - `@angular/cli` for Angular  
+   - `vite` for Vue or vanilla apps  
+   These hide most build config so you code, not babysit Webpack.
+
+4. **Batch your exploration**  
+   Schedule a weekly hour to read release notes or watch talks, instead of chasing Twitter all day.
+
+5. **Prune dependencies**  
+   Review your `package.json` quarterly; remove libs that modern browsers now cover.
+
+## Choosing tools that fit
+
+Ask three questions before adopting anything new:
+
+- **Does it solve a pain I have today?**  
+- **Will it be maintained at least as long as I maintain my code?**  
+- **Can my team learn it without stalling delivery?**  
+
+If the answer is “maybe,” defer. Proven tech ages well, hype fades.
+
+## Looking ahead
+
+Framework velocity is unlikely to slow down. What changes is **your filter**:
+
+- Track stable references like **MDN**, **Can I use**, and the official docs of your chosen framework.  
+- Follow curated newsletters instead of raw feeds.  
+- Keep pet projects small for experimentation; keep production stacks boring. {/* Smashing Magazine article on front‑end fatigue citeturn0search3 */}
+
+{/*
+Additional citations:
+- Wired on decision pressure from too many choices citeturn0news30
+- Medium piece “State of the Art JS in 2016” noting complexity citeturn0search6
+- Medium “JavaScript fatigue” from a beginner viewpoint citeturn0search5
+*/}

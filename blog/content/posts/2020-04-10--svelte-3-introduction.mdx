@@ -1,0 +1,91 @@
+---
+title: Svelte 3 – A Radical New Approach to UI
+date: 2020-04-10
+summary: An introduction to Svelte 3 and how it compiles UI components at build time for performance and simplicity.
+tags: [svelte, javascript, front-end, ui]
+---
+
+Svelte 3 introduced a new approach to building web UIs. Instead of using a virtual DOM like React or Vue, Svelte compiles your components at build time into efficient, minimal JavaScript. This means less runtime overhead and better performance.
+
+## Why Svelte Is Different
+
+- No virtual DOM
+- Compiles to native JavaScript
+- Built-in reactivity without external state management
+- Smaller bundle sizes
+
+## Basic Svelte Component
+
+Here's a simple `Counter` component:
+
+```javascript
+<script>
+  let count = 0;
+
+  function increment() {
+    count += 1;
+  }
+</script>
+
+<button on:click={increment}>
+  Clicked {count} times
+</button>
+```
+
+Any assignment to `count` automatically updates the DOM. You don’t need to use `setState` or call any render functions.
+
+## Setting Up Svelte
+
+You can use the official template to start quickly.
+
+```bash
+npx degit sveltejs/template svelte-app
+cd svelte-app
+npm install
+npm run dev
+```
+
+This sets up a project with rollup and hot reload.
+
+## Reactive Statements
+
+Svelte also lets you define reactive values based on other variables:
+
+```javascript
+<script>
+  let a = 1;
+  let b = 2;
+  $: sum = a + b;
+</script>
+
+<p>{a} + {b} = {sum}</p>
+```
+
+The `$:` syntax makes `sum` update automatically whenever `a` or `b` changes.
+
+## Styling
+
+Svelte scopes styles to each component:
+
+```javascript
+<style>
+  button {
+    background-color: coral;
+    color: white;
+  }
+</style>
+```
+
+No CSS-in-JS or BEM necessary.
+
+## When to Use Svelte
+
+Svelte is a good choice when you want:
+
+- Simple state and logic
+- Fast initial load and performance
+- Less boilerplate and tooling
+
+It's especially great for personal projects, static sites, or widgets where bundle size matters.
+
+Svelte 3 challenged many assumptions about how frontend frameworks should work. It focused on simplicity and efficiency—values that many developers were looking for in 2020.

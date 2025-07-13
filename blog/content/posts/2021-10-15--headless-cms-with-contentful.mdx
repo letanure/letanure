@@ -1,0 +1,103 @@
+---
+title: Headless CMS – Building a Blog with Contentful
+date: 2021-10-15
+summary: Learn how to use a headless CMS to build a blog by integrating Contentful with a modern front-end.
+tags: [headless cms, contentful, jamstack, nextjs, gatsby]
+---
+
+Headless CMSs separate content from presentation, giving front-end developers more flexibility. Instead of managing both content and layout in a traditional CMS like WordPress, a headless CMS stores content and exposes it via an API.
+
+Popular options include:
+
+- Contentful
+- Sanity
+- Strapi
+
+These tools let non-developers manage content in a UI, while developers use the API to pull data into their apps.
+
+## Why use a headless CMS?
+
+- Keep content editing and layout development independent
+- Serve content via API to multiple channels (web, mobile, apps)
+- Use your preferred frontend (React, Vue, Svelte, etc.)
+- Better performance and scalability with static site generators
+
+## Example: Blog with Contentful + Next.js
+
+We'll use Contentful as our CMS and Next.js as the front-end.
+
+### Step 1: Set up Contentful space
+
+1. Create an account at Contentful
+2. Create a new space
+3. Add a content type “Post” with fields like:
+   - `title` (Text)
+   - `slug` (Text)
+   - `body` (Rich Text)
+
+### Step 2: Add some content
+
+Fill in a few blog posts using the Contentful UI.
+
+### Step 3: Connect Next.js to Contentful
+
+Install the required packages:
+
+```bash
+npm install contentful
+```
+
+Create a helper to fetch data:
+
+```js
+// lib/contentful.js
+import { createClient } from 'contentful'
+
+const client = createClient({
+  space: process.env.CONTENTFUL_SPACE_ID,
+  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+})
+
+export async function getPosts() {
+  const entries = await client.getEntries({ content_type: 'post' })
+  return entries.items
+}
+```
+
+Load data in your page:
+
+```js
+// pages/index.js
+import { getPosts } from '../lib/contentful'
+
+export async function getStaticProps() {
+  const posts = await getPosts()
+  return { props: { posts } }
+}
+```
+
+### Step 4: Display the posts
+
+```js
+export default function Home({ posts }) {
+  return (
+    <div>
+      {posts.map((post) => (
+        <article key={post.sys.id}>
+          <h2>{post.fields.title}</h2>
+        </article>
+      ))}
+    </div>
+  )
+}
+```
+
+## Recap
+
+Headless CMSs like Contentful let you:
+
+- Store and manage structured content
+- Serve that content via API
+- Use it in any front-end framework
+
+They're a great fit for JAMstack apps and give you full control over your UI while editors manage the content easily.

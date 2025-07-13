@@ -1,0 +1,111 @@
+---
+title: Layouts Reinvented – CSS Grid Tutorial
+date: 2017-04-12
+summary: Build responsive, two‑dimensional layouts with the new CSS Grid module.
+tags: [css, grid, layout]
+---
+
+CSS Grid reached stable status in 2017, unlocking direct control over rows and columns without float or flex hacks.
+
+## Core ideas
+
+- A **grid container** establishes rows and columns.  
+- Child elements become **grid items** you can place precisely.  
+- Gaps create gutters without extra markup.  
+- Media queries or the `repeat()` function adapt layouts easily.
+
+## Basic grid
+
+```css
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: masonry;
+  gap: 1rem;
+}
+```
+
+```html
+<section class="gallery">
+  <img src="img1.jpg" alt="…" />
+  <img src="img2.jpg" alt="…" />
+  <img src="img3.jpg" alt="…" />
+  <!-- more -->
+</section>
+```
+
+- `repeat(3, 1fr)` creates three equal columns.  
+- `gap` adds uniform spacing.
+
+## Named areas
+
+```css
+.article {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar main"
+    "footer footer";
+  grid-template-columns: 250px 1fr;
+  gap: 1rem;
+}
+
+.header  { grid-area: header; }
+.sidebar { grid-area: sidebar; }
+.main    { grid-area: main; }
+.footer  { grid-area: footer; }
+```
+
+```html
+<article class="article">
+  <header class="header">Header</header>
+  <aside  class="sidebar">Sidebar</aside>
+  <section class="main">Main content</section>
+  <footer class="footer">Footer</footer>
+</article>
+```
+
+The template string describes layout visually.
+
+## Auto‑placing cards
+
+```css
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+```
+
+Cards wrap and stretch to fill available space, ideal for responsive dashboards.
+
+## Aligning and spacing
+
+- `justify-items` controls horizontal alignment inside cells.  
+- `align-items` handles vertical alignment.  
+- `justify-content` and `align-content` distribute the entire grid if track sizes do not fill the container.
+
+```css
+.centered {
+  display: grid;
+  place-items: center; /* shorthand for align-items + justify-items */
+}
+```
+
+## Grid + Flexbox
+
+Use Grid for overall page structure, then Flexbox inside items for one‑dimensional alignment, such as centering content within a card.
+
+## Browser support checklist
+
+- Works in modern Chrome, Firefox, Safari, and Edge released in 2017.  
+- Use `@supports (display: grid)` to progressively enhance older browsers.  
+- Fallbacks: fall back to flex layouts or single‑column flow when Grid unsupported.
+
+## Next steps
+
+1. Experiment with `grid-auto-flow: dense` for masonry effects.  
+2. Combine Grid with `minmax()` and `auto-fit` to create fluid layouts.  
+3. Use fragment identifiers like `grid-column: 1 / -1` to span full width when needed.
+
+CSS Grid frees layouts from the limitations of floats and complex media queries, giving you direct, powerful tools for two‑dimensional design.

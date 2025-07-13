@@ -1,0 +1,110 @@
+---
+title: React Server Components and the New Next.js App Router
+date: 2023-01-01
+summary: A deep dive into React Server Components and the App Router introduced in Next.js 13, showing how to structure and optimize React apps for performance and scalability.
+tags: [react, nextjs, rsc, app-router, 2023]
+---
+
+React Server Components (RSC) and the new App Router in Next.js 13 introduced a new way of thinking about React apps.
+
+This post explains what changed, why it matters, and how to start using it today.
+
+## What Are React Server Components?
+
+React Server Components run on the server and send a serialized component tree to the browser.
+
+This has a few benefits:
+
+- Smaller JavaScript bundles (because server-only code doesn't go to the browser)
+- Faster initial load (streaming HTML from server)
+- More flexibility in separating concerns between client and server
+
+RSC lets you write components like this:
+
+```tsx
+// app/posts/page.tsx
+import { fetchPosts } from './data'
+
+export default async function PostsPage() {
+  const posts = await fetchPosts()
+
+  return (
+    <ul>
+      {posts.map(post => (
+        <li key={post.id}>{post.title}</li>
+      ))}
+    </ul>
+  )
+}
+```
+
+This component is server-rendered by default. You can fetch data directly and render output without sending any of that logic to the client.
+
+## The App Router
+
+Next.js 13 introduces a new `app/` directory.
+
+Main differences:
+
+- Routing is now based on folders inside `app/`
+- Server and client components are mixed by default
+- Data fetching is built-in to components using async/await
+- Layouts and templates offer new control over structure and caching
+
+Basic file structure:
+
+```
+app/
+  layout.tsx
+  page.tsx
+  dashboard/
+    layout.tsx
+    page.tsx
+```
+
+Each `page.tsx` exports a route. Each `layout.tsx` wraps the routes below it.
+
+## Mixing Server and Client Components
+
+By default, components are rendered on the server. To opt into client-side rendering, add a directive:
+
+```tsx
+'use client'
+
+import { useState } from 'react'
+
+export default function Counter() {
+  const [count, setCount] = useState(0)
+
+  return <button onClick={() => setCount(count + 1)}>{count}</button>
+}
+```
+
+Use this when:
+
+- You need interactivity (hooks, event listeners)
+- You use browser-only APIs
+
+## When to Use RSC
+
+Use RSC for:
+
+- Static or dynamic data fetching
+- Markup generation
+- Parts of the UI that don’t need interactivity
+
+Use client components for:
+
+- Forms
+- Buttons
+- Real-time updates
+
+## Why It Matters
+
+React Server Components and the App Router reduce boilerplate, make routing clearer, and shift more logic to the server. This leads to faster, leaner apps.
+
+Give it a try if:
+
+- You're starting a new Next.js project
+- You want better performance with less client JavaScript
+- You're ready to adopt a new rendering model with server as a first-class citizen

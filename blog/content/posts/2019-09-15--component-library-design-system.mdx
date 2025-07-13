@@ -1,0 +1,91 @@
+---
+title: Building a Component Library – Our Design System Journey
+date: 2019-09-15
+summary: How we created a shared UI library to improve consistency, speed up development, and collaborate better with design.
+tags: [design-system, components, ui, storybook]
+---
+
+Creating a component library helped us unify the look and feel of an application while speeding up development and improving collaboration with designers.
+
+## Why Build a Component Library?
+
+- Keep styles and behaviors consistent across the app
+- Reuse logic and reduce code duplication
+- Improve onboarding for new team members
+- Share visual language with design team
+
+## Step 1: Identify Reusable Components
+
+Start with the basics:
+
+- Buttons
+- Form inputs (text fields, checkboxes, radios)
+- Modals and popups
+- Notifications and alerts
+- Layout containers (grids, wrappers)
+
+List what you use often and generalize patterns that repeat.
+
+## Step 2: Set Up the Component Folder
+
+We created a `/components` folder and grouped things by type.
+
+```bash
+src/
+├── components/
+│   ├── Button/
+│   │   ├── Button.tsx
+│   │   ├── Button.stories.tsx
+│   │   └── index.ts
+│   ├── Modal/
+│   └── ...
+```
+
+Each component has:
+
+- The code
+- A test (optional)
+- A Storybook story (for visual testing)
+
+## Step 3: Use Storybook
+
+Storybook helped us:
+
+- Document how each component works
+- Preview variants (sizes, colors, states)
+- Share with designers and QA
+
+```bash
+npx sb init
+npm run storybook
+```
+
+This setup made it easier to demo and test components in isolation.
+
+## Step 4: Add Tokens and Themes
+
+We also added a `theme.ts` file to centralize colors, spacing, font sizes, and other values.
+
+```ts
+export const theme = {
+  colors: {
+    primary: "#0070f3",
+    danger: "#e00",
+    gray: "#666"
+  },
+  spacing: [4, 8, 16, 32, 64]
+};
+```
+
+Then passed the theme into styled components or context providers.
+
+## What We Gained
+
+- Faster development with ready-to-use blocks
+- Consistency across screens and developers
+- Better handoff from Figma to code
+- Easier testing and documentation
+
+---
+
+A component library is not just for large teams. Even solo projects benefit from consistent UI and code reuse. Once you start building with shared pieces, it’s hard to go back.

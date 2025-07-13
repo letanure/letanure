@@ -1,0 +1,103 @@
+---
+title: Introduction to Vue.js 2.0
+date: 2016-09-30
+summary: First look at Vue 2 a lightweight, flexible alternative to heavier frameworks.
+tags: [vue, javascript, framework]
+---
+
+Vue.js 2.0 landed in **September 2016** — a major rewrite focused on speed, smaller size, and a more predictable API. The release post highlights the new virtual‑DOM core and improved rendering performance. [Vue 2.0 release blog post](https://medium.com/the-vue-point/vue-2-0-is-here-ef1f26acf4b8)
+
+---
+
+## Why Vue draws attention
+
+- **Approachable** – just drop a script tag and start coding; no build setup needed. [Vue 2 install guide](https://v2.vuejs.org/v2/guide/installation)  
+- **Incremental adoption** – sprinkle Vue on parts of an existing page or build a full SPA.  
+- **Sensible defaults** – templates use plain HTML with special attributes (`v-if`, `v-for`).  
+- **Lightweight** – around 20 KB min + gzip, smaller than React + Redux bundles of the day.  
+- **Two‑way binding** where it helps, combined with unidirectional parent → child data flow.
+
+---
+
+## Basic component example
+
+```html
+<!-- Include Vue from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.0.3/dist/vue.js"></script>
+
+<div id="app">
+  <button-counter></button-counter>
+</div>
+
+<script>
+Vue.component('button-counter', {
+  data: function () {
+    return { count: 0 }
+  },
+  template: '<button v-on:click="count++">Clicked {{ count }} times</button>'
+})
+
+new Vue({ el: '#app' })
+</script>
+```
+
+Key points:
+
+- `Vue.component` registers a reusable component.  
+- `data` is **a function** that returns an object, ensuring each instance has its own state.  
+- Template syntax is familiar HTML, not JSX.
+
+---
+
+## Reactivity and templating vs React
+
+| Aspect          | Vue 2                                                 | React 15 (2016)                          |
+| --------------- | ----------------------------------------------------- | ---------------------------------------- |
+| Syntax          | HTML‑based templates with directives (`v-bind`)       | JSX (JavaScript + XML)                   |
+| Data binding    | Reactive getters/setters generated at init            | State/props + `setState`                 |
+| Virtual DOM     | Yes, rewritten for 2.0 (“blazing‑fast”)               | Yes                                      |
+| State Mgmt      | Built‑in reactivity; Vuex optional                    | External libraries (Redux, MobX)         |
+| Learning curve  | Lower – starts in a `<script>` tag                    | Requires Babel / bundler for JSX         |
+
+Vue adopts a template‑first syntax, while React treats UI as functions of state in plain JavaScript. Both use a virtual DOM diff, but Vue’s reactivity system tracks dependencies automatically, avoiding manual `shouldComponentUpdate` optimisations.
+
+---
+
+## Getting started with the CLI
+
+For larger projects use **Vue CLI** (beta in late 2016):
+
+```bash
+npm install -g @vue/cli@2.9.6   # historical v2 line
+vue init webpack my-app
+cd my-app
+npm install
+npm run dev
+```
+
+The CLI scaffolds a Webpack/Babel setup with hot reload and single‑file `.vue` components.
+
+---
+
+## When to pick Vue
+
+- Need progressive enhancement on a legacy server‑rendered app.  
+- Want component‑based architecture without heavy build overhead.  
+- Prefer readable templates over JSX.  
+- Team values clear docs and a gentle learning curve.
+
+Vue 2’s release marked its jump from enthusiast circles to mainstream adoption, offering a middle ground between the simplicity of jQuery widgets and the power of full frameworks like Angular.
+
+{/*
+Sources:
+- Official release announcement 30 Sep 2016 https://medium.com/the-vue-point/vue-2-0-is-here-ef1f26acf4b8
+- Vue 2 guide introduction https://v2.vuejs.org/v2/guide/
+- Vue component basics https://v2.vuejs.org/v2/guide/components
+- Comparison with other frameworks https://vuejs.org/v2/guide/comparison.html
+- CDN install instructions https://v2.vuejs.org/v2/guide/installation
+- Vue CLI v2 docs (archived) https://cli.vuejs.org/guide/installation.html
+- State of JS 2016 framework satisfaction shows Vue rising https://stateofjs.com/2016-javascript-survey-frameworks/
+- Evan You talk on Vue 2 performance at VueConf 2016 (video)
+- GitHub release tag v2.0.0 https://github.com/vuejs/vue/releases/tag/v2.0.0
+- Medium “Announcing Vue.js 2.0” preview post https://medium.com/the-vue-point/announcing-vue-js-2-0-8af1bde7ab9
+*/}

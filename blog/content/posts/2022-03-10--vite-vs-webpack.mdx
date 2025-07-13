@@ -1,0 +1,84 @@
+---
+title: Goodbye, Webpack? Hello, Vite!
+date: 2022-03-10
+summary: A deep dive into Vite, the fast and modern alternative to Webpack for frontend development.
+tags: [vite, bundlers, frontend, tools, javascript]
+---
+
+Vite is a modern build tool that has quickly become a go-to choice for frontend developers seeking speed and simplicity. Originally created by Evan You (the creator of Vue.js), Vite was designed to address long-standing pain points with traditional bundlers like Webpack.
+
+## Why Vite?
+
+Vite delivers near-instant startup and updates in development mode by taking a different approach:
+
+- It uses native ES Modules in the browser.
+- No bundling is required for dev mode.
+- Dependencies are pre-bundled using esbuild, which is extremely fast (written in Go).
+- It supports hot module replacement (HMR) out of the box, and it's incredibly fast and reliable.
+
+This is a major shift from tools like Webpack or Parcel, which traditionally bundle everything upfront for both dev and production.
+
+## Vite vs. Webpack
+
+While Webpack became the industry standard through its flexibility and massive plugin ecosystem, it has also become notorious for complex configs, slow cold starts, and long rebuild times.
+
+| Feature              | Webpack                      | Vite                             |
+|----------------------|------------------------------|----------------------------------|
+| Dev Startup Time     | Often slow (seconds+)        | Instant (milliseconds)           |
+| Hot Module Reloading | Sometimes delayed            | Near-instant                     |
+| Config Complexity    | Often high                   | Minimal, zero-config possible    |
+| Ecosystem            | Mature, plugin-rich          | Growing rapidly, focused         |
+| Default Language     | JavaScript + loaders         | Native ES Modules + modern JS    |
+
+## Setup Example
+
+Install Vite and scaffold a new project:
+
+```bash
+npm create vite@latest my-vite-app
+cd my-vite-app
+npm install
+npm run dev
+```
+
+You'll immediately notice the dev server starts almost instantly.
+
+## Using Vite with React
+
+```bash
+npm create vite@latest my-react-app --template react
+cd my-react-app
+npm install
+npm run dev
+```
+
+Vite works seamlessly with JSX, TypeScript, and CSS modules. The development experience is fluid and minimal.
+
+## Production Builds
+
+For production, Vite uses Rollup under the hood to bundle your code efficiently.
+
+```bash
+npm run build
+```
+
+The output is clean and optimized, ready for deployment.
+
+## Plugins and Ecosystem
+
+Vite supports a plugin system similar to Rollup. Some popular plugins include:
+
+- `@vitejs/plugin-react` for React fast refresh
+- `vite-plugin-pwa` for Progressive Web App support
+- `vite-plugin-mdx` for MDX support
+
+## When to Use Vite?
+
+- When starting a new project with modern tools
+- When you want fast dev feedback cycles
+- When you’re building with frameworks like Vue, React, or Svelte
+- When you want less bundler config and better DX
+
+## Conclusion
+
+Vite brings a breath of fresh air to frontend development. While Webpack is still powerful and used widely, Vite offers an appealing alternative for projects that need speed, simplicity, and modern standards. If you're tired of waiting on builds and configs, it's time to give Vite a try.

@@ -1,0 +1,65 @@
+---
+title: SolidJS and Signals – A Different Reactivity
+date: 2023-06-01
+summary: Exploring SolidJS's fine-grained reactivity model and how it differs from virtual DOM frameworks.
+tags: [solidjs, reactivity, signals, javascript, frontend]
+---
+
+SolidJS is a front-end framework that takes a different path than React or Vue. It doesn't use a virtual DOM. Instead, it relies on fine-grained reactivity powered by signals.
+
+### Why Signals?
+
+In Solid, signals are reactive values that automatically update your UI when they change.
+
+Here's a simple example:
+
+```js
+import { createSignal } from "solid-js";
+
+function Counter() {
+  const [count, setCount] = createSignal(0);
+
+  return (
+    <>
+      <p>Count: {count()}</p>
+      <button onClick={() => setCount(count() + 1)}>Increment</button>
+    </>
+  );
+}
+```
+
+Unlike React, you don't write `useState` and `useEffect`. The component is reactive by default. `count()` triggers re-renders only where it's used, not the entire component.
+
+### How Solid Differs
+
+- No virtual DOM
+- Compile-time optimizations
+- Fine-grained reactive updates
+- Small bundle sizes
+
+### Solid vs React
+
+React updates components as a whole. Solid updates DOM nodes directly. This results in better performance for many use cases, especially smaller projects or embedded widgets.
+
+### Signals Everywhere
+
+Solid’s model is gaining attention. Other frameworks are also exploring signal-based reactivity:
+
+- **Preact** introduced `signals` as an experiment
+- **Vue** has its `ref()` API
+- **Qwik** uses resumable reactivity
+
+Developers are now exploring frameworks that prioritize performance with minimal abstraction.
+
+### When to Use Solid
+
+Use Solid if you:
+
+- Care a lot about runtime performance
+- Are building small or medium apps
+- Want simpler mental models for reactivity
+- Like JSX but want more control
+
+Solid is not trying to replace React but offers a clean and fast alternative where simplicity and speed matter most.
+
+{/* SolidJS is part of a new wave of frameworks challenging the virtual DOM era. */} 

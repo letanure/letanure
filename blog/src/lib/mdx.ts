@@ -4,7 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { PostMetadata } from "@/types/post";
 
-const POSTS_PATH = path.join(process.cwd(), "..", "content", "posts");
+const POSTS_PATH = path.join(process.cwd(), "content", "posts");
 
 export function postMetadataGet(slug: string): PostMetadata {
 	const filePath = path.join(POSTS_PATH, `${slug}.mdx`);

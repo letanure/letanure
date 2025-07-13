@@ -1,0 +1,95 @@
+---
+title: Bun 1.0 – Testing a Turbo-Fast JS Runtime
+date: 2023-04-01
+summary: Exploring Bun 1.0 – a fast JavaScript runtime, bundler, and test runner built in Zig.
+tags: [bun, javascript, tooling]
+---
+
+Bun 1.0 is out. It's a new JavaScript runtime built in Zig, and it aims to be fast—very fast.
+
+It’s not just a runtime. It also includes:
+
+- A bundler
+- A test runner
+- A package manager
+- A development server
+
+All built in.
+
+Bun tries to replace several tools at once: Node, Webpack, Jest, even npm.
+
+## Installing Bun
+
+To install Bun:
+
+```bash
+curl https://bun.sh/install | bash
+```
+
+You get access to the `bun` command, which works like `node`, `npm`, and `vite`—all at once.
+
+## Creating a Bun project
+
+You can start a new project like this:
+
+```bash
+bun init
+```
+
+Then run your server:
+
+```bash
+bun run index.ts
+```
+
+Bun supports TypeScript out of the box—no config, no transpile step.
+
+## Why it’s interesting
+
+- Bun uses JavaScriptCore (from Safari), not V8
+- Written in Zig, so it compiles to a single binary
+- It's fast—cold starts and installs are much quicker than Node
+
+## What I tried
+
+I migrated a simple server from Node to Bun:
+
+```ts
+// index.ts
+export default {
+  port: 3000,
+  fetch(request: Request) {
+    return new Response("Hello from Bun!");
+  },
+};
+```
+
+Then ran:
+
+```bash
+bun run index.ts
+```
+
+Worked instantly.
+
+Install times for dependencies were about 10x faster than npm.
+
+## Gotchas
+
+- Not all Node APIs are supported
+- Still new—some ecosystem gaps
+- No Windows support at the time of writing
+
+## Should you use it?
+
+Bun is promising. It’s great for:
+
+- Simple scripts
+- Side projects
+- Trying something fast and new
+
+For large teams, the Node ecosystem is still more mature. But Bun is improving fast.
+
+{/*
+Bun 1.0 might not replace your entire toolchain today, but it's worth keeping an eye on.
+*/}

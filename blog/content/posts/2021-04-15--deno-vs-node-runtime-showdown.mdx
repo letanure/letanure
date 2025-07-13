@@ -1,0 +1,108 @@
+---
+title: Deno vs Node – A Secure Runtime Showdown
+date: 2021-04-15
+summary: A hands-on comparison between Deno and Node.js showing how common tasks differ, their tooling, and the trade-offs.
+tags: [deno, node, javascript, runtimes]
+---
+
+Deno was introduced as a fresh alternative to Node.js, aiming to fix some of Node’s design flaws. One year after its 1.0 release, it's time to compare how the two runtimes stack up for common development tasks.
+
+## Why Compare?
+
+- Both are JavaScript/TypeScript runtimes
+- Built by the same creator (Ryan Dahl)
+- Focus on developer tooling and modern JavaScript support
+- Competing philosophies: Node is stable and mature; Deno is secure and modern
+
+---
+
+## 1. Hello World HTTP Server
+
+**Node.js**
+
+```js
+const http = require('http');
+
+http.createServer((req, res) => {
+  res.end('Hello from Node');
+}).listen(3000);
+```
+
+**Deno**
+
+```ts
+import { serve } from "https://deno.land/std/http/server.ts";
+
+serve((_req) => new Response("Hello from Deno"), { port: 3000 });
+```
+
+---
+
+## 2. Reading a File
+
+**Node.js**
+
+```js
+const fs = require('fs');
+
+fs.readFile('example.txt', 'utf8', (err, data) => {
+  console.log(data);
+});
+```
+
+**Deno**
+
+```ts
+const text = await Deno.readTextFile('example.txt');
+console.log(text);
+```
+
+Note: Deno requires permission to read files. You must run it with:
+
+```bash
+deno run --allow-read read.ts
+```
+
+---
+
+## 3. Fetching Remote Data
+
+**Node.js (with fetch in newer versions)**
+
+```js
+fetch('https://api.example.com/data')
+  .then(res => res.json())
+  .then(data => console.log(data));
+```
+
+**Deno**
+
+```ts
+const res = await fetch('https://api.example.com/data');
+const data = await res.json();
+console.log(data);
+```
+
+No extra install needed. Deno supports fetch natively.
+
+---
+
+## Key Differences
+
+- **Security**: Deno is secure by default. No file/network access unless explicitly granted.
+- **Modules**: Deno uses ES Modules and imports directly via URL. Node relies on npm and CommonJS.
+- **Tooling**: Deno includes formatter, linter, bundler, test runner—built-in.
+- **TypeScript**: First-class TypeScript support out of the box in Deno.
+
+---
+
+## Ecosystem Maturity
+
+- **Node**: Thousands of npm packages, mature tooling, wide adoption.
+- **Deno**: Smaller ecosystem, but growing steadily.
+
+---
+
+## Final Thoughts
+
+Deno simplifies some workflows and introduces modern practices. Node, with its maturity and vast ecosystem, still dominates production use. For new tools, quick scripts, or learning modern APIs, Deno is worth exploring. But for large-scale apps, Node might still be the safer choice—for now.

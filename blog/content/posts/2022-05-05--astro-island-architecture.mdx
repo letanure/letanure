@@ -1,0 +1,85 @@
+---
+title: Astro and Island Architecture – Faster Websites by Doing Less
+date: 2022-05-05
+summary: Learn how Astro and island architecture help build faster websites by reducing JavaScript.
+tags: [astro, javascript, performance, islands, static-sites]
+---
+
+Astro is a modern static site builder that introduced a refreshing idea: **do less in the browser**. While other frameworks focus on how to make client-side rendering faster, Astro focuses on _not sending JavaScript unless necessary_.
+
+This idea is called **island architecture**.
+
+## What is island architecture?
+
+It means you can mix multiple frameworks (React, Svelte, Vue, etc.) in your page, but only hydrate specific parts – the "islands" of interactivity. The rest of the page stays static, like pure HTML and CSS.
+
+Benefits:
+
+- Less JavaScript in the browser
+- Faster load times and better Lighthouse scores
+- Easy integration of different components
+- Good for content-focused sites like blogs, docs, marketing
+
+## Getting started with Astro
+
+Install Astro:
+
+```bash
+npm create astro@latest
+```
+
+Select the minimal template or one with a framework like React or Svelte.
+
+Run dev server:
+
+```bash
+cd your-project
+npm install
+npm run dev
+```
+
+## Using components
+
+You can import components from different frameworks inside `.astro` files:
+
+```javascript
+---
+import MyReactComponent from '../components/MyReactComponent.jsx';
+import Counter from '../components/Counter.svelte';
+---
+
+<html>
+  <body>
+    <h1>Static content is fast</h1>
+    <MyReactComponent client:load />
+    <Counter client:idle />
+  </body>
+</html>
+```
+
+Each interactive block is hydrated only when needed:
+
+- `client:load` runs after page loads
+- `client:idle` waits for browser idle time
+- `client:visible` waits until the component is in view
+
+## Output
+
+Astro renders static HTML for everything else. You don’t send React or Svelte runtime if you don’t need it. That’s a big performance win.
+
+## When to use Astro?
+
+Astro is great for:
+
+- Blogs
+- Documentation
+- Marketing sites
+- Sites with mostly static content and a few dynamic parts
+
+If your app is very dynamic or needs lots of client-side interactivity, use something like Next.js or SvelteKit.
+
+## Final thoughts
+
+Astro follows a smart idea: send less to the browser. Use components when needed. Keep the rest static. In a time where performance matters, this shift makes a lot of sense.
+
+Astro gives you control over interactivity, framework flexibility, and great performance by default.

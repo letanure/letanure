@@ -1,0 +1,192 @@
+---
+title: Building a CLI to Automate Etsy Listings with AI and Fetch Hacks
+date: 2025-07-13
+summary: I built an AI-powered CLI to help my girlfriend publish 80+ handmade tattoo artworks on Etsy, skipping the forms, API delays, and automation traps.
+tags:
+  [
+    "ai",
+    "cli",
+    "nodejs",
+    "openai",
+    "etsy",
+    "automation",
+    "photoroom",
+    "zod",
+    "mcp",
+    "side-projects",
+  ]
+---
+
+# Building a CLI to Automate Etsy Listings with AI and Fetch Hacks
+
+My GF is a tattoo artist that paints and creates several art objects. She had around 140 product photos and needed some help to put her products on Etsy, but there were too many products, and the forms are complex.
+
+So I decided to help. Using Claude Code and AI APIs.
+
+What started as "maybe I can automate this" turned into a full CLI tool that reads images in a folder, describes the products, processes the images, and generates scripts to create Etsy listings.
+
+2 days of work.
+
+## The plan (that didn't work)
+
+My plan was to use the Etsy API. Applied for the API key, but they are slow to answer.
+
+So I first generated some JSON with the data, but the content was not good, varying too much.
+
+I tried some approaches to group images of the same product, but wasn't happy with the coding solutions or AI solutions, so I abandoned that for this phase.
+
+## Node AI SDK + Zod schemas
+
+I changed my approach, used node ai-sdk + zod schemas to pass a predetermind JSON format.
+
+```typescript
+import { z } from "zod";
+import { generateObject } from "ai";
+
+const ProductSchema = z.object({
+  title: z.string().max(140),
+  description: z.string().max(1000),
+  tags: z.array(z.string()).max(13),
+  category: z.string(),
+  materials: z.array(z.string()),
+  style: z.string(),
+  price: z.number(),
+});
+
+const result = await generateObject({
+  model: openai("gpt-4"),
+  schema: ProductSchema,
+  prompt: `Generate Etsy product data for this image: ${imageData}`,
+});
+```
+
+But I had the problem of the specific values. I tried to send them to the OpenAI API, but the model was losing context, so I used the tool / MCP to give the possible values to the API.
+
+```typescript
+// MCP tool to get valid Etsy categories
+const getCategoriesFunction = {
+  name: "getValidCategories",
+  description: "Get valid Etsy category options",
+  parameters: { type: "object", properties: {} },
+  execute: () => etsy_categories,
+};
+
+// Now the AI could ask for valid options
+const prompt = `
+Generate product data for this image.
+Use the getValidCategories tool to ensure correct category selection.
+`;
+```
+
+After several iterations, refining the tone, what to describe, checking best practices for titles, tags, descriptions, I got a good version of text, and with the MCP, the values like style, materials, to generate a good JSON with all the data.
+
+## Puppeteer was a trap
+
+My plan was to use puppeteer to fill the data, but after some tries, I discovered that Etsy is really good at blocking puppeteer automation... and to make puppeteer fill the form in the right way, was giving too much work, adjusting sequence, ids, selectors...
+
+I was planing to go for a browser Claude controlled to fill the data, but decided for a simpler approach.
+
+I created a fake draft product, inspected the network to see the request, and found that it was all created in a single request. Gotcha!
+
+```javascript
+// Generated fetch script
+fetch("/api/v3/application/shops/12345/listings", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest",
+  },
+  body: JSON.stringify({
+    title: "Handmade Abstract Canvas Art",
+    description: "...",
+    tags: ["abstract", "canvas", "art"],
+    // ... all the AI-generated data
+  }),
+})
+  .then((r) => r.json())
+  .then((d) => console.log("Created:", d.listing_id));
+```
+
+I decided to just generate fetch scripts that I can copy paste to the dev tools console and create products, no worries about login, CORS, etc.
+
+Worked like a charm since the first version (just some minor adjustments in the script to avoid some nulls and malformed strings).
+
+## Adding photoroom integration
+
+One thing that I decided to add, was some image generation too.
+
+2 weeks ago I created a photoroom CLI tool to remove background for images, and I decided to integrate this in the flow, generating liveshoot images, images without backgrounds and a clear, standard view for all photos across products.
+
+```bash
+# For each image:
+1. Resize to low-quality for AI analysis (save tokens)
+2. Resize to 2000x2000 for Photoroom processing
+3. Generate product data with AI
+4. Create image variants with Photoroom
+5. Save everything to organized folders
+```
+
+## The final pipeline
+
+So, the final plan, after integrating all was:
+
+Drop a lot of images in a folder, run a terminal script.
+
+My app will read all images, and for each one:
+
+- Resize the image to low quality, to send to OpenAI, saving tokens
+- Resize to a 2000x2000 px to send to photoroom, to generate one snapshot, one live photo, one image without background
+- Send the smallest image to OpenAI, generate the specific data with Zod format, validated
+- Send the image and generate the final versions
+- Save all, images, script to insert, JSON data, a text version, to an output folder, one folder for each product, with SKU as folder name, the SKU was generated based on the product data, using an MCP tool. All with logs.
+
+```bash
+node generate-products.js
+# Outputs:
+# ./output/SKU-ART-001/
+#   ├── images/
+#   ├── product-data.json
+#   ├── etsy-script.js
+#   ├── description.txt
+#   └── logs.txt
+```
+
+After generating all, around 80 products, got nice, cleaner, consistent product descriptions. Happy dev, happy girlfriend. Just checking the products, probably will be published tomorrow.
+
+Ahh... one last idea I added.
+
+I decided to use the generated images to create some image-to-videos, but was not happy with any API, so I added one extra info in the generated txt, a small video prompt, that matches the product and defined style, to generate the videos, after some tries, got really good videos, but was not possible to generate for all, because expired tokens on Veo 3.
+
+## What worked
+
+- **2 days** replaced what would have been a month+ of manual work
+- **Around 80 products** from 140 images
+- **Consistent descriptions** and tone
+- **Professional image variants** for each product
+- **Copy-paste automation** that actually works
+- **Happy girlfriend** (most important metric)
+
+## What I will do different in the future?
+
+- Some pre-classification of the images, sometimes the AI got wrong about size, materials
+- Store in a database, not files, but was ok for an exploration project
+
+## What I learned
+
+- Simple solutions work better than complex automation
+- Zod schemas + AI SDK = consistent results
+- MCP tools solve context problems without bloating prompts
+- Network inspection > fighting anti-bot measures
+- Real problems make the best side projects
+
+## Tech stack
+
+Node.js, AI SDK, Zod, Photoroom API, ImageMagick, Claude Code, MCP tools, bash.
+
+---
+
+I was planning to go even further, make a single script that will get the data for each one, so I run one time and fill one at a time automagically, but sounded too much... the copy paste was not a problem for a one time (maybe) job, and I can always evolve later.
+
+Sometimes the simple solution wins.
+
+Products go live tomorrow.

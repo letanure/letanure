@@ -1,0 +1,284 @@
+---
+title: How Idempotency Saves Your API from Chaos
+date: 2025-06-11
+summary: Learn how to implement idempotency in your APIs to prevent duplicate actions and ensure data consistency. Includes practical examples with Supabase and Node.js.
+tags: ['supabase', 'api', 'webhooks', 'system design', 'nodejs']
+---
+
+# Understanding API Idempotency: A Practical Guide
+
+Idempotency is a crucial concept in API design that ensures:
+
+> **Making the same request multiple times produces the same result without side effects.**
+
+This means that if a client sends the same request twice (or more), the system should handle it gracefully without creating duplicate records or causing unintended consequences. Think of it like a light switch: pressing it multiple times doesn't create multiple lights—it just toggles the same light on or off.
+
+## Why Idempotency Matters
+
+### The Double-Charge Problem
+
+Consider this common e-commerce scenario:
+
+1. A user clicks "Pay $100" on a mobile app
+2. The network connection is unstable
+3. The user doesn't see a response
+4. They click again
+5. **Result**: The user gets charged $200 instead of $100
+
+This is a real problem that affects user trust and can lead to:
+- Customer support tickets
+- Refund requests
+- Loss of customer trust
+- Potential legal issues
+
+### The Reload Problem
+
+Another common issue occurs in booking systems:
+
+1. User fills out a hotel booking form
+2. Page generates a new `bookingId = "booking_123"`
+3. User clicks "Confirm Booking" but the request fails
+4. User reloads the page
+5. A new `bookingId = "booking_456"` is generated
+6. User clicks "Confirm Booking" again
+7. **Result**: Two separate bookings are created for the same room and dates
+
+## Implementing Idempotency
+
+### Client-Side Implementation
+
+The key is to generate and persist a stable ID that represents the user's intent. Here's a React hook that handles this:
+
+```tsx
+// useIdempotentAction.ts
+import { useState, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+
+interface UseIdempotentActionProps {
+  actionKey: string;  // e.g., 'booking', 'payment', 'subscription'
+  onSuccess?: () => void;
+}
+
+export function useIdempotentAction({ actionKey, onSuccess }: UseIdempotentActionProps) {
+  const [actionId, setActionId] = useState<string>('');
+  const storageKey = `${actionKey}-id`;
+
+  useEffect(() => {
+    // Try to retrieve existing action ID
+    const saved = localStorage.getItem(storageKey);
+    if (saved) {
+      setActionId(saved);
+    } else {
+      // Generate new ID if none exists
+      const newId = uuidv4();
+      localStorage.setItem(storageKey, newId);
+      setActionId(newId);
+    }
+  }, [storageKey]);
+
+  const clearActionId = () => {
+    localStorage.removeItem(storageKey);
+    setActionId('');
+    onSuccess?.();
+  };
+
+  return { actionId, clearActionId };
+}
+```
+
+Usage in a booking component:
+
+```tsx
+// BookingForm.tsx
+function BookingForm() {
+  const { actionId, clearActionId } = useIdempotentAction({
+    actionKey: 'booking',
+    onSuccess: () => {
+      // Show success message
+      // Redirect to confirmation page
+    }
+  });
+
+  const handleSubmit = async (formData: BookingFormData) => {
+    try {
+      const response = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Idempotency-Key': actionId
+        },
+        body: JSON.stringify({
+          ...formData,
+          idempotencyKey: actionId
+        })
+      });
+
+      if (response.ok) {
+        clearActionId();
+      }
+    } catch (error) {
+      // Handle error
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* Form fields */}
+    </form>
+  );
+}
+```
+
+### Why Client-Side ID Generation?
+
+The client is the best place to generate the ID because:
+
+1. **Intent Tracking**: It knows the exact moment of user intent
+2. **State Persistence**: It can persist the ID across page reloads
+3. **Retry Management**: It can track retry attempts
+4. **Industry Standard**: It follows the pattern used by industry leaders like Stripe and PayPal
+
+## Practical Implementation with Supabase
+
+### Client-Side Code
+
+```tsx
+// api/bookings.ts
+interface BookingRequest {
+  roomId: string;
+  checkIn: string;
+  checkOut: string;
+  guestInfo: {
+    name: string;
+    email: string;
+  };
+}
+
+async function createBooking(bookingData: BookingRequest, idempotencyKey: string) {
+  const response = await fetch('/api/bookings', {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json',
+      'Idempotency-Key': idempotencyKey
+    },
+    body: JSON.stringify({
+      ...bookingData,
+      idempotencyKey
+    })
+  });
+  
+  if (!response.ok) {
+    throw new Error('Booking failed');
+  }
+
+  return response.json();
+}
+```
+
+### Server-Side Code
+
+```tsx
+// pages/api/bookings.ts
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_KEY!
+);
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const { idempotencyKey, ...bookingData } = req.body;
+
+  try {
+    // First, check if we've already processed this request
+    const { data: existingBooking } = await supabase
+      .from('bookings')
+      .select('*')
+      .eq('idempotency_key', idempotencyKey)
+      .single();
+
+    if (existingBooking) {
+      // Return the existing booking
+      return res.status(200).json(existingBooking);
+    }
+
+    // Process new booking
+    const { data, error } = await supabase
+      .from('bookings')
+      .insert({
+        ...bookingData,
+        idempotency_key: idempotencyKey,
+        status: 'confirmed',
+        created_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return res.status(201).json(data);
+  } catch (error) {
+    console.error('Booking error:', error);
+    return res.status(500).json({ error: 'Booking failed' });
+  }
+}
+```
+
+## Best Practices for Idempotency
+
+1. **Generate Stable IDs**
+   - Use UUIDs (v4) for uniqueness
+   - Include a prefix for different action types (e.g., `booking_`, `payment_`)
+   - Store them in localStorage, cookies, or session storage
+   - Clear them after confirmed success
+
+2. **Handle Edge Cases**
+   - Network failures and timeouts
+   - Page reloads and browser crashes
+   - Multiple clicks and rapid retries
+   - Concurrent requests
+
+3. **Server-Side Considerations**
+   - Use database constraints and unique indexes
+   - Implement proper error handling and logging
+   - Set appropriate timeouts for idempotency keys
+   - Consider using a distributed cache (Redis) for high-traffic systems
+
+4. **Security Considerations**
+   - Validate idempotency keys
+   - Set expiration times for keys
+   - Implement rate limiting
+   - Log suspicious patterns
+
+## Summary
+
+Idempotency is not about preventing duplicate requests—it's about handling them gracefully. A well-designed system should:
+
+- Accept the same request multiple times
+- Process it only once
+- Return the same result each time
+- Maintain data consistency
+- Handle errors gracefully
+
+Remember:
+> Your job isn't to block duplicates.  
+> Your job is to make sure they don't hurt anyone.
+
+By implementing proper idempotency, you create a more resilient system that can handle real-world scenarios like:
+- Poor network conditions
+- User impatience
+- Browser refreshes
+- Mobile app backgrounding
+- Service interruptions
+
+This leads to:
+- Better user experience
+- Fewer support tickets
+- More reliable systems
+- Happier customers

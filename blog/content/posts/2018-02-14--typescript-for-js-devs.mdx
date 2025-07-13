@@ -1,0 +1,116 @@
+---
+title: TypeScript for JavaScript Developers – Getting Started
+date: 2018-02-14
+summary: Add static types to JavaScript for safer, maintainable code and better tooling.
+tags: [typescript, javascript, tutorial]
+---
+
+TypeScript is a typed superset of JavaScript that compiles down to plain JS.  
+By 2018 it was no longer niche: major frameworks (Angular, Nest, Ionic) adopted it, and surveys showed rising usage.
+
+---
+
+## Install the compiler
+
+```bash
+npm install --save-dev typescript
+npx tsc --init
+```
+
+`tsconfig.json` controls compiler options.
+
+---
+
+## Basic types
+
+```ts
+let age: number = 30;
+let name: string = 'Luiz';
+let isActive: boolean = true;
+let tags: string[] = ['css', 'html'];
+```
+
+The compiler flags type mismatches before code runs.
+
+---
+
+## Interfaces
+
+```ts
+interface User {
+  id: number;
+  name: string;
+  email?: string;      // optional
+}
+
+function greet(u: User) {
+  return `Hi ${u.name}`;
+}
+```
+
+Interfaces describe shapes of objects for safer contracts.
+
+---
+
+## Classes with access modifiers
+
+```ts
+class Counter {
+  private count = 0;
+
+  inc(): number {
+    return ++this.count;
+  }
+}
+```
+
+`private` and `public` make intent clear, unlike plain JS objects.
+
+---
+
+## Enums
+
+```ts
+enum Status { Open, Closed, Pending }
+const ticket = { status: Status.Open };
+```
+
+---
+
+## Compile to JavaScript
+
+```bash
+npx tsc
+```
+
+The compiler emits `*.js` files matching the input structure.
+
+---
+
+## Integrating with Webpack
+
+```bash
+npm install --save-dev ts-loader
+```
+
+**webpack.config.js**
+
+```js
+module.exports = {
+  module: {
+    rules: [{ test: /\.ts$/, use: 'ts-loader', exclude: /node_modules/ }]
+  },
+  resolve: { extensions: ['.ts', '.js'] }
+};
+```
+
+---
+
+## Benefits in large codebases
+
+- **Early error detection** reduces runtime bugs.  
+- **IDE tooling**: autocomplete, inline docs, safe refactor.  
+- **Self‑documenting code** thanks to explicit types.  
+- **Gradual adoption**: rename files to `.ts` one at a time, use `// @ts-check` in JS.
+
+TypeScript lets teams scale JavaScript projects confidently while still shipping standard JS to the browser.

@@ -1,0 +1,77 @@
+---
+title: Inside React 16 (Fiber) – What’s Changing?
+date: 2017-07-20
+summary: High‑level look at React’s new Fiber engine, error boundaries, and other practical improvements.
+tags: [react, fiber, javascript]
+---
+
+React 16 ships with **Fiber**, a total rewrite of the reconciliation engine aimed at smoother UIs and better error handling.
+
+## What is Fiber?
+
+- Breaks rendering into small units of work called *fibers*.  
+- Allows React to **pause, resume, and prioritise** rendering, preventing long blocks.  
+- Enables future features like time‑slicing and concurrent rendering.
+
+## Practical wins in React 16
+
+1. **Error boundaries** – components can catch render errors and show fallback UI.  
+2. **Return arrays from render** – no extra wrapper elements needed.  
+3. **Portals** – render children into a different DOM subtree.  
+4. **Smaller bundle** – core size dropped compared with React 15.  
+5. **Better SSR** – streaming server‑side rendering support.
+
+## Minimal error boundary
+
+```jsx
+class ErrorBoundary extends React.Component {
+  state = { hasError: false };
+
+  componentDidCatch(error, info) {
+    this.setState({ hasError: true });
+    // log error or send to monitoring
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong.</h1>;
+    }
+    return this.props.children;
+  }
+}
+```
+
+Wrap parts of your app:
+
+```jsx
+<ErrorBoundary>
+  <ProfilePage />
+</ErrorBoundary>
+```
+
+## Returning multiple elements
+
+```jsx
+function List() {
+  return [
+    <li key="a">A</li>,
+    <li key="b">B</li>
+  ];
+}
+```
+
+Later versions added the shorter `<>…</>` fragment syntax.
+
+## When Fiber matters
+
+- Complex updates like animations or rich editors benefit from interruptible rendering.  
+- Apps with heavy trees gain smoother scrolling and gestures.  
+- Error boundaries keep the rest of the UI running after a crash.
+
+## Upgrade notes
+
+- Public API is mostly unchanged; update warnings from React 15 should be resolved first.  
+- Old lifecycle hooks (`componentWillMount`, etc.) may show deprecation warnings.  
+- Third‑party libraries generally work; check those touching internals.
+
+React 16’s Fiber engine lays the groundwork for future concurrent features while already improving stability and developer experience.

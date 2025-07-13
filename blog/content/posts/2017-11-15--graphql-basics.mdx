@@ -1,0 +1,135 @@
+---
+title: GraphQL Basics – Querying APIs the Modern Way
+date: 2017-11-15
+summary: Learn how GraphQL lets clients ask for just the data they need and avoid over‑fetching common with REST.
+tags: [graphql, api, tutorial]
+---
+
+GraphQL offers a single endpoint where clients send **queries** describing the exact fields they require.  
+The server returns a JSON object with that shape—no more, no less.
+
+---
+
+## REST vs GraphQL
+
+### Typical REST flow
+
+```text
+GET /users/42          → user object
+GET /users/42/repos    → list of repos
+GET /users/42/followers → list of followers
+```
+
+Multiple round‑trips fetch related data, often including fields the UI never shows.
+
+### GraphQL equivalent
+
+```graphql
+{
+  user(id: 42) {
+    name
+    repos(limit: 3) { name stars }
+    followers(limit: 5) { name }
+  }
+}
+```
+
+One request gets everything, trimmed to what the UI needs.
+
+---
+
+## Query structure
+
+- **Fields**: properties you want returned.  
+- **Arguments**: refine results (`limit`, `order`).  
+- **Fragments**: reusable field sets.  
+- **Variables**: externalise arguments to avoid string interpolation.
+
+Example with variables:
+
+```graphql
+query($id: ID!) {
+  user(id: $id) {
+    name
+    avatar
+  }
+}
+```
+
+Send `{ "id": 42 }` in the request body under `variables`.
+
+---
+
+## Try it yourself (GitHub API)
+
+1. Create a personal token with `read:user` scope.  
+2. POST to `https://api.github.com/graphql` with header `Authorization: bearer <token>`.  
+3. Send the query above to fetch your profile fields.
+
+---
+
+## Schema language
+
+A server publishes types:
+
+```graphql
+type User {
+  id: ID!
+  name: String!
+  repos(limit: Int = 5): [Repo!]!
+}
+
+type Repo {
+  id: ID!
+  name: String!
+  stars: Int!
+}
+
+type Query {
+  user(id: ID!): User
+}
+```
+
+The client introspects this schema to know which fields exist and their types.
+
+---
+
+## Benefits for front‑end devs
+
+- **Exact data** – smaller payloads, faster rendering.  
+- **Single round‑trip** – fewer spinners.  
+- **Strong typing** – tools like autocomplete and compile‑time checks.  
+- **Versionless** – add fields without breaking clients.
+
+---
+
+## Building a simple schema (Node)
+
+```bash
+npm init -y
+npm install graphql express express-graphql
+```
+
+```js
+const { graphqlHTTP } = require('express-graphql');
+const { buildSchema } = require('graphql');
+const express = require('express');
+
+const schema = buildSchema(`
+  type Query {
+    hello: String
+  }
+`);
+
+const root = { hello: () => 'Hello GraphQL' };
+
+express()
+  .use('/graphql', graphqlHTTP({ schema, rootValue: root, graphiql: true }))
+  .listen(4000);
+```
+
+Navigate to `http://localhost:4000/graphql` and run `{ hello }`.
+
+---
+
+GraphQL gained traction in 2017 as teams realised its power to streamline data fetching and reduce boilerplate compared with traditional REST endpoints.

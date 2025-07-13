@@ -1,0 +1,110 @@
+---
+title: The JAMstack Revolution – Building with Hugo and Headless CMS
+date: 2019-04-15
+summary: A walkthrough of building a fast static site using Hugo and content pulled from a headless CMS via API, using the JAMstack model.
+tags: [jamstack, hugo, headless-cms, static-sites]
+---
+
+JAMstack stands for JavaScript, APIs, and Markup. It’s an approach to building websites that are static, fast, and secure—but powered by dynamic content from APIs.
+
+We’ll walk through creating a site using Hugo, a static site generator written in Go, and pulling data from a headless CMS.
+
+## Why JAMstack?
+
+JAMstack separates:
+- The frontend (markup, HTML, JS)
+- The content (delivered by APIs or CMS)
+- The build process (pre-rendered at deploy time)
+
+Benefits:
+- Fast loading from static hosting (CDN)
+- Improved security (no backend server to hack)
+- Easier scaling
+- Better DX with modern tools
+
+## Step 1: Install Hugo
+
+```bash
+brew install hugo
+hugo new site jamstack-demo
+cd jamstack-demo
+```
+
+Pick a theme:
+
+```bash
+git init
+git submodule add https://github.com/budparr/gohugo-theme-ananke themes/ananke
+echo 'theme = "ananke"' >> config.toml
+```
+
+## Step 2: Create Pages
+
+```bash
+hugo new posts/my-first-post.md
+```
+
+Edit the post in `content/posts/my-first-post.md`:
+
+```markdown
+---
+title: "My First Post"
+date: 2019-04-15
+---
+
+This is my first JAMstack post powered by Hugo.
+```
+
+## Step 3: Pull Content from a Headless CMS
+
+Use a script (Node or Go) to fetch content via API from a CMS like:
+- Contentful
+- Sanity
+- Strapi
+
+Save it as Markdown files into `content/posts/`.
+
+Example fetch and write:
+
+```js
+// fetch-posts.js
+const fs = require('fs');
+const fetch = require('node-fetch');
+
+async function getPosts() {
+  const res = await fetch('https://api.mycms.com/posts');
+  const posts = await res.json();
+
+  posts.forEach(post => {
+    const content = `---
+title: "${post.title}"
+date: "${post.date}"
+---
+
+${post.body}
+`;
+    fs.writeFileSync(`content/posts/${post.slug}.md`, content);
+  });
+}
+
+getPosts();
+```
+
+Run this script before building the site:
+
+```bash
+node fetch-posts.js
+hugo
+```
+
+## Step 4: Deploy to Netlify
+
+```bash
+npm install -g netlify-cli
+netlify init
+netlify deploy
+```
+
+---
+
+Using Hugo and a headless CMS shows how JAMstack can be flexible, fast, and suitable for both small sites and large content-driven platforms.

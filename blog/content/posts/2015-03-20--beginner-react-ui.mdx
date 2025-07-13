@@ -1,0 +1,138 @@
+---
+title: Building UIs with React.js – A Beginner’s Tutorial
+date: 2015-03-20
+summary: Learn the core ideas of React 0.13 and build a small interactive UI.
+tags: [react, javascript, ui]
+---
+
+React is a library for creating user interfaces with a **component‑based** approach and a **virtual DOM** diffing engine.
+
+React 0.13 (released March 2015) added optional ES6 class support but `React.createClass` remains the common style.
+
+---
+
+## Why React changes front‑end work
+
+- **Component isolation** – each piece of UI is a self‑contained function of props and state.  
+- **Virtual DOM** – React builds an in‑memory tree and updates only the changed parts on the real DOM, avoiding full page reflows.  
+- **One‑way data flow** – parent → child props keep data reasoning straight.  
+- **Declarative rendering** – describe *what* the UI looks like; React figures out *how* to update it.
+
+*(Check the React v0.13 release notes for details on class support and goals.)*
+
+---
+
+## Quick setup
+
+Add React, ReactDOM, and JSX transformer via CDN:
+
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react-dom.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+<div id="app"></div>
+```
+
+Write components in a `<script type="text/babel">` block.  
+The browser runs Babel in‑place to transform JSX into plain JavaScript.
+
+---
+
+## Component list
+
+- [Counter component](#counter-component)  
+- [App wrapper](#app-wrapper)  
+- [Rendering](#rendering)  
+
+---
+
+### Counter component
+
+Uses `React.createClass` and local state.
+
+```jsx
+const Counter = React.createClass({
+  getInitialState() {
+    return { count: 0 };
+  },
+  add() {
+    this.setState({ count: this.state.count + 1 });
+  },
+  render() {
+    return (
+      <button onClick={this.add}>
+        Clicked {this.state.count} times
+      </button>
+    );
+  }
+});
+```
+
+---
+
+### App wrapper
+
+Holds the Counter and shows a heading.
+
+```jsx
+const App = React.createClass({
+  render() {
+    return (
+      <section>
+        <h1>Demo: React Counter</h1>
+        <Counter />
+      </section>
+    );
+  }
+});
+```
+
+---
+
+### Rendering
+
+```jsx
+ReactDOM.render(<App />, document.getElementById('app'));
+```
+
+React builds a virtual DOM tree from `App`, compares it with the previous tree on every `setState`, and patches only the node that displays the count.
+
+---
+
+
+
+### JSX syntax
+
+JSX lets you write HTML‑like tags in JavaScript. Babel turns this syntax into `React.createElement` calls.
+
+```jsx
+const element = <h1 className="title">Hello React</h1>;
+```
+
+The code above compiles to:
+
+```js
+const element = React.createElement(
+  'h1',
+  { className: 'title' },
+  'Hello React'
+);
+```
+
+---
+
+### Props versus state
+
+- **Props**: read‑only data passed from parent to child.  
+- **State**: mutable data local to a component.  
+
+State changes with `setState()` cause React to re‑render the component and its children. Props flow down; state stays inside.
+
+
+## Key takeaways
+
+- Components bundle markup, logic, and state.  
+- State changes trigger efficient re‑renders through the virtual DOM diff.  
+- Composition lets small pieces form complex UIs.  
+
+This counter shows the minimum needed to start. Expand with more components, props, and events to grow a full application.

@@ -1,0 +1,56 @@
+---
+title: Vibe Coding ‑ Notes from the First Try
+date: 2025-06-06
+summary: Quick lessons from spinning up a new blog with an AI pair‑programmer and Cursor.
+tags: [vibe, coding, ai, cursor, blog]
+---
+
+You can build a working blog in a weekend.  
+I did it using **Cursor** and an AI pair‑programmer.
+
+## What worked
+
+- **Speed**  
+  I had a template running in minutes.  
+  Live reload kept the loop short.
+
+- **Focused prompts**  
+  Short, clear requests gave better code.  
+  One task at a time.
+
+- **Hands‑on fixes**  
+  When type errors showed up, I jumped in and patched them fast.  
+  No waiting for another answer.
+
+## What hurt
+
+- **Out‑of‑date examples**  
+  The assistant knows only what was public at its last crawl.  
+  New package versions need manual checks.
+
+- **Over‑eager edits**  
+  I asked for a sidebar tweak; it rewired other files and broke the build.  
+  I learned to halt the run early.
+
+- **Constraint drift**  
+  “Do not add package X.”  
+  Ten minutes later, package X popped back.  
+  Keep an eye on `package.json`.
+
+- **TypeScript drift**  
+  As the codebase grew, generated types lagged.  
+  I had to prune old code.
+
+## Pro tips
+
+- Write a `.nvmrc` early.  
+- Add a smoke test that runs `next build` before each commit or push.  
+- Keep `prompt.md`,  rules file or notepad with all active constraints.  
+- Stop the assistant if it touches files outside the task.  
+- Commit small and often.
+
+
+## Final thoughts
+
+AI pair‑programming is an interesting shortcut, but it won’t replace real craft For now.  
+You still need multiple projects to master the flow, bigger teams get messy, and the output quality matches the developer’s own skills—otherwise you may end up with a basic scaffold that you could have built faster with a simple **git clone**.

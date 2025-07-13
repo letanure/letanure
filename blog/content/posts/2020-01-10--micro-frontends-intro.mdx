@@ -1,0 +1,82 @@
+---
+title: Micro-Frontends – Scaling Your Front-End Architecture
+date: 2020-01-10
+summary: Learn what micro-frontends are, why they matter, and how to apply them to large-scale applications.
+tags: [architecture, micro-frontends, frontend]
+---
+
+Micro-frontends are a way to split a large front-end application into smaller, more manageable pieces. Each piece (or "micro-frontend") is owned by a different team and can be developed, deployed, and updated independently.
+
+This idea comes from microservices, but applied to the front-end.
+
+## What Are Micro-Frontends?
+
+- **Independent front-end apps** that can be developed and deployed separately.
+- Often loaded at runtime into a main "shell" or container application.
+- Useful in large teams or enterprise apps where different parts of the UI evolve separately.
+
+## Benefits
+
+- **Independent deployments**: Teams can release their features without coordinating with others.
+- **Technology flexibility**: Teams can use different stacks (React, Vue, etc.) if needed.
+- **Team autonomy**: Smaller teams can take full ownership of their parts of the UI.
+- **Code isolation**: Reduced risk of regressions across unrelated parts of the app.
+
+## Challenges
+
+- **Initial setup complexity**
+- **Cross-team coordination**
+- **Shared dependencies** (e.g., design systems, global state)
+- **Performance and loading times** (more assets to download)
+
+## Example Use Case
+
+Imagine an e-commerce site:
+
+- **Homepage**: Core team
+- **Product Search**: Search team
+- **Product Details**: Catalog team
+- **Shopping Cart**: Checkout team
+- **User Profile**: Account team
+
+Each of these could be a micro-frontend, deployed on its own and integrated into a shared layout.
+
+## Approaches
+
+### Server-Side Composition
+
+- Each micro-frontend is rendered on the server and merged before being sent to the browser.
+- Works well with traditional server-rendered apps.
+
+### Client-Side Composition
+
+- The shell app loads each micro-frontend at runtime via JavaScript.
+- Allows more flexibility but needs careful handling of dependencies.
+
+### Webpack Module Federation (introduced in Webpack 5)
+
+```js
+// Example config snippet
+new ModuleFederationPlugin({
+  name: 'checkout',
+  filename: 'remoteEntry.js',
+  exposes: {
+    './Cart': './src/components/Cart',
+  },
+  shared: ['react', 'react-dom'],
+});
+```
+
+## When to Use Micro-Frontends
+
+- You have **many teams** working on the same front-end codebase.
+- You want **independent deployments**.
+- You maintain **separate domains** of business logic.
+- Your app is **too large** for a single team to own or understand.
+
+If you're in a small team or project, micro-frontends may add more complexity than value.
+
+## Final Thoughts
+
+Micro-frontends aren’t for every project. But for large apps with many teams, they can help scale your architecture in a clean and maintainable way.
+

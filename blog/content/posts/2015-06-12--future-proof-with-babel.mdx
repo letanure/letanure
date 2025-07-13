@@ -1,0 +1,100 @@
+---
+title: Writing Future‑Proof Code with Babel
+date: 2015-06-12
+summary: Use Babel to compile ES6+ JavaScript into browser‑friendly ES5.
+tags: [babel, javascript, tooling]
+---
+
+Babel is a JavaScript compiler.  
+It converts modern syntax into code that older browsers understand.  
+In 2015 this made it possible to use ES6 features in production while IE‑only engines were still common.
+
+---
+
+## Why Babel matters
+
+- **Early access** – arrow functions, classes, modules, and more without waiting for native support  
+- **Config file** – `.babelrc` keeps presets and plugins in one place  
+- **Plugin system** – choose only the transforms you need  
+- **Multiple outputs** – turn ES modules into CommonJS, AMD, or System formats  
+
+---
+
+## Project setup
+
+```bash
+# Install CLI and the ES2015 preset locally
+npm install --save-dev babel-cli babel-core babel-preset-es2015
+
+# Optional: watcher for automatic rebuilds
+npm install --save-dev babel-watch
+```
+
+Create **.babelrc**:
+
+```json
+{
+  "presets": ["es2015"]
+}
+```
+
+---
+
+## Example: Transpile a small module
+
+**src/math.js**
+
+```js
+export const PI = 3.14;
+export const double = n => n * 2;
+```
+
+Build the file:
+
+```bash
+# One‑off build
+npx babel src --out-dir lib
+
+# Continuous build during development
+npx babel-watch src --out-dir lib
+```
+
+**lib/math.js** (output)
+
+```js
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var PI = exports.PI = 3.14;
+var double = exports.double = function double(n) {
+  return n * 2;
+};
+```
+
+The ES6 `export` statements become CommonJS assignments, ready for Node or older browsers after bundling.
+
+---
+
+## Common build integrations
+
+- **Browserify** – add `babelify` as a transform  
+- **Grunt / Gulp** – run `grunt-babel` or `gulp-babel` in the task pipeline  
+
+---
+
+## Key ES6 features you can ship today
+
+- `let` and `const` block‑scoped variables  
+- Arrow functions with lexical `this`  
+- Classes with concise method syntax  
+- Template literals with `${}` interpolation  
+- Destructuring for arrays and objects  
+
+Each transform is handled by the preset, so the workflow stays simple after the initial install.
+
+---
+
+Babel removes the waiting game.  
+Write modern JavaScript, compile once, and run everywhere.

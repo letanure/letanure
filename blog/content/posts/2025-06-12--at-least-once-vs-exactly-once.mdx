@@ -1,0 +1,180 @@
+---
+title: At-Least-Once vs. Exactly-Once - Understanding Message Delivery Guarantees
+date: 2025-06-12
+summary: Learn about message delivery guarantees in distributed systems. Understand why most production systems implement at-least-once delivery with idempotency rather than attempting exactly-once delivery.
+tags: ['system design', 'backend', 'queues', 'supabase', 'jobs']
+---
+
+# At-Least-Once vs. Exactly-Once: Understanding Message Delivery Guarantees
+
+In distributed systems, when performing critical operations such as webhook delivery, job processing, or payment recording, a fundamental question arises:
+
+> **How many times can this operation be executed?**
+
+The answer to this question determines your system's reliability and consistency guarantees.
+
+---
+
+## At-Least-Once Delivery
+
+**Definition**: The system guarantees that an operation will be executed at least once, with the possibility of multiple executions.
+
+### Characteristics
+
+- Widely adopted in production systems
+- Common in message queues: RabbitMQ, Kafka, Supabase Realtime
+- Requires idempotent operation handlers
+- Supports automatic retries on failure
+- Simpler to implement and maintain
+
+### Implementation Example
+
+```typescript
+// Webhook handler with idempotency
+export async function POST(req: Request) {
+  const event = await req.json();
+  
+  // 1. Check for duplicate processing
+  const { data: existingEvent } = await supabase
+    .from('webhook_logs')
+    .select('*')
+    .eq('event_id', event.id)
+    .maybeSingle();
+
+  if (existingEvent) {
+    // Event already processed, return success
+    return new Response('Event already processed', { status: 200 });
+  }
+
+  // 2. Record the event before processing
+  const { error: insertError } = await supabase
+    .from('webhook_logs')
+    .insert({
+      event_id: event.id,
+      payload: event,
+      status: 'processing',
+      created_at: new Date().toISOString()
+    });
+
+  if (insertError) {
+    return new Response('Failed to record event', { status: 500 });
+  }
+
+  try {
+    // 3. Process the event
+    await processEvent(event);
+    
+    // 4. Update event status
+    await supabase
+      .from('webhook_logs')
+      .update({ status: 'completed' })
+      .eq('event_id', event.id);
+      
+    return new Response('Event processed successfully', { status: 200 });
+  } catch (error) {
+    // 5. Handle processing errors
+    await supabase
+      .from('webhook_logs')
+      .update({ 
+        status: 'failed',
+        error: error.message 
+      })
+      .eq('event_id', event.id);
+      
+    return new Response('Event processing failed', { status: 500 });
+  }
+}
+```
+
+This implementation ensures that:
+1. Duplicate events are detected and handled gracefully
+2. Event processing is tracked and can be monitored
+3. Failures are properly recorded
+4. The system can recover from errors
+
+---
+
+## Exactly-Once Delivery
+
+**Definition**: The system guarantees that an operation will be executed exactly once, no more and no less.
+
+### Challenges
+
+- Extremely difficult to implement in distributed systems
+- Requires complex coordination across:
+  - Network layers
+  - State management
+  - Retry mechanisms
+  - Transaction boundaries
+- Significant performance overhead
+- Often unnecessary for most use cases
+
+Even major platforms like Stripe, Kafka, and AWS don't implement exactly-once delivery by default. Instead, they rely on at-least-once delivery combined with idempotent operations.
+
+---
+
+## Real-World Applications
+
+These delivery guarantees are crucial in several scenarios:
+
+### 1. Webhook Delivery
+- External service notifications
+- Payment processing callbacks
+- Integration events
+
+### 2. Background Job Processing
+- Email sending
+- Report generation
+- Data synchronization
+
+### 3. Side Effects
+- Inventory updates
+- Receipt generation
+- Payout processing
+
+### 4. Event Processing
+- User notifications
+- Audit logging
+- System state changes
+
+---
+
+## Best Practices for At-Least-Once Systems
+
+1. **Implement Idempotent Operations**
+   - Use unique identifiers for operations
+   - Check for existing results before processing
+   - Use atomic operations where possible
+
+2. **Track Operation State**
+   - Record operation IDs
+   - Track event processing status
+   - Maintain audit logs
+
+3. **Handle Duplicates**
+   - Implement deduplication logic
+   - Use database constraints
+   - Maintain operation logs
+
+4. **Design for Retries**
+   - Implement exponential backoff
+   - Set reasonable retry limits
+   - Handle partial failures
+
+---
+
+## Summary
+
+| Delivery Type     | Guarantees            | Implementation Complexity | Use Cases                |
+|-------------------|------------------------|---------------------------|--------------------------|
+| At-Least-Once     | Will execute ≥1 times  | Moderate                 | Most production systems  |
+| Exactly-Once      | Will execute =1 time   | High                     | Rare, specific cases     |
+
+For most production systems, the recommended approach is:
+
+1. Implement at-least-once delivery
+2. Design idempotent operation handlers
+3. Implement proper retry mechanisms
+4. Maintain comprehensive logging
+
+This combination provides the reliability and consistency needed for production systems while maintaining reasonable complexity and performance characteristics.

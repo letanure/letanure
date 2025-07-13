@@ -1,0 +1,246 @@
+---
+title: Exploring ECMAScript 2015 (ES6) Features
+date: 2015-01-15
+summary: Deep dive into every ES6 feature with concise examples.
+tags: [javascript, es6]
+---
+
+ECMAScript 2015 (ES6) adds modern syntax, safer defaults, and built‑in tools for async and modular code.
+
+Transpile with **Babel**:
+
+```bash
+npm init -y
+npm install --save-dev @babel/core @babel/cli @babel/preset-env
+echo '{ "presets": ["@babel/preset-env"] }' > .babelrc
+npx babel src --out-dir dist
+```
+
+Place ES6 files in **src/**, run the command, and load the output from **dist/** in older browsers.
+
+---
+
+## Feature list
+
+- [let and const](#let-and-const)  
+- [Arrow functions](#arrow-functions)  
+- [Template literals](#template-literals)  
+- [Destructuring](#destructuring)  
+- [Default, rest, spread](#default-rest-spread)  
+- [Enhanced object literals](#enhanced-object-literals)  
+- [Classes](#classes)  
+- [Modules](#modules)  
+- [Promises](#promises)  
+- [Iterators and for..of](#iterators-and-forof)  
+- [Generators](#generators)  
+- [Map, Set, WeakMap, WeakSet](#map-set-weakmap-weakset)  
+- [Symbols](#symbols)  
+- [Unicode & binary/octal](#unicode--binaryoctal)  
+- [New APIs](#new-apis)  
+- [Proxies](#proxies)  
+- [Reflect API](#reflect-api)  
+- [Tail‑call optimisation](#tail-call-optimisation)  
+
+---
+
+### let and const
+
+```js
+for (let i = 0; i < 3; i++) {
+  // i scoped to loop only
+}
+const API_URL = '/api';
+```
+
+---
+
+### Arrow functions
+
+```js
+const doubled = [1, 2, 3].map(n => n * 2);
+button.addEventListener('click', () => this.save());
+```
+
+---
+
+### Template literals
+
+```js
+const user = 'Luiz';
+const msg = `Hi, ${user}
+Welcome to ES6.`;
+```
+
+---
+
+### Destructuring
+
+```js
+const [red, green] = ['#f00', '#0f0'];
+
+const user = { id: 7, role: 'admin' };
+const { id, role } = user;
+```
+
+---
+
+### Default, rest, spread
+
+```js
+function greet(name = 'guest') { return `Hi ${name}`; }
+
+const nums = [1, 2, 3];
+sum(...nums); // spread into args
+
+function logAll(...args) { console.log(args); }
+```
+
+---
+
+### Enhanced object literals
+
+```js
+const name = 'x';
+const obj = {
+  name,                // shorthand
+  [`prop_${name}`]: 1, // computed key
+  toString() { return this.name; }
+};
+```
+
+---
+
+### Classes
+
+```js
+class Counter {
+  constructor(start = 0) { this.count = start; }
+  inc() { return ++this.count; }
+}
+```
+
+---
+
+### Modules
+
+```js
+// math.js
+export const PI = 3.14;
+
+// app.js
+import { PI } from './math.js';
+console.log(PI);
+```
+
+*Run through Babel or a bundler to use modules in the browser.*
+
+---
+
+### Promises
+
+```js
+fetch('/data.json')
+  .then(r => r.json())
+  .then(show)
+  .catch(console.error);
+```
+
+---
+
+### Iterators and for..of
+
+```js
+for (const n of [10, 20, 30]) {
+  console.log(n);
+}
+```
+
+---
+
+### Generators
+
+```js
+function* idMaker() {
+  let id = 0;
+  while (true) yield id++;
+}
+const gen = idMaker();
+gen.next().value; // 0
+```
+
+---
+
+### Map, Set, WeakMap, WeakSet
+
+```js
+const ids = new Set([1, 2, 2, 3]); // {1,2,3}
+const dict = new Map([['key', 42]]);
+```
+
+---
+
+### Symbols
+
+```js
+const secret = Symbol('secret');
+const obj = { [secret]: 123 };
+```
+
+---
+
+### Unicode & binary/octal
+
+```js
+'𝌆'.length; // 2 in ES5, fixed helpers in ES6
+
+0b1010; // 10
+0o755;  // 493
+```
+
+---
+
+### New APIs
+
+```js
+Number.isNaN(NaN);      // true
+[1, 2, 3].includes(2);  // true
+Math.trunc(4.8);        // 4
+Object.assign({}, { a: 1 });
+```
+
+---
+
+### Proxies
+
+```js
+const monitor = new Proxy({}, {
+  get(target, prop) {
+    console.log('read', prop);
+    return target[prop];
+  }
+});
+monitor.x = 5;
+monitor.x; // logs "read x"
+```
+
+---
+
+### Reflect API
+
+```js
+const obj = {};
+Reflect.set(obj, 'x', 1);
+Reflect.get(obj, 'x'); // 1
+```
+
+---
+
+### Tail‑call optimisation
+
+```js
+function factorial(n, acc = 1) {
+  return n === 0 ? acc : factorial(n - 1, n * acc);
+}
+```
+
+Tail‑recursive functions can run without growing the call stack in compliant engines.

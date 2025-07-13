@@ -1,0 +1,99 @@
+---
+title: Using React Hooks – A New Way to Write Components
+date: 2019-02-12
+summary: How to use React Hooks like useState and useEffect to write simpler functional components instead of class-based ones.
+tags: [react, hooks, useState, useEffect]
+---
+
+React Hooks were introduced in version 16.8. They let you use state and lifecycle features in functional components. This changed how many people write React apps.
+
+## Why Hooks?
+
+Before Hooks, you had to use class components to:
+- Manage state
+- Use lifecycle methods
+- Share logic between components
+
+Hooks made this easier by adding functions like `useState` and `useEffect`.
+
+## useState Example
+
+```js
+import React, { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+```
+
+No constructor, no `this`, just clean and readable.
+
+## useEffect Example
+
+```js
+import React, { useState, useEffect } from 'react';
+
+function Timer() {
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSeconds(prev => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return <p>{seconds} seconds have passed.</p>;
+}
+```
+
+`useEffect` replaces `componentDidMount`, `componentDidUpdate`, and `componentWillUnmount`.
+
+## Replacing a Class Component
+
+Old class component:
+
+```js
+class Counter extends React.Component {
+  state = { count: 0 };
+
+  render() {
+    return (
+      <button onClick={() => this.setState({ count: this.state.count + 1 })}>
+        {this.state.count}
+      </button>
+    );
+  }
+}
+```
+
+Now with Hooks:
+
+```js
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return <button onClick={() => setCount(count + 1)}>{count}</button>;
+}
+```
+
+## Why This Matters
+
+Hooks:
+- Simplify code
+- Avoid class boilerplate
+- Make it easier to reuse logic with custom hooks
+
+---
+
+Hooks changed the way we write React apps. They’re simple, flexible, and work well with today’s component-based design.

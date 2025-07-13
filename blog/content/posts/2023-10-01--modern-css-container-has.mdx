@@ -1,0 +1,71 @@
+---
+title: Modern CSS – Container Queries and :has() in Action
+date: 2023-10-01
+summary: A look at how container queries and the :has() selector open new doors for responsive and contextual styling in CSS.
+tags: [css, container-queries, has-selector, responsive, modern-css]
+---
+
+Two major features have made their way into modern CSS: **container queries** and the `:has()` selector. Together, they unlock new ways to write styles that are more flexible, modular, and context-aware.
+
+## What are Container Queries?
+
+Container queries allow components to adapt based on the **size of their container**, not the entire viewport. This is a game-changer for building reusable, responsive components.
+
+Here's a basic example:
+
+```css
+.card {
+  container-type: inline-size;
+}
+
+@container (min-width: 400px) {
+  .card {
+    flex-direction: row;
+  }
+}
+```
+
+With this, `.card` changes its layout only when its **container** is wider than 400px, not the whole screen. You can use it in grids, toolbars, cards, and nested components.
+
+## What is `:has()`?
+
+The `:has()` selector is like a parent selector – it applies styles to elements **based on their children**.
+
+Example:
+
+```css
+form:has(input:invalid) {
+  border: 2px solid red;
+}
+```
+
+This applies a red border to the whole `form` if any of its inputs are invalid. Another use:
+
+```css
+label:has(+ input:focus) {
+  font-weight: bold;
+}
+```
+
+This bolds a label when its associated input is focused.
+
+## Why This Matters
+
+- Container queries help components behave **independently**, especially useful in design systems.
+- `:has()` gives us a clean way to react to user interaction **without JS**.
+- Support for both features is now solid in evergreen browsers.
+
+## Tools and Usage Tips
+
+- Use `@supports` to check for availability:
+  ```css
+  @supports (container-type: inline-size) {
+    /* safe to use container queries */
+  }
+  ```
+
+- Consider pairing with utility-first CSS like Tailwind (which now supports container queries in some setups).
+
+Modern CSS keeps evolving fast. These features reduce the need for JavaScript or complex class toggles and make styling cleaner and more powerful.
+
+{/* Source: Practical experiments during site rebuild and State of CSS trends */}
