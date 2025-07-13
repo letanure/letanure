@@ -179,13 +179,14 @@ I decided to use the generated images to create some image-to-videos, but was no
 - Some pre-classification of the images, sometimes the AI got wrong about size, materials
 - Store in a database, not files, but was ok for an exploration project
 
-## What I learned
+## What I learned about AI-assisted problem solving
 
-- Simple solutions work better than complex automation
-- Zod schemas + AI SDK = consistent results
-- MCP tools solve context problems without bloating prompts
-- Network inspection > fighting anti-bot measures
-- Real problems make the best side projects
+- **AI works best with constraints**: Free-form AI output is inconsistent. Structured output with Zod schemas gives you the power of AI with the reliability of typed data.
+- **MCP tools are game-changers**: Instead of bloating prompts with context, give AI tools to fetch what it needs. This scales much better and keeps prompts focused.
+- **Claude Code as a pair programmer**: Having an AI that understands your codebase and can suggest architectural decisions speeds up development significantly.
+- **Iterative AI refinement**: The first AI output is never perfect. Plan for multiple iterations to tune prompts, constraints, and data structures.
+- **Simple solutions beat complex automation**: Sometimes the best approach is to step back, understand the problem differently, and let AI generate the simple solution.
+- **Real problems make the best AI projects**: When you're solving actual pain points, you iterate faster and build more useful tools.
 
 ## Tech stack
 
@@ -195,6 +196,8 @@ Node.js, AI SDK, Zod, Photoroom API, ImageMagick, Claude Code, MCP tools, bash.
 
 I was planning to go even further, make a single script that will get the data for each one, so I run one time and fill one at a time automagically, but sounded too much... the copy paste was not a problem for a one time (maybe) job, and I can always evolve later.
 
-Sometimes the simple solution wins.
+This project reinforced something important about working with AI: the goal isn't to build the most technically impressive solution. It's to solve the problem efficiently. AI helped me build exactly what was needed, nothing more.
+
+Sometimes the simple AI-generated solution wins.
 
 Products go live tomorrow.
