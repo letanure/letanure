@@ -64,6 +64,8 @@ const result = await generateObject({
 
 But I had the problem of the specific values. I tried to send them to the OpenAI API, but the model was losing context, so I used the tool / MCP to give the possible values to the API.
 
+This is where my problem-solving approach with AI really paid off. Instead of cramming everything into prompts and hoping the AI would remember Etsy's specific categories and materials, I built MCP tools that could provide that context on-demand. The AI could now ask for valid options when it needed them.
+
 ```typescript
 // MCP tool to get valid Etsy categories
 const getCategoriesFunction = {
@@ -82,13 +84,17 @@ Use the getValidCategories tool to ensure correct category selection.
 
 After several iterations, refining the tone, what to describe, checking best practices for titles, tags, descriptions, I got a good version of text, and with the MCP, the values like style, materials, to generate a good JSON with all the data.
 
+This iterative approach with AI is crucial - you don't get perfect results on the first try. Each iteration taught me something new about how to prompt the AI, how to structure the data, and what constraints were actually needed. The AI became more useful the more I understood how to work with it.
+
 ## Puppeteer was a trap
 
 My plan was to use puppeteer to fill the data, but after some tries, I discovered that Etsy is really good at blocking puppeteer automation... and to make puppeteer fill the form in the right way, was giving too much work, adjusting sequence, ids, selectors...
 
-I was planing to go for a browser Claude controlled to fill the data, but decided for a simpler approach.
+I was planning to go for a browser Claude controlled to fill the data, but decided for a simpler approach.
 
-I created a fake draft product, inspected the network to see the request, and found that it was all created in a single request. Gotcha!
+This is where good problem-solving beats brute force automation. Instead of fighting Etsy's anti-bot measures, I stepped back and thought: what's actually happening when someone creates a product? I created a fake draft product, inspected the network to see the request, and found that it was all created in a single request. Gotcha!
+
+Sometimes the best solution is the simplest one - and AI helped me generate clean, working fetch scripts instead of battling complex browser automation.
 
 ```javascript
 // Generated fetch script
@@ -128,13 +134,13 @@ One thing that I decided to add, was some image generation too.
 5. Save everything to organized folders
 ```
 
-## The final pipeline
+## The final AI-orchestrated pipeline
 
-So, the final plan, after integrating all was:
+This is where all the AI pieces came together beautifully. What started as a manual problem became a fully automated AI pipeline:
 
 Drop a lot of images in a folder, run a terminal script.
 
-My app will read all images, and for each one:
+My AI-powered app will read all images, and for each one:
 
 - Resize the image to low quality, to send to OpenAI, saving tokens
 - Resize to a 2000x2000 px to send to photoroom, to generate one snapshot, one live photo, one image without background
