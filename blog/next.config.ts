@@ -1,7 +1,4 @@
 import createMDX from "@next/mdx";
-import rehypePrismPlus from "rehype-prism-plus";
-import remarkFrontmatter from "remark-frontmatter";
-import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -11,12 +8,7 @@ const nextConfig = {
 const withMDX = createMDX({
 	extension: /\.mdx?$/,
 	options: {
-		// remarkPlugins: [remarkGfm,
-		rehypePlugins: [[rehypePrismPlus, { ignoreMissing: true }]],
-		remarkPlugins: [
-			remarkFrontmatter,
-			[remarkMdxFrontmatter, { name: "metadata" }],
-		],
+		// Minimal config without problematic plugins
 	},
 });
 

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
-import { BlogTag } from "./ui/BlogTag";
+import { Tag } from "./ui/Tag";
 
 interface PostCardProps {
   title: string;
@@ -28,7 +28,7 @@ export function PostCard({ title, date, summary, slug, tags }: PostCardProps) {
         </p>
         <div className="flex flex-wrap gap-2">
           {tags.map((tag) => (
-            <BlogTag key={tag} text={tag} />
+            <Tag key={tag} text={tag} href={`/blog/tag/${tag}`} />
           ))}
         </div>
       </div>

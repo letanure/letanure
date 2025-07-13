@@ -1,8 +1,12 @@
 import { WorkshopItem } from "@/components/WorkshopItem";
 import { workshopItems } from "@/data/workshopItems";
 
-export default function TagPage({ params }: { params: { tag: string } }) {
-  const { tag } = params;
+interface Props {
+  params: Promise<{ tag: string }>;
+}
+
+export default async function TagPage({ params }: Props) {
+  const { tag } = await params;
   const filteredItems = workshopItems.filter((item) =>
     item.tags.includes(tag)
   );
