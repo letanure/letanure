@@ -1,0 +1,200 @@
+---
+title: Building an AI-Powered Etsy Product Pipeline with Claude Code and Node.js
+date: 2025-07-13
+summary: How I built an automated pipeline to transform 140 product photos into 80 complete Etsy listings in 2 days using AI, saving weeks of manual work.
+tags: ['ai', 'nodejs', 'automation', 'claude', 'etsy', 'zod', 'openai', 'mcp']
+---
+
+Sometimes the best side projects come from real problems.
+
+My girlfriend is a tattoo artist who creates amazing art objects. She had 140 product photos sitting in a folder and wanted to sell them on Etsy. The problem? Etsy's forms are complex, and doing this manually would take forever.
+
+So I did what any developer would do: I built a pipeline.
+
+## The naive first attempt
+
+My initial plan was simple:
+1. Apply for Etsy API access
+2. Read images from a folder 
+3. Use AI to generate descriptions
+4. Post everything via API
+
+Reality hit fast. Etsy's API approval process is slow. And when I tested AI descriptions with basic prompts, the results were inconsistent garbage—varying wildly in tone, style, and format.
+
+```bash
+# What I got
+"Beautiful handmade item perfect for your home"
+"Unique artistic creation with vibrant colors and modern aesthetic"
+"This piece features excellent craftsmanship and attention to detail"
+```
+
+Useless. Too generic, no structure, no consistency.
+
+## Structured data with Zod schemas
+
+I switched approaches. Instead of free-form text, I'd force the AI to output structured JSON using Zod schemas and the AI SDK.
+
+```typescript
+import { z } from 'zod';
+import { generateObject } from 'ai';
+
+const ProductSchema = z.object({
+  title: z.string().max(140),
+  description: z.string().max(1000),
+  tags: z.array(z.string()).max(13),
+  category: z.string(),
+  materials: z.array(z.string()),
+  style: z.string(),
+  price: z.number()
+});
+
+const result = await generateObject({
+  model: openai('gpt-4'),
+  schema: ProductSchema,
+  prompt: `Generate Etsy product data for this image: ${imageData}`
+});
+```
+
+Better. Now I had consistent structure. But the AI was still guessing at specific values for materials and styles instead of using Etsy's predefined options.
+
+## Context problems and MCP tools
+
+The AI kept losing context about valid Etsy values. Categories like "Home & Living > Decorative Objects" or materials like "Canvas, Acrylic Paint, Wood" weren't being used consistently.
+
+This is where MCP (Model Context Protocol) tools saved me. Instead of cramming everything into the prompt, I created tools that could provide the AI with valid options on demand.
+
+```typescript
+// MCP tool to get valid Etsy categories
+const getCategoriesFunction = {
+  name: 'getValidCategories',
+  description: 'Get valid Etsy category options',
+  parameters: { type: 'object', properties: {} },
+  execute: () => etsy_categories
+};
+
+// Now the AI could ask for valid options
+const prompt = `
+Generate product data for this image.
+Use the getValidCategories tool to ensure correct category selection.
+`;
+```
+
+Perfect. Consistent values, proper formatting, Etsy-compliant data.
+
+## The Puppeteer trap
+
+With good data generation working, I planned to automate form filling with Puppeteer. Big mistake.
+
+Etsy is **really** good at blocking automation. Between anti-bot measures, dynamic selectors, and complex form flows, I was spending more time fighting the automation than solving the actual problem.
+
+After hours of adjusting selectors and sequences, I stepped back. Was I overengineering this?
+
+## The breakthrough: Network inspection
+
+Instead of fighting Etsy's frontend, I inspected the network requests. Turns out, creating a draft product is just a single POST request.
+
+I created a fake draft product, watched the network tab, and found the exact payload structure. Gotcha.
+
+```javascript
+// Generated fetch script
+fetch('/api/v3/application/shops/12345/listings', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest'
+  },
+  body: JSON.stringify({
+    title: "Handmade Abstract Canvas Art",
+    description: "...",
+    tags: ["abstract", "canvas", "art"],
+    // ... all the AI-generated data
+  })
+})
+.then(r => r.json())
+.then(d => console.log('Created:', d.listing_id));
+```
+
+No CORS issues. No login problems. Just copy-paste into dev tools console and run. Worked like a charm from the first try.
+
+## Adding image processing with Photoroom
+
+Since I was already building a pipeline, why not make the images consistent too?
+
+I integrated my [Photoroom CLI tool](https://github.com/letanure/photoroom-cli) to generate three versions of each image:
+- Original with background
+- Clean version without background  
+- Lifestyle/staged version
+
+```bash
+# For each image:
+1. Resize to low-quality for AI analysis (save tokens)
+2. Resize to 2000x2000 for Photoroom processing
+3. Generate product data with AI
+4. Create image variants with Photoroom
+5. Save everything to organized folders
+```
+
+## The complete pipeline
+
+Final workflow for each of the 140 images:
+
+1. **Image preprocessing**: Resize for AI analysis
+2. **AI analysis**: Generate structured product data with Zod validation
+3. **Image processing**: Create multiple variants with Photoroom
+4. **Output generation**: Save images, fetch scripts, JSON data, and text summaries
+5. **Organization**: Everything goes into SKU-named folders with full logs
+
+```bash
+node generate-products.js
+# Outputs:
+# ./output/SKU-ART-001/
+#   ├── images/
+#   ├── product-data.json
+#   ├── etsy-script.js
+#   ├── description.txt
+#   └── logs.txt
+```
+
+## Bonus: AI-generated product videos
+
+Feeling ambitious, I added video generation using the AI-generated descriptions as prompts for video creation APIs. The results were surprisingly good, though I hit token limits before completing all 80 products.
+
+```typescript
+// Added to product data
+const videoPrompt = `
+Slow zoom on ${product.title}, 
+showing ${product.materials.join(' and ')} texture,
+${product.style} lighting, 
+professional product showcase
+`;
+```
+
+## Results
+
+Two days of coding replaced what would have been a month+ of manual work.
+
+- **140 images** → **80 products** (some images were duplicates)
+- **Consistent descriptions** in multiple languages
+- **Professional image variants** for each product
+- **Copy-paste automation** that actually works
+- **Happy girlfriend** (most important metric)
+
+## What I'd do differently
+
+- **Pre-classify images**: Sometimes the AI misjudged size or materials
+- **Use a database**: File-based storage was fine for exploration, but a DB would scale better
+- **Better duplicate detection**: I abandoned automatic image grouping, but it would save time
+
+## Lessons learned
+
+1. **Start simple**: The copy-paste approach beat complex automation
+2. **Structure matters**: Zod schemas made all the difference
+3. **MCP tools are powerful**: Context management without prompt bloat
+4. **Network inspection beats web scraping**: Always check what the frontend actually sends
+5. **Real problems make the best projects**: Solving actual needs keeps you motivated
+
+Sometimes the best solution isn't the most technically impressive one. It's the one that ships and solves the problem.
+
+The products go live tomorrow. 80 listings, consistent quality, zero manual data entry.
+
+Not bad for a weekend hack.
