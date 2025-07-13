@@ -1,7 +1,5 @@
 /* ------------------------------ Types ------------------------------ */
 
-type ClassValue = string | false | null | undefined;
-
 export type Metadata = {
 	date?: string | number | Date;
 	title: string;

@@ -4,8 +4,12 @@ import { serialize } from 'next-mdx-remote/serialize';
 import { MDXContent } from "@/components/MDXContent";
 import { workshopItems } from "@/data/workshopItems";
 
-export default async function WorkshopItemPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+interface Props {
+  params: Promise<{ slug: string }>;
+}
+
+export default async function WorkshopItemPage({ params }: Props) {
+  const { slug } = await params;
   const item = workshopItems.find((item) => item.slug === slug);
 
   if (!item) {
