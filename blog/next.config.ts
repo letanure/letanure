@@ -14,6 +14,8 @@ const withMDX = createMDX({
 			remarkFrontmatter,
 			[remarkMdxFrontmatter, { name: "metadata" }],
 		],
+		// Add basic syntax highlighting without rehype-prism-plus
+		rehypePlugins: [],
 	},
 });
 

@@ -109,7 +109,7 @@ fetch("/api/v3/application/shops/12345/listings", {
     description: "...",
     tags: ["abstract", "canvas", "art"],
     // ... all the AI-generated data
-  }),
+  })
 })
   .then((r) => r.json())
   .then((d) => console.log("Created:", d.listing_id));
@@ -125,14 +125,12 @@ One thing that I decided to add, was some image generation too.
 
 2 weeks ago I created a photoroom CLI tool to remove background for images, and I decided to integrate this in the flow, generating liveshoot images, images without backgrounds and a clear, standard view for all photos across products.
 
-```bash
-# For each image:
+**For each image:**
 1. Resize to low-quality for AI analysis (save tokens)
 2. Resize to 2000x2000 for Photoroom processing
 3. Generate product data with AI
 4. Create image variants with Photoroom
 5. Save everything to organized folders
-```
 
 ## The final AI-orchestrated pipeline
 
