@@ -21,11 +21,11 @@ tags:
 
 My GF is a tattoo artist that paints and creates several art objects. She had around 140 product photos and needed some help to put her products on Etsy, but there were too many products, and the forms are complex.
 
-So I decided to help. Using Claude Code and AI APIs.
+So I decided to help. This was the perfect opportunity to leverage AI tools - Claude Code as my pair programmer, OpenAI's vision models for product analysis, and MCP tools for context management.
 
-What started as "maybe I can automate this" turned into a full CLI tool that reads images in a folder, describes the products, processes the images, and generates scripts to create Etsy listings.
+What started as "maybe I can automate this" turned into a full AI-powered CLI that orchestrates multiple AI services: Claude Code helped me architect the solution, GPT-4 Vision analyzed product images, and custom MCP tools ensured consistent Etsy-compliant data generation.
 
-2 days of work.
+2 days of AI-assisted development. Here's how I solved it.
 
 ## The plan (that didn't work)
 
@@ -35,9 +35,11 @@ So I first generated some JSON with the data, but the content was not good, vary
 
 I tried some approaches to group images of the same product, but wasn't happy with the coding solutions or AI solutions, so I abandoned that for this phase.
 
-## Node AI SDK + Zod schemas
+## AI-powered structured data generation
 
-I changed my approach, used node ai-sdk + zod schemas to pass a predetermind JSON format.
+This is where AI really shined. Instead of fighting inconsistent text generation, I turned to the AI SDK with structured output - letting the AI do what it does best while constraining it to exactly what I needed.
+
+I changed my approach, used node ai-sdk + zod schemas to pass a predetermined JSON format. This was classic problem-solving: the AI was giving me the right content, but in the wrong format. So I gave it structure.
 
 ```typescript
 import { z } from "zod";
