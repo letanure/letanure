@@ -47,7 +47,7 @@ interface Props {
 export default async function BlogPostPage({ params }: Props) {
 	const { slug } = await params;
 
-	const post = await import(`../../../../../../content/posts/${slug}.mdx`);
+	const post = await import(`../../../../../content/posts/${slug}.mdx`);
 	const { metadata, default: Content } = post;
 
 	if (!post) {
