@@ -1,8 +1,19 @@
 ---
 title: Building a CLI Tool with Claude Code - From API to NPM in One Week
-date: 2025-07-14
+date: 2025-07-10
 summary: How I built photoroom-cli using Claude Code as my pair programmer. Lessons about AI-assisted development, balancing speed with quality, and the art of guided coding.
-tags: ['ai', 'cli', 'claude', 'nodejs', 'typescript', 'tui', 'api', 'npm', 'pair-programming']
+tags:
+  [
+    "ai",
+    "cli",
+    "claude",
+    "nodejs",
+    "typescript",
+    "tui",
+    "api",
+    "npm",
+    "pair-programming",
+  ]
 ---
 
 # Building a CLI Tool with Claude Code: From API to NPM in One Week
@@ -24,6 +35,7 @@ The question became: how do you make this simple for users without overwhelming 
 ## Starting with Claude Code
 
 Claude Code helped me explore different TUI approaches quickly. We tried several interface patterns:
+
 - Menu-driven navigation
 - Question-based flows
 - Hybrid command/interactive modes
@@ -42,8 +54,8 @@ This taught me something important about AI-assisted development: coding skills 
 // Claude's first attempt - works but not reusable
 async function removeBackground(imagePath: string) {
   const questions = [
-    { type: 'input', name: 'output', message: 'Output filename?' },
-    { type: 'list', name: 'format', choices: ['png', 'jpg'] }
+    { type: "input", name: "output", message: "Output filename?" },
+    { type: "list", name: "format", choices: ["png", "jpg"] },
   ];
   // ... implementation
 }
@@ -63,6 +75,7 @@ I started as simple as possible: a menu for each endpoint, asking every required
 But most users don't need every option. The breakthrough was focusing on the most important, commonly used, required parameters first, then asking "Do you want to edit the background?" to avoid forcing users through parameters they don't need.
 
 Later additions:
+
 - File selection interfaces
 - Parameter validation
 - Smart defaults based on previous choices
@@ -75,11 +88,12 @@ The biggest challenge wasn't coding—it was information architecture. How do yo
 Claude Code helped implement sophisticated features I might have skipped:
 
 **Encrypted API Key Management:**
+
 ```typescript
 // AI helped design secure key storage
 const encrypt = (text: string, key: Buffer): EncryptedData => {
   const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipher('aes-256-gcm', key);
+  const cipher = crypto.createCipher("aes-256-gcm", key);
   // ... secure implementation
 };
 ```
@@ -95,12 +109,14 @@ Setting up automated testing, releases, and even Claude Code Review integration 
 I read a phrase recently that resonates: "AI makes 80% of my coding skills almost useless, but makes the other 20% 80x more important."
 
 It's not about typing code anymore. It's about:
+
 - **Saying what to create** (clear requirements)
 - **Defining good architecture** (patterns and structure)
 - **Evaluating results** (code review and refactoring)
 - **Having freedom to explore** paths and rollback when necessary
 
 Claude Code excels at implementation but needs human guidance for:
+
 - Architectural decisions
 - Code organization
 - Pattern consistency
@@ -109,6 +125,7 @@ Claude Code excels at implementation but needs human guidance for:
 ## The Publishing Experience
 
 Getting from working code to published NPM package involved:
+
 - TypeScript configuration for proper exports
 - Testing setup with Vitest
 - Documentation and examples
