@@ -1,0 +1,146 @@
+---
+title: Building a CLI Tool with Claude Code - From API to NPM in One Week
+date: 2025-07-14
+summary: How I built photoroom-cli using Claude Code as my pair programmer. Lessons about AI-assisted development, balancing speed with quality, and the art of guided coding.
+tags: ['ai', 'cli', 'claude', 'nodejs', 'typescript', 'tui', 'api', 'npm', 'pair-programming']
+---
+
+# Building a CLI Tool with Claude Code: From API to NPM in One Week
+
+I wanted to practice pair programming with Claude Code, but I needed a real project—not another todo app.
+
+Photoroom has an excellent API for AI-powered image editing, but no CLI tool. Perfect opportunity.
+
+What started as practice became a production tool published to NPM. Here's what I learned about AI-assisted development when the AI codes faster than you can think.
+
+## The Challenge: API to CLI Translation
+
+The real challenge wasn't coding—it was design. How do you reduce a visual interface to CLI args and TUI interactions?
+
+Photoroom's API is straightforward but has complex relationships. Some parameters only appear when others have specific values. Image editing endpoints have dozens of options, most optional, but the interdependencies create a maze of possibilities.
+
+The question became: how do you make this simple for users without overwhelming them?
+
+## Starting with Claude Code
+
+Claude Code helped me explore different TUI approaches quickly. We tried several interface patterns:
+- Menu-driven navigation
+- Question-based flows
+- Hybrid command/interactive modes
+
+When Claude generated disorganized code initially, I let it slide. But after repetition, I started iterating to find useful abstractions and patterns. This became the rhythm: let Claude explore, then I'd reorganize and extract reusable components.
+
+## The Speed Problem
+
+Claude Code works fast. Too fast.
+
+Lots of times, Claude would implement full features without thinking about reusable parts or patterns. I'd find myself constantly refactoring—moving code around, reorganizing structure, forcing Claude to reuse components in other parts.
+
+This taught me something important about AI-assisted development: coding skills shift from typing to guiding, reviewing, and defining rules.
+
+```typescript
+// Claude's first attempt - works but not reusable
+async function removeBackground(imagePath: string) {
+  const questions = [
+    { type: 'input', name: 'output', message: 'Output filename?' },
+    { type: 'list', name: 'format', choices: ['png', 'jpg'] }
+  ];
+  // ... implementation
+}
+
+// After refactoring - reusable question patterns
+async function askQuestions<T>(config: QuestionConfig[]): Promise<T> {
+  // Generic question handler that all features can use
+}
+```
+
+I learned to establish patterns early and force consistency across modules. The AI is incredibly productive, but human oversight ensures the code remains maintainable.
+
+## TUI Evolution: Simple to Smart
+
+I started as simple as possible: a menu for each endpoint, asking every required parameter.
+
+But most users don't need every option. The breakthrough was focusing on the most important, commonly used, required parameters first, then asking "Do you want to edit the background?" to avoid forcing users through parameters they don't need.
+
+Later additions:
+- File selection interfaces
+- Parameter validation
+- Smart defaults based on previous choices
+- Conditional questions that only appear when relevant
+
+The biggest challenge wasn't coding—it was information architecture. How do you organize complex API relationships into a simple user flow?
+
+## Security and Polish with AI
+
+Claude Code helped implement sophisticated features I might have skipped:
+
+**Encrypted API Key Management:**
+```typescript
+// AI helped design secure key storage
+const encrypt = (text: string, key: Buffer): EncryptedData => {
+  const iv = crypto.randomBytes(16);
+  const cipher = crypto.createCipher('aes-256-gcm', key);
+  // ... secure implementation
+};
+```
+
+**Error Handling:**
+Claude generated comprehensive error scenarios I hadn't considered. The AI's systematic approach to edge cases made the tool more robust than I would have built alone.
+
+**CI/CD Pipeline:**
+Setting up automated testing, releases, and even Claude Code Review integration in the CI pipeline. The AI helped configure modern tooling I was less familiar with.
+
+## What I Learned About AI-Assisted Development
+
+I read a phrase recently that resonates: "AI makes 80% of my coding skills almost useless, but makes the other 20% 80x more important."
+
+It's not about typing code anymore. It's about:
+- **Saying what to create** (clear requirements)
+- **Defining good architecture** (patterns and structure)
+- **Evaluating results** (code review and refactoring)
+- **Having freedom to explore** paths and rollback when necessary
+
+Claude Code excels at implementation but needs human guidance for:
+- Architectural decisions
+- Code organization
+- Pattern consistency
+- User experience design
+
+## The Publishing Experience
+
+Getting from working code to published NPM package involved:
+- TypeScript configuration for proper exports
+- Testing setup with Vitest
+- Documentation and examples
+- CI/CD for automated releases
+
+Claude Code helped with the technical setup, but the decisions about what to include, how to organize it, and what the user experience should be—that was human judgment.
+
+## Community and Reflection
+
+I'm not very active in promotion, so feedback has been limited. But I realized building tools isn't enough—you need to build audience and reputation too. Creating tools and telling people about them is a good start, without expecting immediate cheers.
+
+The project taught me that modern development with AI isn't about coding faster—it's about thinking better. The AI handles the implementation while you focus on the hard problems: architecture, user experience, and system design.
+
+## Results
+
+- **Published to NPM**: https://www.npmjs.com/package/photoroom-cli
+- **Open source**: https://github.com/letanure/photoroom-cli
+- **Real users**: Solving actual problems for other developers
+- **One week**: From idea to published package
+
+## Key Takeaways
+
+1. **AI coding requires different skills**: More guiding, reviewing, defining rules
+2. **Speed vs. quality balance**: Let AI explore, then human reorganization
+3. **Pattern enforcement**: Establish consistency early and maintain it
+4. **Focus on hard problems**: Let AI handle implementation, you handle design
+5. **Build for real users**: Even practice projects should solve real problems
+
+The future of development isn't human vs. AI—it's human with AI. The challenge is learning how to be a better conductor of the AI orchestra.
+
+## Tech Stack
+
+Node.js, TypeScript, Yargs, Enquirer, Vitest, GitHub Actions, and of course, Claude Code as my pair programmer.
+
+Sometimes the best practice project is one that other people actually use.
