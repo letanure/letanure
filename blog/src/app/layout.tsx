@@ -16,6 +16,13 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
 	title: "Luiz Tanure",
 	description: "A personal blog about web development, programming, and technology.",
+	alternates: {
+		types: {
+			'application/rss+xml': [
+				{ url: '/feed.xml', title: 'Letanure Blog RSS Feed' }
+			]
+		}
+	}
 };
 
 export default function RootLayout({
