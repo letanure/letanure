@@ -1,5 +1,5 @@
 ---
-title: Building a CLI Tool with Claude Code - From API to NPM in 3 Days
+title: Building photoroom-cli with Claude Code: From API to NPM in 3 Days
 date: 2025-07-10
 summary: How I built photoroom-cli using Claude Code as my pair programmer. Lessons about AI-assisted development, balancing speed with quality, and the art of guided coding.
 tags:
@@ -18,21 +18,17 @@ tags:
 
 # Building a CLI Tool with Claude Code: From API to NPM in 3 Days
 
-I wanted to practice with Claude Code as my pair programmer, but I needed something real to work on. Not another todo app.
+I wanted to practice pair programming with Claude Code—but I needed a real project. Not a todo app. Not a playground. Something small, useful, and publishable.
 
-Photoroom has this great API for AI image editing, but no CLI tool. I like the challenge of building something useful for others, and the challenge of reducing an interface to the minimum possible CLI args and TUI to make it useful and clear.
-
-So I started checking endpoints, docs, trying to understand the relationships between possible arguments, since some are required and change what values others can use.
-
-3 days later, I had a working CLI tool published to NPM.
+Photoroom has a clean, AI-powered API for image editing—but no CLI. That was the gap. It’s a useful service, the docs are great, and the scope felt just right for a solo dev experiment.
 
 ![photoroom-cli demo](https://raw.githubusercontent.com/letanure/photoroom-cli/main/docs/demo.gif)
 
 ## Figuring out what to build
 
-The real challenge wasn't coding—it was design. 
+The real challenge wasn't coding—it was design.
 
-After defining the first draft of what needed to be done, I started the TUI, trying to make separate small apps for each section, like remove background, AI backgrounds.
+After a rough first draft of the main commands, I started building a minimal TUI—separating it into clear use cases: background removal, AI-generated backgrounds, and API key setup.
 
 Most of the endpoints are straightforward, but the image editing one has a lot of parameters. Some of them should just appear if another one has a specific value. Trying to reduce this complexity to a simple TUI interface was one of the biggest challenges, and it wasn't about coding only, but about how to organize the info and make it simple for the user.
 
@@ -42,7 +38,7 @@ Claude helped me explore different ways to implement TUI interfaces quickly. Whe
 
 This became the rhythm: let Claude explore, then I'd reorganize and extract reusable components.
 
-## The speed problem
+## Claude Code is Fast—Too Fast
 
 Claude Code works fast. Too fast.
 
@@ -105,7 +101,7 @@ I read a phrase recently that resonates: "AI makes 80% of my coding skills almos
 
 So, it's not about typing code anymore, but saying what to create, defining a good architecture, evaluating the results, having more freedom to explore paths, go forward or rollback when necessary.
 
-Working with Claude, the coding skills need to be used differently. More guiding, reviewing, defining rules. I like that phrase I read: "AI makes 80% of my code skills almost useless, but makes the other 20% 80x more important."
+Coding with Claude isn’t about typing—it's about reviewing, refactoring, and maintaining structure. AI accelerates output, but you still have to think about what’s worth building, and how it fits together.
 
 ## The Publishing Experience
 
@@ -120,7 +116,7 @@ Claude Code helped with the technical setup, but the decisions about what to inc
 
 ## Building for others
 
-I'm not very active later, so no big feedback. I realized that I need to build an audience and reputation too, not just tools. Creating tools and telling about them is a good start, without expecting cheers. Build, tell people, learn.
+I didn’t promote the project much, so feedback was limited. But it reminded me that building useful tools isn’t enough—you have to tell people. Shipping is just the first half. Sharing is the second.
 
 ## Results
 
@@ -143,4 +139,4 @@ The future of development isn't human vs. AI—it's human with AI. The challenge
 
 Node.js, TypeScript, Yargs, Enquirer, Vitest, GitHub Actions, and of course, Claude Code as my pair programmer.
 
-Working with Claude, the coding skills need to be used differently. More guiding, reviewing, defining rules. Sometimes the best practice project is one that other people actually use.
+Sometimes the best “practice” is something small that real people can use. That’s what this was. A fast build, a solid CLI, and one more tool out in the wild.
