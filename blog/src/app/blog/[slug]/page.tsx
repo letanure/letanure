@@ -7,6 +7,7 @@ import { ItemSummary } from "@/components/ui/ItemSummary";
 import { Title } from "@/components/ui/Title";
 import { TagList } from "@/components/ui/TagList";
 import PostsList from "@/components/PostsList";
+import { postMetadataGet } from "@/lib/mdx";
 
 const t = getTranslation();
 
@@ -33,23 +34,28 @@ interface Props {
 // 	}
 // }
 
-// export async function generateStaticParams() {
-// 	const posts = await import.meta.glob<{
-// 		metadata: { title: string; date: string; summary: string; tags: string[] };
-// 	}>("@/content/mdx/*.mdx");
-// 	return Object.keys(posts).map((path) => ({
-// 		slug: path.replace(/^.*[\\\/]/, "").replace(/\.mdx$/, ""),
-// 	}));
-// }
+export async function generateStaticParams() {
+	const fs = await import('fs');
+	const path = await import('path');
+	const postsDirectory = path.join(process.cwd(), 'content', 'posts');
+	const filenames = fs.readdirSync(postsDirectory);
+	
+	return filenames
+		.filter((name) => name.endsWith('.mdx'))
+		.map((name) => ({
+			slug: name.replace(/\.mdx$/, ''),
+		}));
+}
 
 export default async function BlogPostPage({ params }: Props) {
 	const { slug } = await params;
 
 	try {
+		const metadata = postMetadataGet(slug);
 		const post = await import(`../../../../content/posts/${slug}.mdx`);
-		const { metadata, default: Content } = post;
+		const { default: Content } = post;
 
-		if (!post || !metadata) {
+		if (!Content || !metadata) {
 			console.error("Post or metadata not found for slug:", slug);
 			notFound();
 		}
