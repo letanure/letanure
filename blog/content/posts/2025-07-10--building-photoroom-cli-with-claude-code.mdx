@@ -1,5 +1,5 @@
 ---
-title: Building a CLI Tool with Claude Code - From API to NPM in One Week
+title: Building a CLI Tool with Claude Code - From API to NPM in 3 Days
 date: 2025-07-10
 summary: How I built photoroom-cli using Claude Code as my pair programmer. Lessons about AI-assisted development, balancing speed with quality, and the art of guided coding.
 tags:
@@ -16,39 +16,37 @@ tags:
   ]
 ---
 
-# Building a CLI Tool with Claude Code: From API to NPM in One Week
+# Building a CLI Tool with Claude Code: From API to NPM in 3 Days
 
-I wanted to practice pair programming with Claude Code, but I needed a real project—not another todo app.
+I wanted to practice with Claude Code as my pair programmer, but I needed something real to work on. Not another todo app.
 
-Photoroom has an excellent API for AI-powered image editing, but no CLI tool. Perfect opportunity.
+Photoroom has this great API for AI image editing, but no CLI tool. I like the challenge of building something useful for others, and the challenge of reducing an interface to the minimum possible CLI args and TUI to make it useful and clear.
 
-What started as practice became a production tool published to NPM. Here's what I learned about AI-assisted development when the AI codes faster than you can think.
+So I started checking endpoints, docs, trying to understand the relationships between possible arguments, since some are required and change what values others can use.
 
-## The Challenge: API to CLI Translation
+3 days later, I had a working CLI tool published to NPM.
 
-The real challenge wasn't coding—it was design. How do you reduce a visual interface to CLI args and TUI interactions?
+## Figuring out what to build
 
-Photoroom's API is straightforward but has complex relationships. Some parameters only appear when others have specific values. Image editing endpoints have dozens of options, most optional, but the interdependencies create a maze of possibilities.
+The real challenge wasn't coding—it was design. 
 
-The question became: how do you make this simple for users without overwhelming them?
+After defining the first draft of what needed to be done, I started the TUI, trying to make separate small apps for each section, like remove background, AI backgrounds.
 
-## Starting with Claude Code
+Most of the endpoints are straightforward, but the image editing one has a lot of parameters. Some of them should just appear if another one has a specific value. Trying to reduce this complexity to a simple TUI interface was one of the biggest challenges, and it wasn't about coding only, but about how to organize the info and make it simple for the user.
 
-Claude Code helped me explore different TUI approaches quickly. We tried several interface patterns:
+## Working with Claude Code
 
-- Menu-driven navigation
-- Question-based flows
-- Hybrid command/interactive modes
+Claude helped me explore different ways to implement TUI interfaces quickly. When Claude generated disorganized code, first I let it go. After repetition, I started iterating to find useful and good abstractions and patterns.
 
-When Claude generated disorganized code initially, I let it slide. But after repetition, I started iterating to find useful abstractions and patterns. This became the rhythm: let Claude explore, then I'd reorganize and extract reusable components.
+This became the rhythm: let Claude explore, then I'd reorganize and extract reusable components.
 
-## The Speed Problem
+## The speed problem
 
 Claude Code works fast. Too fast.
 
-Lots of times, Claude would implement full features without thinking about reusable parts or patterns. I'd find myself constantly refactoring—moving code around, reorganizing structure, forcing Claude to reuse components in other parts.
+Lots of times, Claude was implementing full features, without thinking about reusing parts or patterns. On refactorings and code analysis, I was moving parts, reorganizing stuff, and forcing Claude to reuse in other parts.
 
-This taught me something important about AI-assisted development: coding skills shift from typing to guiding, reviewing, and defining rules.
+This taught me something important: working with Claude, the coding skills need to be used differently. More guiding, reviewing, defining rules.
 
 ```typescript
 // Claude's first attempt - works but not reusable
@@ -68,20 +66,15 @@ async function askQuestions<T>(config: QuestionConfig[]): Promise<T> {
 
 I learned to establish patterns early and force consistency across modules. The AI is incredibly productive, but human oversight ensures the code remains maintainable.
 
-## TUI Evolution: Simple to Smart
+## Making it simple for users
 
-I started as simple as possible: a menu for each endpoint, asking every required parameter.
+I started as simple as possible: a menu for each endpoint, asking all the parameters. Later, I grouped them better, focused on the most important, used, required ones, and put the others as optional.
 
-But most users don't need every option. The breakthrough was focusing on the most important, commonly used, required parameters first, then asking "Do you want to edit the background?" to avoid forcing users through parameters they don't need.
+"Do you want to edit the background?" to avoid forcing the user to answer all params that they don't need most of the time.
 
-Later additions:
+After that, I added validation and complex TUI interfaces, like file selection.
 
-- File selection interfaces
-- Parameter validation
-- Smart defaults based on previous choices
-- Conditional questions that only appear when relevant
-
-The biggest challenge wasn't coding—it was information architecture. How do you organize complex API relationships into a simple user flow?
+The biggest challenge wasn't coding—it was information architecture.
 
 ## Security and Polish with AI
 
@@ -104,23 +97,13 @@ Claude generated comprehensive error scenarios I hadn't considered. The AI's sys
 **CI/CD Pipeline:**
 Setting up automated testing, releases, and even Claude Code Review integration in the CI pipeline. The AI helped configure modern tooling I was less familiar with.
 
-## What I Learned About AI-Assisted Development
+## What I learned
 
 I read a phrase recently that resonates: "AI makes 80% of my coding skills almost useless, but makes the other 20% 80x more important."
 
-It's not about typing code anymore. It's about:
+So, it's not about typing code anymore, but saying what to create, defining a good architecture, evaluating the results, having more freedom to explore paths, go forward or rollback when necessary.
 
-- **Saying what to create** (clear requirements)
-- **Defining good architecture** (patterns and structure)
-- **Evaluating results** (code review and refactoring)
-- **Having freedom to explore** paths and rollback when necessary
-
-Claude Code excels at implementation but needs human guidance for:
-
-- Architectural decisions
-- Code organization
-- Pattern consistency
-- User experience design
+Working with Claude, the coding skills need to be used differently. More guiding, reviewing, defining rules. I like that phrase I read: "AI makes 80% of my code skills almost useless, but makes the other 20% 80x more important."
 
 ## The Publishing Experience
 
@@ -133,18 +116,16 @@ Getting from working code to published NPM package involved:
 
 Claude Code helped with the technical setup, but the decisions about what to include, how to organize it, and what the user experience should be—that was human judgment.
 
-## Community and Reflection
+## Building for others
 
-I'm not very active in promotion, so feedback has been limited. But I realized building tools isn't enough—you need to build audience and reputation too. Creating tools and telling people about them is a good start, without expecting immediate cheers.
-
-The project taught me that modern development with AI isn't about coding faster—it's about thinking better. The AI handles the implementation while you focus on the hard problems: architecture, user experience, and system design.
+I'm not very active later, so no big feedback. I realized that I need to build an audience and reputation too, not just tools. Creating tools and telling about them is a good start, without expecting cheers. Build, tell people, learn.
 
 ## Results
 
 - **Published to NPM**: https://www.npmjs.com/package/photoroom-cli
 - **Open source**: https://github.com/letanure/photoroom-cli
 - **Real users**: Solving actual problems for other developers
-- **One week**: From idea to published package
+- **3 days**: From idea to published package
 
 ## Key Takeaways
 
@@ -160,4 +141,4 @@ The future of development isn't human vs. AI—it's human with AI. The challenge
 
 Node.js, TypeScript, Yargs, Enquirer, Vitest, GitHub Actions, and of course, Claude Code as my pair programmer.
 
-Sometimes the best practice project is one that other people actually use.
+Working with Claude, the coding skills need to be used differently. More guiding, reviewing, defining rules. Sometimes the best practice project is one that other people actually use.
