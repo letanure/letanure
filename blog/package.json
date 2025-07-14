@@ -9,7 +9,8 @@
 		"start": "next start",
 		"lint": "next lint",
 		"publish:devto": "tsx scripts/publishing/publish-to-devto.ts",
-		"publish:medium": "tsx scripts/publishing/publish-to-medium.ts"
+		"publish:medium": "tsx scripts/publishing/publish-to-medium.ts",
+		"publish:hashnode": "tsx scripts/publishing/publish-to-hashnode.ts"
 	},
 	"dependencies": {
 		"@mdx-js/loader": "^3.1.0",
