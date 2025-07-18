@@ -1,0 +1,287 @@
+---
+title: "Understand the Acronym Spaghetti: Part 4 - CQRS and Hexagonal Architecture"
+date: 2025-07-21
+summary: "Apply CQRS and Hexagonal Architecture in React and Node.js. Learn when to separate queries from commands and how to structure frontend applications for maintainability."
+tags: [programming, architecture, cqrs, hexagonal-architecture, design-patterns, scalability]
+---
+
+# Understand the Acronym Spaghetti: Part 4 - CQRS and Hexagonal Architecture
+
+## TLDR
+- **CQRS**: Separate read/write operations for better performance
+- **Hexagonal Architecture**: Isolate business logic from external services
+
+---
+
+In [Part 3](./understand-acronym-spaghetti-part-3-solid-principles), we covered **SOLID Architecture** principles. Now let's explore **System Architecture** patterns that help you build systems that can scale and evolve.
+
+## System Architecture Patterns
+
+These patterns help you structure React applications and Node.js APIs, moving beyond single components to system-wide organization.
+
+### CQRS (Command Query Responsibility Segregation)
+
+**Definition:** Separate read operations (queries) from write operations (commands). In React/Node.js, this means different hooks, API endpoints, and state management for reading vs writing data.
+
+**Simple explanation:** Don't use the same code path for getting data and changing data. They have different needs and performance requirements.
+
+**Why it matters:** Read and write operations have different performance characteristics, caching needs, and error handling. Separating them allows each to be optimized independently.
+
+**When to use:**
+- Complex forms with heavy validation
+- Different permissions for reading vs writing
+- Performance-critical apps where reads and writes need different optimization
+- Large teams where query logic and mutation logic change at different rates
+
+**When NOT to use:**
+- Simple CRUD operations where read/write are basically the same
+- Small applications where the separation adds unnecessary complexity
+- Prototypes or MVPs where you need to move fast
+
+**React custom hook example**
+
+```typescript
+// ❌ Mixed read/write operations - same hook for everything
+const useUser = (userId: string) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  
+  const fetchUser = async () => {
+    setLoading(true);
+    // Complex query with joins and calculations
+    const response = await fetch(`/api/users/${userId}?include=profile,stats,preferences`);
+    const userData = await response.json();
+    setUser(userData);
+    setLoading(false);
+  };
+  
+  const updateUser = async (data: any) => {
+    setLoading(true);
+    // Uses same complex endpoint for simple updates
+    await fetch(`/api/users/${userId}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+    // Re-fetches complex data after simple update
+    await fetchUser();
+    setLoading(false);
+  };
+  
+  return { user, loading, updateUser, fetchUser };
+};
+```
+
+```typescript
+// ✅ Separated read and write hooks
+const useUserQuery = (userId: string) => {
+  return useQuery({
+    queryKey: ['user', userId],
+    queryFn: () => fetch(`/api/users/${userId}`).then(res => res.json())
+  });
+};
+
+const useUserMutation = () => {
+  return useMutation({
+    mutationFn: ({ userId, data }: { userId: string; data: any }) => 
+      fetch(`/api/users/${userId}`, {
+        method: 'PUT',
+        body: JSON.stringify(data)
+      }).then(res => res.json())
+  });
+};
+```
+
+**React component example**
+
+```typescript
+// ❌ Component with mixed concerns
+const UserProfile = ({ userId }: { userId: string }) => {
+  const { user, loading, updateUser } = useUser(userId);
+  
+  const handleNameChange = async (newName: string) => {
+    // Heavy operation for simple field update
+    await updateUser({ name: newName });
+  };
+  
+  if (loading) return <div>Loading...</div>;
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <p>Followers: {user.stats.followers}</p>
+      <button onClick={() => handleNameChange('New Name')}>
+        Change Name
+      </button>
+    </div>
+  );
+};
+```
+
+```typescript
+// ✅ Component with separated concerns
+const UserProfile = ({ userId }: { userId: string }) => {
+  const { data: user, isLoading } = useUserQuery(userId);
+  const updateUser = useUserMutation();
+  
+  const handleNameChange = (newName: string) => {
+    updateUser.mutate({ userId, data: { name: newName } });
+  };
+  
+  if (isLoading) return <div>Loading...</div>;
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <button onClick={() => handleNameChange('New Name')}>
+        Change Name
+      </button>
+    </div>
+  );
+};
+```
+
+**Node.js API example**
+
+```typescript
+// ❌ Same endpoint for different needs
+app.get('/api/users/:id', async (req, res) => {
+  // Heavy query for display
+  const user = await db.getUserWithStats(req.params.id);
+  res.json(user);
+});
+
+app.put('/api/users/:id', async (req, res) => {
+  // Simple update but uses heavy query for validation
+  const user = await db.getUserWithStats(req.params.id);
+  await db.updateUser(req.params.id, req.body);
+  res.json({ success: true });
+});
+```
+
+```typescript
+// ✅ Separated by concern
+// Read endpoint - optimized for display
+app.get('/api/users/:id/profile', async (req, res) => {
+  const user = await db.getUserWithStats(req.params.id);
+  res.json(user);
+});
+
+// Write endpoint - optimized for updates
+app.put('/api/users/:id', async (req, res) => {
+  const exists = await db.userExists(req.params.id);
+  if (!exists) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+  
+  await db.updateUser(req.params.id, req.body);
+  res.json({ success: true });
+});
+```
+
+
+**Benefits:**
+- **Performance**: Reads and writes can be optimized independently
+- **Maintainability**: Query logic and mutation logic can evolve separately
+- **Team Collaboration**: Different developers can work on reads vs writes
+
+**Common Pitfall:** Over-engineering simple forms where read/write are basically the same operation.
+
+---
+
+### Hexagonal Architecture (Ports & Adapters)
+
+**Definition:** Keep business logic separate from external services (databases, APIs). Use interfaces to connect them.
+
+**Simple explanation:** Your core logic shouldn't care where data comes from - database, file, or API.
+
+**When to use:** Complex business rules that need testing independently.
+**When NOT to use:** Simple CRUD apps or prototypes.
+
+**Node.js API tightly coupled to external services**
+
+```typescript
+// ❌ Business logic mixed with infrastructure
+app.post('/api/register', async (req, res) => {
+  const { name, email } = req.body;
+  
+  if (!email.includes('@')) {
+    return res.status(400).json({ error: 'Invalid email' });
+  }
+  
+  // Direct dependencies - hard to test
+  const existing = await db.findUser(email);
+  if (existing) {
+    return res.status(409).json({ error: 'User exists' });
+  }
+  
+  await db.createUser(name, email);
+  await emailService.sendWelcome(email);
+  
+  res.json({ success: true });
+});
+```
+
+```typescript
+// ✅ Core business logic separated from infrastructure
+// Define interfaces (ports)
+interface UserRepo {
+  findByEmail(email: string): Promise<User | null>;
+  save(user: User): Promise<User>;
+}
+
+interface EmailService {
+  sendWelcome(user: User): Promise<void>;
+}
+
+// Pure business logic
+const createUserService = (userRepo: UserRepo, emailService: EmailService) => {
+  const registerUser = async (userData: { name: string; email: string }) => {
+    if (!userData.email.includes('@')) {
+      return { success: false, error: 'Invalid email' };
+    }
+    
+    const existing = await userRepo.findByEmail(userData.email);
+    if (existing) {
+      return { success: false, error: 'User exists' };
+    }
+    
+    const user = await userRepo.save(userData);
+    await emailService.sendWelcome(user);
+    
+    return { success: true, user };
+  };
+  
+  return { registerUser };
+};
+
+// HTTP adapter
+app.post('/api/register', async (req, res) => {
+  const userService = createUserService(userRepo, emailService);
+  const result = await userService.registerUser(req.body);
+  
+  if (result.success) {
+    res.json({ user: result.user });
+  } else {
+    res.status(400).json({ error: result.error });
+  }
+});
+```
+
+**Benefits:**
+- **Testability**: Test business logic with mocks
+- **Flexibility**: Easy to swap databases or email services
+- **Maintainability**: Business logic isolated from infrastructure
+
+**Common Pitfall:** Over-architecting simple applications.
+
+## Summary
+
+**CQRS and Hexagonal Architecture** are powerful patterns for structuring React and Node.js applications. They help you build systems that can scale, evolve, and remain testable as they grow.
+
+**CQRS** helps you optimize reads and writes independently - perfect for React Query patterns and API design.
+
+**Hexagonal Architecture** keeps your business logic pure and testable - ideal for complex applications with multiple integrations.
+
+Both patterns build on the SOLID principles from [Part 3](./understand-acronym-spaghetti-part-3-solid-principles) and help you create systems that can adapt to future needs without major rewrites.
+
+**Coming next:** [Part 5](./understand-acronym-spaghetti-part-5-advanced-principles) covers **Advanced Principles** - the subtle patterns that separate good developers from great ones.
+
+Remember: **architecture is about trade-offs - choose patterns that solve your specific problems, not just because they're trendy.**
