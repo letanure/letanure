@@ -1,0 +1,414 @@
+---
+title: "Understand the Acronym Spaghetti: Part 5 - Advanced Principles"
+date: 2025-07-22
+summary: "Master the final set of programming principles: Law of Demeter, Composition over Inheritance, Tell Don't Ask, Convention over Configuration, and Principle of Least Astonishment. Advanced patterns for React and Node.js developers."
+tags: [programming, principles, clean-code, react, nodejs, advanced]
+---
+
+# Understand the Acronym Spaghetti: Part 5 - Advanced Principles
+
+## TLDR
+- **Law of Demeter**: Avoid deep object chaining
+- **Composition over Inheritance**: Combine small parts instead of extending classes
+- **Tell Don't Ask**: Let objects manage their own state
+- **Convention over Configuration**: Smart defaults over explicit setup
+- **Principle of Least Astonishment**: Behave as users expect
+
+---
+
+We've covered **The Foundation** in [Part 1](./understand-acronym-spaghetti-wtf-to-solid-code), **Code Quality & Safety** in [Part 2](./understand-acronym-spaghetti-part-2-quality-principles), **SOLID Architecture** in [Part 3](./understand-acronym-spaghetti-part-3-solid-principles), and **System Architecture** in [Part 4](./understand-acronym-spaghetti-part-4-cqrs-and-hexagonal).
+
+**Advanced Principles** are the subtle patterns that separate good developers from great ones. These make code truly elegant and maintainable.
+
+## Advanced Principles
+
+These principles help you write code that's not just functional, but intuitive and pleasant to work with.
+
+### Law of Demeter (Don't Talk to Strangers)
+
+**Definition:** A function should only talk to its immediate friends - don't reach through objects to talk to their friends.
+
+**Simple explanation:** Avoid chaining calls like `user.profile.settings.theme.color`. Each object should only know about its direct dependencies.
+
+**Why it matters:** Reduces coupling, makes code less fragile to changes, and prevents the "breaking chain" problem where changes deep in the structure break code far away.
+
+**When to use:**
+- Complex object hierarchies
+- API design where you want to prevent tight coupling
+- Component props design to avoid props drilling
+
+**When NOT to use:**
+- Simple utility functions or data transformations
+- Well-established patterns like `array.map().filter()`
+- Configuration objects where chaining is expected
+
+```typescript
+// ❌ Violates Law of Demeter - too much chaining
+const UserProfile = ({ user }: { user: User }) => {
+  return (
+    <div>
+      <h1>{user.profile.name}</h1>
+      <p style={{ color: user.settings.theme.color }}>
+        Posts: {user.profile.stats.posts}
+      </p>
+    </div>
+  );
+};
+```
+
+```typescript
+// ✅ Follows Law of Demeter - service handles deep access
+const getUserDisplayData = (user: User) => {
+  return {
+    name: user.getName(),
+    textColor: user.getThemeColor(),
+    postCount: user.getPostCount()
+  };
+};
+
+const UserProfile = ({ user }: { user: User }) => {
+  const { name, textColor, postCount } = getUserDisplayData(user);
+  
+  return (
+    <div>
+      <h1>{name}</h1>
+      <p style={{ color: textColor }}>
+        Posts: {postCount}
+      </p>
+    </div>
+  );
+};
+```
+
+**Benefits:**
+- **Maintainability**: Changes to deep objects don't break surface code
+- **Testability**: Easier to mock and test components
+
+**Common Pitfall:** Creating unnecessary wrapper functions for simple property access.
+
+---
+
+### Composition over Inheritance
+
+**Definition:** Build complex functionality by combining simple components rather than creating complex inheritance hierarchies.
+
+**Simple explanation:** Instead of creating a "BaseComponent" that others extend, create small, focused components that can be combined in different ways.
+
+**Why it matters:** More flexible, easier to test, and avoids the "fragile base class" problem where changes to parent classes break child classes.
+
+**When to use:**
+- React component design patterns
+- Building reusable UI components
+- Creating flexible API interfaces
+- When you need multiple behaviors that can be mixed and matched
+
+**When NOT to use:**
+- Simple cases where inheritance is clearer
+- Well-established patterns (like extending Error classes)
+- When you need polymorphism with shared behavior
+
+```typescript
+// ❌ Inheritance-heavy approach
+class BaseButton {
+  constructor(protected text: string) {}
+  render() {
+    return `<button>${this.text}</button>`;
+  }
+}
+
+class PrimaryButton extends BaseButton {
+  render() {
+    return `<button class="primary">${this.text}</button>`;
+  }
+}
+
+class LoadingButton extends BaseButton {
+  constructor(text: string, private loading: boolean) {
+    super(text);
+  }
+  render() {
+    return `<button disabled="${this.loading}">${this.loading ? 'Loading...' : this.text}</button>`;
+  }
+}
+
+// ❌ What if we need LoadingPrimaryButton? Multiple inheritance problem!
+```
+
+```typescript
+// ✅ Composition approach
+interface ButtonProps {
+  text: string;
+  variant?: 'primary' | 'secondary';
+  loading?: boolean;
+  onClick?: () => void;
+}
+
+const Button = ({ text, variant = 'secondary', loading, onClick }: ButtonProps) => {
+  return (
+    <button 
+      className={`button ${variant}`}
+      onClick={onClick}
+      disabled={loading}
+    >
+      {loading ? 'Loading...' : text}
+    </button>
+  );
+};
+
+// ✅ Easy to combine behaviors
+const PrimaryButton = (props: Omit<ButtonProps, 'variant'>) => (
+  <Button {...props} variant="primary" />
+);
+
+const LoadingPrimaryButton = (props: Omit<ButtonProps, 'variant' | 'loading'>) => (
+  <Button {...props} variant="primary" loading={true} />
+);
+```
+
+**Benefits:**
+- **Flexibility**: Mix and match behaviors as needed
+- **Testability**: Easy to test individual behaviors
+
+**Common Pitfall:** Creating too many small components when a simple solution would work better.
+
+---
+
+### Tell, Don't Ask
+
+**Definition:** Objects should tell other objects what to do, not ask them for data and make decisions for them.
+
+**Simple explanation:** Instead of asking an object for its data and then deciding what to do, tell the object what you want done and let it handle the details.
+
+**Why it matters:** Encapsulates logic where it belongs, reduces coupling, and makes code more maintainable by keeping related logic together.
+
+**When to use:**
+- State management where logic belongs with the data
+- API design where you want to encapsulate business rules
+- React components that should manage their own state
+- Reducing prop drilling and state management complexity
+
+**When NOT to use:**
+- Simple data structures without behavior
+- When you genuinely need raw data for multiple purposes
+- Pure calculation functions that transform data
+
+```typescript
+// ❌ Asking for data and making decisions externally
+const ShoppingCart = () => {
+  const [cart, setCart] = useState({ items: [], discount: 0 });
+  
+  const handleCheckout = () => {
+    // Asking for data and calculating externally
+    let total = 0;
+    cart.items.forEach(item => {
+      total += item.price * item.quantity;
+    });
+    checkout(total);
+  };
+  
+  return <button onClick={handleCheckout}>Checkout</button>;
+};
+```
+
+```typescript
+// ✅ Tell objects what to do
+class ShoppingCartModel {
+  private items: CartItem[] = [];
+  
+  calculateTotal(): number {
+    return this.items.reduce((sum, item) => 
+      sum + (item.price * item.quantity), 0
+    );
+  }
+  
+  checkout(): CheckoutData {
+    return { items: this.items, total: this.calculateTotal() };
+  }
+}
+
+// ✅ React component tells the cart what to do
+const ShoppingCart = () => {
+  const [cart] = useState(() => new ShoppingCartModel());
+  
+  const handleCheckout = () => {
+    const checkoutData = cart.checkout(); // Tell the cart to checkout
+    processCheckout(checkoutData);
+  };
+  
+  return <button onClick={handleCheckout}>Checkout</button>;
+};
+```
+
+**Benefits:**
+- **Encapsulation**: Business logic stays with the data
+- **Maintainability**: Changes to rules happen in one place
+
+**Common Pitfall:** Creating overly complex objects when simple data structures would suffice.
+
+---
+
+### Convention over Configuration
+
+**Definition:** Provide sensible defaults and follow established patterns so developers don't have to configure everything explicitly.
+
+**Simple explanation:** Make the common case easy by having smart defaults. Only require configuration for the uncommon cases.
+
+**Why it matters:** Reduces boilerplate, speeds up development, and makes codebases more predictable by following established patterns.
+
+**When to use:**
+- Folder structure organization
+- API endpoint naming
+- Component file naming and organization
+- State management patterns
+- Default configurations
+
+**When NOT to use:**
+- When your needs genuinely differ from conventions
+- When conventions would confuse your team
+- When explicit configuration improves clarity
+
+```typescript
+// ❌ Everything requires explicit configuration
+const routes = {
+  users: {
+    list: { path: '/api/users', method: 'GET', handler: 'UserController.list' },
+    create: { path: '/api/users', method: 'POST', handler: 'UserController.create' },
+    get: { path: '/api/users/:id', method: 'GET', handler: 'UserController.get' }
+  }
+};
+
+// ❌ Manual API client configuration
+const apiClient = new ApiClient({
+  baseURL: 'https://api.example.com',
+  timeout: 5000,
+  headers: { 'Content-Type': 'application/json' },
+  errorHandler: (error) => { /* custom error handling */ }
+});
+```
+
+```typescript
+// ✅ Convention-based routing
+// File: routes/users.ts - framework maps methods to RESTful routes
+export default {
+  async index(req, res) { /* GET /api/users */ },
+  async create(req, res) { /* POST /api/users */ },
+  async show(req, res) { /* GET /api/users/:id */ }
+};
+
+// ✅ API client with smart defaults
+const apiClient = createApiClient(); // Works out of the box
+
+// Only configure what's different
+const customApiClient = createApiClient({
+  baseURL: process.env.API_URL
+});
+```
+
+**Benefits:**
+- **Productivity**: Less boilerplate, faster development
+- **Consistency**: Everyone follows the same patterns
+- **Discoverability**: Easy to find things in predictable locations
+- **Onboarding**: New developers understand the structure quickly
+
+**Common Pitfall:** Following conventions blindly when they don't fit your use case.
+
+---
+
+### Principle of Least Astonishment
+
+**Definition:** Software should behave in a way that least surprises users and developers. The behavior should match expectations based on common patterns and naming.
+
+**Simple explanation:** If most developers would expect something to work a certain way, it should work that way. Don't be clever at the expense of being predictable.
+
+**Note:** This is similar to "Principle of Least Surprise" from Part 2, but focuses more on API design and system behavior rather than code readability.
+
+**Why it matters:** Reduces cognitive load, prevents bugs from misunderstood behavior, and makes systems easier to learn and use.
+
+**When to use:**
+- API response formats
+- Error handling patterns
+- State management behavior
+- Component lifecycle and side effects
+- Function naming and behavior
+
+**When NOT to use:**
+- When breaking expectations provides significant value
+- When following patterns would compromise security
+- When domain requirements genuinely differ from common patterns
+
+```typescript
+// ❌ Astonishing API behavior
+app.get('/api/users/:id', async (req, res) => {
+  const user = await User.findById(req.params.id);
+  
+  if (!user) {
+    // Surprising: Returns 200 with special format instead of 404
+    res.json({ error: 'NOT_FOUND', data: null });
+  } else {
+    res.json({ error: null, data: user });
+  }
+});
+```
+
+```typescript
+// ✅ Predictable API behavior
+app.get('/api/users/:id', async (req, res) => {
+  const user = await User.findById(req.params.id);
+  
+  if (!user) {
+    // Expected: 404 for not found
+    res.status(404).json({ error: 'User not found' });
+  } else {
+    // Expected: 200 with user data
+    res.json(user);
+  }
+});
+```
+
+```typescript
+// ❌ Function with surprising behavior
+const saveUserData = async (userData: any) => {
+  // Surprising: Function named 'save' also sends emails
+  const user = await database.save(userData);
+  await emailService.sendWelcome(user);
+  return user;
+};
+```
+
+```typescript
+// ✅ Function with predictable behavior
+const saveUser = async (userData: UserData): Promise<User> => {
+  // Function only saves, as the name suggests
+  return await database.save(userData);
+};
+
+const createUser = async (userData: UserData): Promise<User> => {
+  // Separate function for the full creation flow
+  const user = await saveUser(userData);
+  await emailService.sendWelcome(user);
+  return user; // Always returns the same type
+};
+```
+
+**Benefits:**
+- **Reduced Errors**: Developers make fewer mistakes when behavior matches expectations
+- **Faster Development**: Less time spent understanding quirks
+
+**Common Pitfall:** Being too clever or trying to "improve" on established patterns without clear benefit.
+
+---
+
+## Summary
+
+These **Advanced Principles** help you write code that's not just functional, but elegant and maintainable. They're the difference between code that works and code that's a joy to work with.
+
+**Advanced principles covered:**
+- **Law of Demeter**: Don't reach through objects - keep interactions local
+- **Composition over Inheritance**: Build complexity from simple, composable parts
+- **Tell, Don't Ask**: Let objects manage their own state and behavior
+- **Convention over Configuration**: Smart defaults make the common case easy
+- **Principle of Least Astonishment**: Behavior should match expectations
+
+Together with the principles from [Part 1](./understand-acronym-spaghetti-wtf-to-solid-code), [Part 2](./understand-acronym-spaghetti-part-2-quality-principles), [Part 3](./understand-acronym-spaghetti-part-3-solid-principles), and [Part 4](./understand-acronym-spaghetti-part-4-cqrs-and-hexagonal), you now have a complete toolkit for writing clean, maintainable code in React and Node.js.
+
+Remember: **mastery comes from knowing when to apply these principles and when to break them for the sake of simplicity.**
