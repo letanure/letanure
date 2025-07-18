@@ -53,7 +53,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
     // Truncate title if too long
     const maxTitleLength = 80
     const title = post.title.length > maxTitleLength 
-      ? post.title.substring(0, maxTitleLength) + '...'
+      ? `${post.title.substring(0, maxTitleLength)}...`
       : post.title
 
     // Get primary tag for color theming
@@ -153,7 +153,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
                 }}
               >
                 {post.summary.length > 150 
-                  ? post.summary.substring(0, 150) + '...'
+                  ? `${post.summary.substring(0, 150)}...`
                   : post.summary
                 }
               </p>
@@ -176,9 +176,9 @@ export default async function Image({ params }: { params: { slug: string } }) {
                 flexWrap: 'wrap',
               }}
             >
-              {post.tags?.slice(0, 4).map((tag, index) => (
+              {post.tags?.slice(0, 4).map((tag) => (
                 <span
-                  key={index}
+                  key={tag}
                   style={{
                     backgroundColor: colorScheme.text === '#fff' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)',
                     color: colorScheme.text,

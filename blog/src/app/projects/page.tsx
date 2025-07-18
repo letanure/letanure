@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { generateMetadata as generateSiteMetadata } from "@/lib/metadata";
+import { generateWebPageSchema, generateItemListSchema } from "@/lib/schema";
+import { siteConfig } from "@/siteConfig";
 import { getTranslation } from "@/i18n";
 
 const t = getTranslation();
@@ -11,12 +13,46 @@ export const metadata: Metadata = generateSiteMetadata({
 });
 
 export default async function ProjectsPage() {
+	const pageSchema = generateWebPageSchema({
+		title: t.projects.title,
+		description: t.projects.descriptionPage,
+		url: `${siteConfig.url}/projects`,
+	});
+
+	const projectsSchema = t.projects.projects && t.projects.projects.length > 0 
+		? generateItemListSchema({
+			title: t.projects.title,
+			description: t.projects.descriptionPage,
+			url: `${siteConfig.url}/projects`,
+			items: t.projects.projects.map(project => ({
+				name: project.title,
+				description: project.description,
+				technologies: project.technologies,
+			})),
+		})
+		: null;
+
 	try {
 		return (
-			<article
-				className=" -gray dark:-invert max-w-none"
-				aria-labelledby="projects-title"
-			>
+			<>
+				<script
+					type="application/ld+json"
+					suppressHydrationWarning
+					// biome-ignore lint/security/noDangerouslySetInnerHtml: Required for structured data
+					dangerouslySetInnerHTML={{ __html: JSON.stringify(pageSchema, null, 2) }}
+				/>
+				{projectsSchema && (
+					<script
+						type="application/ld+json"
+						suppressHydrationWarning
+						// biome-ignore lint/security/noDangerouslySetInnerHtml: Required for structured data
+						dangerouslySetInnerHTML={{ __html: JSON.stringify(projectsSchema, null, 2) }}
+					/>
+				)}
+				<article
+					className=" -gray dark:-invert max-w-none"
+					aria-labelledby="projects-title"
+				>
 				<h1
 					id="projects-title"
 					className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl"
@@ -69,6 +105,7 @@ export default async function ProjectsPage() {
 					</output>
 				)}
 			</article>
+		</>
 		);
 	} catch (error) {
 		console.error("Error loading projects:", error);

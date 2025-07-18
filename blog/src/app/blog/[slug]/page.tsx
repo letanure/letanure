@@ -38,8 +38,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-	const fs = await import('fs');
-	const path = await import('path');
+	const fs = await import('node:fs');
+	const path = await import('node:path');
 	const postsDirectory = path.join(process.cwd(), 'content', 'posts');
 	const filenames = fs.readdirSync(postsDirectory);
 	

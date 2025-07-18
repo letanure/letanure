@@ -1,4 +1,4 @@
-import { siteConfig } from "@/siteConfig";
+import { siteConfig } from "@/i18n/en";
 import type { BlogPostSchema, BlogListSchema } from "@/types/schema";
 import type { PostMetadata } from "@/types/post";
 
@@ -110,6 +110,71 @@ export function generatePersonSchema() {
 			name: siteConfig.author.name,
 		},
 		// sameAs: siteConfig.author.socials,
+	};
+}
+
+export function generateWebSiteSchema() {
+	return {
+		"@context": "https://schema.org",
+		"@type": "WebSite",
+		name: siteConfig.name,
+		description: siteConfig.description,
+		url: siteConfig.url,
+		author: {
+			"@type": "Person",
+			name: siteConfig.author.name,
+			url: siteConfig.url,
+		},
+		publisher: {
+			"@type": "Organization",
+			name: siteConfig.author.name,
+			logo: {
+				"@type": "ImageObject",
+				url: `${siteConfig.url}/logo.png`,
+			},
+		},
+		potentialAction: {
+			"@type": "SearchAction",
+			target: `${siteConfig.url}/blog?search={search_term_string}`,
+			"query-input": "required name=search_term_string",
+		},
+	};
+}
+
+export function generateItemListSchema({
+	title,
+	description,
+	url,
+	items,
+}: {
+	title: string;
+	description: string;
+	url: string;
+	items: Array<{
+		name: string;
+		description: string;
+		technologies?: readonly string[];
+	}>;
+}) {
+	return {
+		"@context": "https://schema.org",
+		"@type": "ItemList",
+		name: title,
+		description,
+		url,
+		numberOfItems: items.length,
+		itemListElement: items.map((item, index) => ({
+			"@type": "ListItem",
+			position: index + 1,
+			item: {
+				"@type": "CreativeWork",
+				name: item.name,
+				description: item.description,
+				...(item.technologies && {
+					keywords: item.technologies.join(", "),
+				}),
+			},
+		})),
 	};
 }
 
