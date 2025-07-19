@@ -4,47 +4,32 @@ const t = getTranslation();
 
 export default function Footer() {
 	return (
-		<footer className="bg-white dark:bg-gray-800">
-			<div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-				<div className="flex items-center justify-between">
-					<p className="text-sm text-gray-500 dark:text-gray-400">
-						© {new Date().getFullYear()} {t.site.name}. All rights reserved.
+		<footer className="border-t border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.12)] mt-16">
+			<div className="mx-auto max-w-[1000px] px-4 py-8 sm:px-6 lg:px-8">
+				<div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+					<p className="text-sm text-[#757575] dark:text-[#A8A8A8]">
+						© {new Date().getFullYear()} {t.site.name}
 					</p>
 					<div className="flex items-center space-x-6">
 						<a
 							href="https://cal.com/letanure"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="inline-flex items-center px-4 py-2 rounded-md bg-gray-900 text-white hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
+							className="inline-flex items-center px-4 py-2 rounded-full bg-[#292929] dark:bg-[#E6E6E6] text-white dark:text-[#191919] hover:bg-[#1A8917] dark:hover:bg-[#1DB954] dark:hover:text-white transition-colors text-sm font-medium"
 							aria-label="Book a call"
 						>
-							<span className="sr-only">Book a call</span>
-							<svg
-								className="h-5 w-5 mr-2"
-								fill="none"
-								stroke="currentColor"
-								viewBox="0 0 24 24"
-								aria-hidden="true"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth={2}
-									d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-								/>
-							</svg>
 							Book a Call
 						</a>
 						<a
 							href="https://github.com/letanure"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+							className="text-[#757575] hover:text-[#292929] dark:text-[#A8A8A8] dark:hover:text-[#E6E6E6] transition-colors"
 							aria-label="GitHub Profile"
 						>
 							<span className="sr-only">Visit GitHub Profile</span>
 							<svg
-								className="h-6 w-6"
+								className="h-5 w-5"
 								fill="currentColor"
 								viewBox="0 0 24 24"
 								aria-hidden="true"
@@ -60,12 +45,12 @@ export default function Footer() {
 							href="https://twitter.com/tanure"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+							className="text-[#757575] hover:text-[#292929] dark:text-[#A8A8A8] dark:hover:text-[#E6E6E6] transition-colors"
 							aria-label="Twitter Profile"
 						>
 							<span className="sr-only">Visit Twitter Profile</span>
 							<svg
-								className="h-6 w-6"
+								className="h-5 w-5"
 								fill="currentColor"
 								viewBox="0 0 24 24"
 								aria-hidden="true"
@@ -77,12 +62,12 @@ export default function Footer() {
 							href="/feed.xml"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+							className="text-[#757575] hover:text-[#292929] dark:text-[#A8A8A8] dark:hover:text-[#E6E6E6] transition-colors"
 							aria-label="RSS Feed"
 						>
 							<span className="sr-only">Subscribe to RSS Feed</span>
 							<svg
-								className="h-6 w-6"
+								className="h-5 w-5"
 								fill="currentColor"
 								viewBox="0 0 24 24"
 								aria-hidden="true"

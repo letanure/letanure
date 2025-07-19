@@ -2,113 +2,214 @@
 @import "prismjs/themes/prism-tomorrow.css";
 
 :root {
-	--foreground-rgb: 0, 0, 0;
+	--foreground-rgb: 41, 41, 41;
 	--background-rgb: 255, 255, 255;
+	--text-primary: #292929;
+	--text-secondary: #757575;
+	--text-tertiary: #6B6B6B;
+	--border-color: rgba(0, 0, 0, 0.12);
+	--accent-color: #1A8917;
+	--serif-font: charter, Georgia, Cambria, "Times New Roman", Times, serif;
+	--sans-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
 	:root {
-		--foreground-rgb: 255, 255, 255;
-		--background-rgb: 0, 0, 0;
+		--foreground-rgb: 230, 230, 230;
+		--background-rgb: 25, 25, 25;
+		--text-primary: #E6E6E6;
+		--text-secondary: #A8A8A8;
+		--text-tertiary: #8F8F8F;
+		--border-color: rgba(255, 255, 255, 0.15);
+		--accent-color: #1DB954;
 	}
 }
 
 body {
 	color: rgb(var(--foreground-rgb));
 	background: rgb(var(--background-rgb));
+	font-family: var(--sans-font);
+	font-size: 16px;
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
-/* Prose Content Styles */
+/* Prose Content Styles - Medium-inspired */
 .prose {
 	@apply max-w-none;
+	font-family: var(--serif-font);
+	font-size: 20px;
+	line-height: 1.6;
+	letter-spacing: -0.003em;
+	color: var(--text-primary);
 }
 
-/* Headings */
+/* Headings - Clean Medium Style with 8px grid */
 .prose h1 {
-	@apply text-4xl font-bold tracking-tight text-gray-900 dark:text-white mb-8 mt-12;
-	@apply border-b border-gray-200 dark:border-gray-700 pb-4;
+	@apply mb-8 mt-12;
+	font-family: var(--sans-font);
+	font-size: 40px;
+	line-height: 1.2;
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	color: var(--text-primary);
 }
 
 .prose h2 {
-	@apply text-3xl font-semibold text-gray-900 dark:text-white mt-12 mb-6;
-	@apply border-b border-gray-200 dark:border-gray-700 pb-2;
+	@apply mt-12 mb-6;
+	font-family: var(--sans-font);
+	font-size: 32px;
+	line-height: 1.25;
+	font-weight: 600;
+	letter-spacing: -0.015em;
+	color: var(--text-primary);
 }
 
 .prose h3 {
-	@apply text-2xl font-semibold text-gray-900 dark:text-white mt-10 mb-4;
+	@apply mt-10 mb-4;
+	font-family: var(--sans-font);
+	font-size: 24px;
+	line-height: 1.3;
+	font-weight: 600;
+	letter-spacing: -0.012em;
+	color: var(--text-primary);
 }
 
 .prose h4 {
-	@apply text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4;
+	@apply mt-8 mb-4;
+	font-family: var(--sans-font);
+	font-size: 20px;
+	line-height: 1.3;
+	font-weight: 600;
+	color: var(--text-primary);
 }
 
 /* Paragraphs and Text */
 .prose p {
-	@apply text-gray-600 dark:text-gray-300 mb-6 leading-7;
-	@apply text-lg;
+	@apply mb-6;
+	color: var(--text-primary);
 }
 
 .prose strong {
-	@apply font-semibold text-gray-900 dark:text-white;
+	font-weight: 600;
+	color: var(--text-primary);
 }
 
 .prose em {
-	@apply italic text-gray-900 dark:text-white;
+	font-style: italic;
 }
 
 /* Links */
 .prose a {
-	@apply text-blue-600 dark:text-blue-400 hover:underline;
-	@apply transition-colors duration-200;
+	color: var(--text-primary);
+	text-decoration: underline;
+	text-decoration-color: var(--text-secondary);
+	text-underline-offset: 3px;
+	transition: text-decoration-color 0.2s ease;
+}
+
+.prose a:hover {
+	text-decoration-color: var(--text-primary);
 }
 
 /* Lists */
 .prose ul {
-	@apply list-disc list-inside mb-6 space-y-3;
-	@apply text-gray-600 dark:text-gray-300;
+	@apply mb-6;
+	padding-left: 32px;
+	list-style: none;
+}
+
+.prose ul li::before {
+	content: "•";
+	color: var(--text-primary);
+	font-weight: 400;
+	display: inline-block;
+	width: 1em;
+	margin-left: -1em;
 }
 
 .prose ol {
-	@apply list-decimal list-inside mb-6 space-y-3;
-	@apply text-gray-600 dark:text-gray-300;
+	@apply mb-6;
+	padding-left: 32px;
+	list-style: none;
+	counter-reset: list-counter;
+}
+
+.prose ol li {
+	counter-increment: list-counter;
+}
+
+.prose ol li::before {
+	content: counter(list-counter) ".";
+	color: var(--text-primary);
+	font-weight: 400;
+	display: inline-block;
+	width: 2em;
+	margin-left: -2em;
 }
 
 .prose li {
-	@apply text-gray-600 dark:text-gray-300;
-	@apply leading-7;
+	@apply mb-2;
+	color: var(--text-primary);
 }
 
 .prose li p {
-	@apply text-gray-600 dark:text-gray-300 mb-0 inline;
+	@apply mb-0 inline;
 }
 
 /* Blockquotes */
 .prose blockquote {
-	@apply border-l-4 border-blue-500 dark:border-blue-400 pl-4 italic;
-	@apply text-gray-600 dark:text-gray-300 my-6;
-	@apply bg-gray-50 dark:bg-gray-800/50 p-4 rounded-r-lg;
+	@apply my-8 pl-6;
+	border-left: 3px solid var(--text-primary);
+	font-style: italic;
+	color: var(--text-secondary);
+	font-size: 20px;
+	letter-spacing: -0.003em;
 }
 
 /* Code Blocks */
 .prose code {
-	@apply font-mono text-sm bg-gray-100 dark:bg-gray-800;
-	@apply px-1.5 py-0.5 rounded text-gray-900 dark:text-gray-100;
-	@apply before:content-[''] after:content-[''];
+	font-family: Menlo, Monaco, "Courier New", Courier, monospace;
+	font-size: 16px;
+	background: rgba(0, 0, 0, 0.05);
+	padding: 2px 6px;
+	border-radius: 4px;
+	color: var(--text-primary);
+}
+
+@media (prefers-color-scheme: dark) {
+	.prose code {
+		background: rgba(255, 255, 255, 0.1);
+	}
 }
 
 .prose pre {
-	@apply bg-gray-900 dark:bg-gray-900 p-4 rounded-lg overflow-x-auto my-6;
-	@apply border border-gray-200 dark:border-gray-700;
+	@apply my-8 p-6 rounded-lg overflow-x-auto;
+	background: rgb(40, 44, 52);
+	border: 1px solid var(--border-color);
 }
 
 .prose pre code {
-	@apply bg-transparent p-0 text-gray-100 dark:text-gray-100;
-	@apply text-sm leading-6 font-mono;
+	@apply bg-transparent p-0;
+	color: #abb2bf;
+	font-size: 14px;
+	line-height: 1.6;
 }
 
 /* Horizontal Rule */
 .prose hr {
-	@apply my-8 border-gray-200 dark:border-gray-700;
+	@apply my-12;
+	border: 0;
+	text-align: center;
+}
+
+.prose hr::before {
+	content: "...";
+	letter-spacing: 0.6em;
+	color: var(--text-tertiary);
+	font-size: 30px;
+	line-height: 1;
 }
 
 /* Tables */
@@ -137,8 +238,10 @@ body {
 
 /* Images */
 .prose img {
-	@apply rounded-lg my-6;
-	@apply border border-gray-200 dark:border-gray-700;
+	@apply my-8 mx-auto;
+	max-width: 100%;
+	height: auto;
+	display: block;
 }
 
 /* Custom Elements */
@@ -154,7 +257,7 @@ body {
 
 /* Spacing between sections */
 .prose > * + * {
-	@apply mt-6;
+	margin-top: 24px;
 }
 
 /* First element spacing */
@@ -165,6 +268,14 @@ body {
 /* Last element spacing */
 .prose > *:last-child {
 	@apply mb-0;
+}
+
+/* Improved paragraph spacing after headings */
+.prose h1 + p,
+.prose h2 + p,
+.prose h3 + p,
+.prose h4 + p {
+	margin-top: 16px;
 }
 
 /* Code block syntax highlighting */

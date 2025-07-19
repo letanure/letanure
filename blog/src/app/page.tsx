@@ -16,13 +16,23 @@ export default async function HomePage() {
 				// biome-ignore lint/security/noDangerouslySetInnerHtml: Required for structured data
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(schema, null, 2) }}
 			/>
-			<section className="max-w-2xl mx-auto">
-				<Title title={t.home.title} subtitle={t.home.subtitle} tag="h1" />
-				<div>
-					<Title title={t.home.latestPosts} tag="h2" />
-					<PostsList limit={3} />
-				</div>
-			</section>
+			<div className="py-8 sm:py-12">
+				<section className="mb-16">
+					<h1 className="text-4xl sm:text-5xl font-bold text-[#292929] dark:text-[#E6E6E6] mb-6 leading-tight">
+						{t.home.title}
+					</h1>
+					<p className="text-xl text-[#6B6B6B] dark:text-[#8F8F8F] leading-relaxed">
+						{t.home.subtitle}
+					</p>
+				</section>
+				
+				<section>
+					<h2 className="text-2xl font-semibold text-[#292929] dark:text-[#E6E6E6] mb-8">
+						{t.home.latestPosts}
+					</h2>
+					<PostsList limit={5} />
+				</section>
+			</div>
 		</>
 	);
 }

@@ -35,7 +35,7 @@ export default async function AboutPage() {
 					suppressHydrationWarning
 					{...{ __html: JSON.stringify(personSchema) }}
 				/>
-				<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+				<div className="py-8 sm:py-12">
 					{/* Hero Section */}
 					<div className="flex flex-col md:flex-row items-center gap-8 mb-16">
 						<div className="relative w-48 h-48 rounded-full overflow-hidden">
@@ -48,13 +48,13 @@ export default async function AboutPage() {
 							/>
 						</div>
 						<div className="flex-1">
-							<h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+							<h1 className="text-4xl sm:text-5xl font-bold text-[#292929] dark:text-[#E6E6E6] mb-4 leading-tight">
 								{t.about.title}
 							</h1>
-							<p className="mt-2 text-xl text-gray-600 dark:text-gray-300">
+							<p className="text-xl text-[#6B6B6B] dark:text-[#8F8F8F] mb-4">
 								{t.about.subtitle}
 							</p>
-							<p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+							<p className="text-lg text-[#757575] dark:text-[#A8A8A8]">
 								{t.about.hero.brief}
 							</p>
 						</div>
@@ -62,23 +62,23 @@ export default async function AboutPage() {
 
 					{/* Skills Section */}
 					<section className="mb-16">
-						<h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+						<h2 className="text-2xl font-semibold text-[#292929] dark:text-[#E6E6E6] mb-8">
 							Skills & Technologies
 						</h2>
 						<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 							{t.about.skills.categories.map((category) => (
 								<div
 									key={category.name}
-									className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm"
+									className="bg-[rgba(0,0,0,0.02)] dark:bg-[rgba(255,255,255,0.05)] rounded-lg p-6 border border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.12)]"
 								>
-									<h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+									<h3 className="text-lg font-semibold text-[#292929] dark:text-[#E6E6E6] mb-4">
 										{category.name}
 									</h3>
 									<ul className="space-y-2">
 										{category.items.map((item) => (
 											<li
 												key={item}
-												className="text-gray-600 dark:text-gray-300"
+												className="text-[#6B6B6B] dark:text-[#8F8F8F]"
 											>
 												{item}
 											</li>
@@ -91,23 +91,23 @@ export default async function AboutPage() {
 
 					{/* Experience Section */}
 					<section className="mb-16">
-						<h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+						<h2 className="text-2xl font-semibold text-[#292929] dark:text-[#E6E6E6] mb-8">
 							Experience
 						</h2>
 						<div className="space-y-8">
 							{t.about.experience.map((job) => (
 								<div
 									key={`${job.company}-${job.period}`}
-									className="relative pl-8 border-l-2 border-gray-200 dark:border-gray-700"
+									className="relative pl-8 border-l-2 border-[rgba(0,0,0,0.12)] dark:border-[rgba(255,255,255,0.15)]"
 								>
-									<div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-blue-500" />
-									<h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+									<div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-[#1A8917] dark:bg-[#1DB954]" />
+									<h3 className="text-lg font-semibold text-[#292929] dark:text-[#E6E6E6]">
 										{job.title}
 									</h3>
-									<p className="text-gray-600 dark:text-gray-300">
+									<p className="text-[#757575] dark:text-[#A8A8A8]">
 										{job.company} • {job.period}
 									</p>
-									<p className="mt-2 text-gray-600 dark:text-gray-300">
+									<p className="mt-2 text-[#6B6B6B] dark:text-[#8F8F8F]">
 										{job.description}
 									</p>
 								</div>
@@ -117,19 +117,19 @@ export default async function AboutPage() {
 
 					{/* Interests Section */}
 					<section className="mb-16">
-						<h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+						<h2 className="text-2xl font-semibold text-[#292929] dark:text-[#E6E6E6] mb-8">
 							Interests & Hobbies
 						</h2>
 						<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 							{t.about.interests.map((interest) => (
 								<div
 									key={interest.title}
-									className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm"
+									className="bg-[rgba(0,0,0,0.02)] dark:bg-[rgba(255,255,255,0.05)] rounded-lg p-6 border border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.12)]"
 								>
-									<h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+									<h3 className="text-lg font-semibold text-[#292929] dark:text-[#E6E6E6] mb-2">
 										{interest.title}
 									</h3>
-									<p className="text-gray-600 dark:text-gray-300">
+									<p className="text-[#6B6B6B] dark:text-[#8F8F8F]">
 										{interest.description}
 									</p>
 								</div>
@@ -139,18 +139,18 @@ export default async function AboutPage() {
 
 					{/* Contact Section */}
 					<section>
-						<h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+						<h2 className="text-2xl font-semibold text-[#292929] dark:text-[#E6E6E6] mb-8">
 							Get in Touch
 						</h2>
-						<div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+						<div className="bg-[rgba(0,0,0,0.02)] dark:bg-[rgba(255,255,255,0.05)] rounded-lg p-6 border border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.12)]">
 							<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
 								<div>
-									<p className="text-gray-600 dark:text-gray-300">
+									<p className="text-[#6B6B6B] dark:text-[#8F8F8F]">
 										{t.about.contact.location}
 									</p>
 									<a
 										href={`mailto:${t.about.contact.email}`}
-										className="text-blue-600 dark:text-blue-400 hover:underline"
+										className="text-[#292929] dark:text-[#E6E6E6] underline underline-offset-4 decoration-[#757575] hover:decoration-[#292929] dark:hover:decoration-[#E6E6E6] transition-colors"
 									>
 										{t.about.contact.email}
 									</a>
@@ -162,7 +162,7 @@ export default async function AboutPage() {
 											href={link.url}
 											target="_blank"
 											rel="noopener noreferrer"
-											className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
+											className="text-[#757575] hover:text-[#292929] dark:text-[#A8A8A8] dark:hover:text-[#E6E6E6] transition-colors"
 											aria-label={`Visit my ${link.name} profile`}
 										>
 											<span className="sr-only">{link.name}</span>
@@ -180,17 +180,17 @@ export default async function AboutPage() {
 		console.error("Error loading about content:", error);
 		return (
 			<article
-				className="prose prose-gray dark:prose-invert max-w-none"
+				className="py-8 sm:py-12"
 				aria-labelledby="error-title"
 			>
 				<h1
 					id="error-title"
-					className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl"
+					className="text-4xl font-bold text-[#292929] dark:text-[#E6E6E6] mb-4"
 				>
 					{t.about.title}
 				</h1>
 				<div
-					className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300"
+					className="text-lg text-[#6B6B6B] dark:text-[#8F8F8F]"
 					role="alert"
 					aria-label={t.a11y.errorMessage}
 				>

@@ -21,39 +21,41 @@ export default async function NowPage() {
 	});
 
 	return (
-		<article className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+		<div className="py-8 sm:py-12">
 			<script
 				type="application/ld+json"
 				// biome-ignore lint/security/noDangerouslySetInnerHtml: <explanation>
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
 			/>
-			<header className="mb-8">
-				<h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+			<div className="mb-12">
+				<h1 className="text-4xl font-bold text-[#292929] dark:text-[#E6E6E6] mb-4">
 					Now
 				</h1>
-				<p className="mt-4 text-sm text-gray-500">
+				<p className="text-sm text-[#757575] dark:text-[#A8A8A8]">
 					Last updated: {dateFormat(t.now.lastUpdated)}
 				</p>
-			</header>
+			</div>
 
 			<div className="space-y-12">
 				{t.now.categories.map((category) => (
-					<section key={category.name} className="space-y-4">
-						<h2 className="text-xl font-semibold text-gray-900">
+					<section key={category.name} className="space-y-6">
+						<h2 className="text-2xl font-semibold text-[#292929] dark:text-[#E6E6E6]">
 							{category.name}
 						</h2>
 						<div className="grid gap-4 sm:grid-cols-2">
 							{category.items.map((item) => (
 								<div
 									key={item.title}
-									className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+									className="rounded-lg border border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.12)] bg-[rgba(0,0,0,0.02)] dark:bg-[rgba(255,255,255,0.02)] p-6 hover:bg-[rgba(0,0,0,0.04)] dark:hover:bg-[rgba(255,255,255,0.04)] transition-colors"
 								>
-									<h3 className="font-medium text-gray-900">{item.title}</h3>
-									<p className="mt-1 text-sm text-gray-600">
+									<h3 className="font-semibold text-[#292929] dark:text-[#E6E6E6] mb-2">
+										{item.title}
+									</h3>
+									<p className="text-[#6B6B6B] dark:text-[#8F8F8F] mb-3">
 										{item.description}
 									</p>
 									{item.status && (
-										<span className="mt-2 inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+										<span className="inline-flex items-center rounded-full bg-[#1A8917] dark:bg-[#1DB954] px-3 py-1 text-xs font-medium text-white">
 											{item.status}
 										</span>
 									)}
@@ -63,6 +65,6 @@ export default async function NowPage() {
 					</section>
 				))}
 			</div>
-		</article>
+		</div>
 	);
 }

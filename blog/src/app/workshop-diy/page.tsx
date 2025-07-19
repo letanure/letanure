@@ -3,13 +3,16 @@ import { workshopItems } from "@/data/workshopItems";
 
 export default function WorkshopPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4">
-      <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-8">
-        Workshop & DIY
-      </h1>
-      <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
-        Explore hands-on projects and tutorials for building, creating, and learning.
-      </p>
+    <div className="py-8 sm:py-12">
+      <div className="mb-12">
+        <h1 className="text-4xl font-bold text-[#292929] dark:text-[#E6E6E6] mb-4">
+          Workshop & DIY
+        </h1>
+        <p className="text-lg text-[#6B6B6B] dark:text-[#8F8F8F]">
+          Explore hands-on projects and tutorials for building, creating, and learning.
+        </p>
+      </div>
+      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {workshopItems.map((item) => (
           <WorkshopItem key={item.slug} {...item} />
@@ -17,4 +20,4 @@ export default function WorkshopPage() {
       </div>
     </div>
   );
-} 
+}

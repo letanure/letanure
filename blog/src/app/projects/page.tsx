@@ -49,85 +49,61 @@ export default async function ProjectsPage() {
 						dangerouslySetInnerHTML={{ __html: JSON.stringify(projectsSchema, null, 2) }}
 					/>
 				)}
-				<article
-					className=" -gray dark:-invert max-w-none"
-					aria-labelledby="projects-title"
-				>
-				<h1
-					id="projects-title"
-					className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl"
-				>
-					{t.projects.title}
-				</h1>
-				<div
-					className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300"
-					aria-label={t.a11y.postContent}
-				>
-					{t.projects.body}
-				</div>
-				{t.projects.projects && t.projects.projects.length > 0 ? (
-					<ul className="mt-8 space-y-8 list-none pl-0 marker:hidden">
-						{t.projects.projects.map((project) => (
-							<li
-								className="marker:hidden rounded-md border border-gray-200 dark:border-gray-700 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition"
-								key={project.title}
-							>
-								<div className="space-y-1">
-									<h2 className="text-base font-medium text-gray-900 dark:text-white mb-1">
+				<div className="py-8 sm:py-12">
+					<div className="mb-12">
+						<h1 className="text-4xl font-bold text-[#292929] dark:text-[#E6E6E6] mb-4">
+							{t.projects.title}
+						</h1>
+						<p className="text-lg text-[#6B6B6B] dark:text-[#8F8F8F]">
+							{t.projects.body}
+						</p>
+					</div>
+					
+					{t.projects.projects && t.projects.projects.length > 0 ? (
+						<div className="space-y-6">
+							{t.projects.projects.map((project) => (
+								<div
+									className="border border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.12)] rounded-lg p-6 hover:bg-[rgba(0,0,0,0.02)] dark:hover:bg-[rgba(255,255,255,0.02)] transition-colors"
+									key={project.title}
+								>
+									<h2 className="text-xl font-semibold text-[#292929] dark:text-[#E6E6E6] mb-3">
 										{project.title}
 									</h2>
-									<p className="text-gray-600 dark:text-gray-300">
+									<p className="text-[#6B6B6B] dark:text-[#8F8F8F] mb-4">
 										{project.description}
 									</p>
-									<ul
-										className="flex flex-wrap gap-2 list-none"
-										aria-label={`${t.a11y.technologiesUsed.replace("{project}", project.title)}`}
-									>
+									<div className="flex flex-wrap gap-2">
 										{project.technologies.map((tech) => (
-											<li
+											<span
 												key={tech}
-												className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+												className="text-xs px-2 py-1 bg-[rgba(0,0,0,0.04)] dark:bg-[rgba(255,255,255,0.08)] text-[#757575] dark:text-[#A8A8A8] rounded-full"
 											>
 												{tech}
-											</li>
+											</span>
 										))}
-									</ul>
+									</div>
 								</div>
-							</li>
-						))}
-					</ul>
-				) : (
-					<output
-						className="mt-8 text-gray-600 dark:text-gray-400 block"
-						aria-label={t.a11y.noProjects}
-					>
-						{t.a11y.noProjects}
-					</output>
-				)}
-			</article>
-		</>
+							))}
+						</div>
+					) : (
+						<div className="text-[#757575] dark:text-[#A8A8A8]">
+							{t.a11y.noProjects}
+						</div>
+					)}
+				</div>
+			</>
 		);
 	} catch (error) {
 		console.error("Error loading projects:", error);
 		return (
-			<article
-				className="  dark:-invert max-w-none"
-				aria-labelledby="error-title"
-			>
-				<h1
-					id="error-title"
-					className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl"
-				>
+			<div className="py-8 sm:py-12">
+				<h1 className="text-4xl font-bold text-[#292929] dark:text-[#E6E6E6] mb-4">
 					{t.projects.title}
 				</h1>
-				<div
-					className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300"
-					role="alert"
-					aria-label={t.a11y.errorMessage}
-				>
+				<div className="text-lg text-[#6B6B6B] dark:text-[#8F8F8F]">
 					{t.errors.loadingProjects}
 				</div>
-			</article>
+			</div>
 		);
 	}
 }

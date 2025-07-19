@@ -34,12 +34,12 @@ export default function RootLayout({
 		<html lang="en" className="h-full">
 			<Analytics />
 			<SpeedInsights />
-			<body className={`${inter.className} h-full bg-gray-50 dark:bg-gray-900`}>
+			<body className={`${inter.className} h-full bg-white dark:bg-[#191919]`}>
 				<SkipNavigation />
 				<Menu />
 				<main
 					id="main-content"
-					className="mx-auto max-w-7xl px-4 pt-24 pb-8 sm:px-6 lg:px-8"
+					className="mx-auto max-w-[1000px] px-4 pt-24 pb-16 sm:px-6 lg:px-8"
 				>
 					{children}
 				</main>

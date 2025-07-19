@@ -10,6 +10,7 @@ import { Title } from "@/components/ui/Title";
 import { TagList } from "@/components/ui/TagList";
 import PostsList from "@/components/PostsList";
 import { postMetadataGet } from "@/lib/mdx";
+import { formatDate } from "@/lib/utils";
 
 const t = getTranslation();
 
@@ -81,47 +82,38 @@ export default async function BlogPostPage({ params }: Props) {
 					dangerouslySetInnerHTML={{ __html: JSON.stringify(schema, null, 2) }}
 				/>
 
-				<div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
-					<article
-						aria-labelledby="post-title"
-						className="mx-auto grid max-w-7xl grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-3"
-					>
-						<div className="lg:col-span-2">
-							<div className="mb-16">
-								<ItemSummary
-									as="header"
-									slug={slug}
-									title={metadata.title}
-									date={metadata.date}
-									tags={metadata.tags}
-									hasBorder={false}
-									isLink={false}
-								/>
-							</div>
-							<div className="prose space-y-5" aria-label={t.a11y.postContent}>
-								<Content />
-							</div>
+				<article className="py-8 sm:py-12">
+					<header className="mb-12">
+						<h1 className="text-4xl font-bold text-[#292929] dark:text-[#E6E6E6] mb-4 leading-tight">
+							{metadata.title}
+						</h1>
+						<div className="flex items-center gap-4 text-sm text-[#757575] dark:text-[#A8A8A8] mb-6">
+							<time>{formatDate(metadata.date)}</time>
 						</div>
-						<div className="lg:col-span-1">
-							<div className="sticky top-8">
-								<div className="space-y-5 mb-15">
-									<Title title="Recent posts" tag="h3" />
-									<PostsList limit={3} showTags={false} />
-								</div>
-								<div className="space-y-5">
-									<Title title={t.general.tags} tag="h3" />
-									<TagList
-										as="nav"
-										tags={metadata.tags}
-										showCount={true}
-										className="mt-4 flex flex-wrap gap-2"
-										aria-label={t.a11y.postTags}
-									/>
-								</div>
-							</div>
+						<div className="flex flex-wrap gap-2">
+							{metadata.tags.map((tag) => (
+								<a
+									key={tag}
+									href={`/blog/tag/${tag}`}
+									className="text-sm text-[#757575] dark:text-[#A8A8A8] hover:text-[#292929] dark:hover:text-[#E6E6E6] transition-colors"
+								>
+									#{tag}
+								</a>
+							))}
 						</div>
-					</article>
-				</div>
+					</header>
+					
+					<div className="prose max-w-none" aria-label={t.a11y.postContent}>
+						<Content />
+					</div>
+					
+					<footer className="mt-16 pt-8 border-t border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.12)]">
+						<h3 className="text-2xl font-semibold text-[#292929] dark:text-[#E6E6E6] mb-8">
+							More posts
+						</h3>
+						<PostsList limit={3} showTags={false} currentSlug={slug} />
+					</footer>
+				</article>
 			</>
 		);
 	} catch (error) {

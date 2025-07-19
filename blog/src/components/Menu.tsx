@@ -49,16 +49,16 @@ export default function Menu() {
 
 	return (
 		<header 
-			className={`fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-800 shadow-sm transition-transform duration-300 ${
+			className={`fixed top-0 left-0 right-0 z-50 bg-white dark:bg-[#191919] border-b border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.12)] transition-transform duration-300 ${
 				isVisible ? "translate-y-0" : "-translate-y-full"
 			}`}
 		>
-			<nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
+			<nav className="mx-auto max-w-[1192px] px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
 				<div className="flex h-16 justify-between items-center">
 					<div className="flex items-center">
 						<Link
 							href="/"
-							className="text-xl font-bold text-gray-900 dark:text-white"
+							className="text-xl font-bold text-[#292929] dark:text-[#E6E6E6] tracking-tight"
 						>
 							{t.site.name}
 						</Link>
@@ -67,7 +67,7 @@ export default function Menu() {
 					{/* Mobile menu button */}
 					<button
 						type="button"
-						className="sm:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+						className="sm:hidden inline-flex items-center justify-center p-2 rounded-md text-[#757575] hover:text-[#292929] dark:text-[#A8A8A8] dark:hover:text-[#E6E6E6] hover:bg-[rgba(0,0,0,0.05)] dark:hover:bg-[rgba(255,255,255,0.1)] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#1A8917] dark:focus:ring-[#1DB954]"
 						aria-controls="mobile-menu"
 						aria-expanded={isOpen}
 						onClick={() => setIsOpen(!isOpen)}
@@ -108,21 +108,21 @@ export default function Menu() {
 					</button>
 
 					{/* Desktop menu */}
-					<div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+					<div className="hidden sm:ml-10 sm:flex sm:items-center sm:space-x-8">
 						{navLinks.map((link) => (
 							<Link
 								key={link.href}
 								href={link.href}
-								className={`inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium ${
+								className={`text-[15px] font-normal transition-colors ${
 									pathname === link.href
-										? "border-blue-500 text-gray-900 dark:text-white"
-										: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white"
+										? "text-[#292929] dark:text-[#E6E6E6]"
+										: "text-[#757575] hover:text-[#292929] dark:text-[#A8A8A8] dark:hover:text-[#E6E6E6]"
 								}`}
 							>
 								{link.label}
 							</Link>
-						))}
-					</div>
+						))
+					}</div>
 				</div>
 
 				{/* Mobile menu */}
@@ -137,10 +137,10 @@ export default function Menu() {
 							<Link
 								key={link.href}
 								href={link.href}
-								className={`block border-l-4 py-2 pl-3 pr-4 text-base font-medium ${
+								className={`block py-3 pl-4 pr-4 text-base transition-colors ${
 									pathname === link.href
-										? "border-blue-500 bg-blue-50 text-blue-700 dark:bg-gray-700 dark:text-white"
-										: "border-transparent text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
+										? "text-[#292929] dark:text-[#E6E6E6] font-medium bg-[rgba(0,0,0,0.03)] dark:bg-[rgba(255,255,255,0.05)]"
+										: "text-[#757575] dark:text-[#A8A8A8]"
 								}`}
 							>
 								{link.label}
