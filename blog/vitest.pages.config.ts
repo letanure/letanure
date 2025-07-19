@@ -8,7 +8,7 @@ export default defineConfig({
     environment: 'node',
     globals: true,
     include: ['test/pages/**/*.test.ts'],
-    timeout: 30000,
+    testTimeout: 30000,
   },
   resolve: {
     alias: {

@@ -4,11 +4,15 @@ import { postMetadataGetAll } from "@/lib/mdx";
 type PostsListProps = {
 	limit?: number | null;
 	showTags?: boolean;
+	currentSlug?: string;
 };
 
-export default async function PostsList({ limit, showTags }: PostsListProps) {
+export default async function PostsList({ limit, showTags, currentSlug }: PostsListProps) {
 	const allPosts = await postMetadataGetAll();
-	const posts = limit ? allPosts.slice(0, limit) : allPosts;
+	const filteredPosts = currentSlug 
+		? allPosts.filter(post => post.slug !== currentSlug)
+		: allPosts;
+	const posts = limit ? filteredPosts.slice(0, limit) : filteredPosts;
 	return (
 		<ul className="space-y-6">
 			{posts.map((post) => (

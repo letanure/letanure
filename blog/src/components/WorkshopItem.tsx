@@ -49,7 +49,9 @@ export function WorkshopItem({
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
+                aria-label="Workshop icon"
               >
+                <title>Workshop icon</title>
                 <path 
                   strokeLinecap="round" 
                   strokeLinejoin="round" 

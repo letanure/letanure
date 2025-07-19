@@ -3,7 +3,10 @@ import { beforeAll, afterAll, afterEach } from 'vitest'
 // Mock Next.js router
 beforeAll(() => {
   // Mock environment variables if needed
-  process.env.NODE_ENV = 'test'
+  Object.defineProperty(process.env, 'NODE_ENV', {
+    value: 'test',
+    writable: true
+  })
 })
 
 afterEach(() => {
