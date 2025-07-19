@@ -4,7 +4,6 @@ import { getTranslation } from "@/i18n";
 import { siteConfig } from "@/siteConfig";
 import { generateBlogListSchema } from "@/lib/schema";
 import { postMetadataGetAll } from "@/lib/mdx";
-import { Title } from "@/components/ui/Title";
 import PostsList from "@/components/PostsList";
 import { TagList } from "@/components/ui/TagList";
 

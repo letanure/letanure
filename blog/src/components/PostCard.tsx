@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
-import { Tag } from "./ui/Tag";
 
 interface PostCardProps {
   title: string;

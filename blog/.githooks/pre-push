@@ -1,0 +1,102 @@
+#!/bin/bash
+
+# Pre-push hook to run basic page tests
+# This ensures all main pages are accessible before pushing
+
+echo "🔍 Running pre-push checks..."
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Function to print colored output
+print_status() {
+    if [ $1 -eq 0 ]; then
+        echo -e "${GREEN}✓ $2${NC}"
+    else
+        echo -e "${RED}✗ $2${NC}"
+    fi
+}
+
+print_warning() {
+    echo -e "${YELLOW}⚠ $1${NC}"
+}
+
+# Check if we can build the project
+echo "📦 Building project..."
+if npm run build > /dev/null 2>&1; then
+    print_status 0 "Build successful"
+else
+    print_status 1 "Build failed"
+    echo -e "${RED}Build failed. Please fix build errors before pushing.${NC}"
+    exit 1
+fi
+
+# Check if dev server is running for tests
+if curl -s http://localhost:3000 > /dev/null 2>&1; then
+    DEV_SERVER_RUNNING=1
+    print_status 0 "Dev server is running on localhost:3000"
+else
+    DEV_SERVER_RUNNING=0
+    print_warning "Dev server not running on localhost:3000"
+    print_warning "Starting temporary server for tests..."
+    
+    # Start a temporary server in background
+    npm run start > /dev/null 2>&1 &
+    SERVER_PID=$!
+    
+    # Wait for server to start
+    echo "⏳ Waiting for server to start..."
+    for i in {1..30}; do
+        if curl -s http://localhost:3000 > /dev/null 2>&1; then
+            DEV_SERVER_RUNNING=1
+            break
+        fi
+        sleep 1
+    done
+    
+    if [ $DEV_SERVER_RUNNING -eq 0 ]; then
+        print_status 1 "Could not start server for testing"
+        echo -e "${RED}Please ensure the app can start with 'npm run start'${NC}"
+        exit 1
+    fi
+fi
+
+# Run page tests
+echo "🧪 Running page accessibility tests..."
+if npm run test:pages > /dev/null 2>&1; then
+    print_status 0 "All pages are accessible"
+else
+    print_status 1 "Some pages failed accessibility tests"
+    echo -e "${RED}Page tests failed. Running tests with output:${NC}"
+    npm run test:pages
+    
+    # Clean up if we started the server
+    if [ -n "$SERVER_PID" ]; then
+        kill $SERVER_PID > /dev/null 2>&1
+    fi
+    
+    exit 1
+fi
+
+# Clean up if we started the server
+if [ -n "$SERVER_PID" ]; then
+    kill $SERVER_PID > /dev/null 2>&1
+    print_status 0 "Temporary server stopped"
+fi
+
+# Run linting
+echo "🧹 Running linter..."
+if npm run lint > /dev/null 2>&1; then
+    print_status 0 "Linting passed"
+else
+    print_status 1 "Linting failed"
+    echo -e "${YELLOW}Linting issues found. Consider fixing them:${NC}"
+    npm run lint
+    echo -e "${YELLOW}Proceeding with push (linting is non-blocking)${NC}"
+fi
+
+echo -e "${GREEN}🚀 All checks passed! Proceeding with push...${NC}"
+exit 0

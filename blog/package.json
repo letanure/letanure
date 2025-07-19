@@ -8,6 +8,10 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:pages": "vitest run --config vitest.pages.config.ts",
+		"setup:hooks": "bash scripts/setup-hooks.sh",
 		"publish:devto": "tsx scripts/publishing/publish-to-devto.ts",
 		"publish:medium": "tsx scripts/publishing/publish-to-medium.ts",
 		"publish:hashnode": "tsx scripts/publishing/publish-to-hashnode.ts"
@@ -38,12 +42,15 @@
 		"@types/node": "^20.17.57",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
+		"@vitejs/plugin-react": "^4.3.3",
 		"dotenv": "^17.2.0",
 		"eslint": "^9",
 		"eslint-config-next": "15.3.3",
+		"jsdom": "^25.0.1",
 		"tailwindcss": "^4.1.8",
 		"tsx": "^4.20.3",
-		"typescript": "^5"
+		"typescript": "^5",
+		"vitest": "^2.1.8"
 	},
 	"engines": {
 		"node": "20.x"

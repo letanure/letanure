@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 interface WorkshopItemProps {
   title: string;
@@ -17,7 +18,6 @@ export function WorkshopItem({
   slug,
   tags,
   imageUrl,
-  imageKeywords,
 }: WorkshopItemProps) {
   // Use provided imageUrl, or generate one from title as fallback
   const finalImageUrl = imageUrl || `https://picsum.photos/400/240?random=${title.length}`;
@@ -29,11 +29,12 @@ export function WorkshopItem({
     >
       <div className="p-6">
         <div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] dark:from-[#4f46e5] dark:to-[#7c3aed]">
-          <img
+          <Image
             src={finalImageUrl}
             alt={title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            loading="lazy"
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             onError={(e) => {
               // Fallback to gradient background if image fails
               const target = e.target as HTMLImageElement;

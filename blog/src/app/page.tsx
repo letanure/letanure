@@ -1,4 +1,3 @@
-import { Title } from "@/components/ui/Title";
 import PostsList from "@/components/PostsList";
 import { getTranslation } from "@/i18n";
 import { generateWebSiteSchema } from "@/lib/schema";

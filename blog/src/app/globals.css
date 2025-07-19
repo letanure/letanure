@@ -36,6 +36,9 @@ body {
 }
 
 /* Prose Content Styles - Medium-inspired */
+.prose > h1 {
+	display: none !important;
+}
 .prose {
 	@apply max-w-none;
 	font-family: var(--serif-font);

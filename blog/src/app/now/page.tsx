@@ -31,9 +31,9 @@ export default async function NowPage() {
 			{/* Hero Section */}
 			<div className="mb-16">
 				<div className="flex items-center gap-3 mb-6">
-					<div className="w-3 h-3 bg-[#1A8917] dark:bg-[#1DB954] rounded-full animate-pulse"></div>
+					<div className="w-3 h-3 bg-[#1A8917] dark:bg-[#1DB954] rounded-full animate-pulse" />
 					<h1 className="text-4xl sm:text-5xl font-bold text-[#292929] dark:text-[#E6E6E6] leading-tight">
-						What I'm doing now
+						What I&apos;m doing now
 					</h1>
 				</div>
 				<p className="text-lg text-[#6B6B6B] dark:text-[#8F8F8F] mb-4 max-w-2xl">
@@ -67,7 +67,7 @@ export default async function NowPage() {
 									categoryIndex === 1 ? 'bg-[#6366f1] dark:bg-[#8b5cf6]' :
 									categoryIndex === 2 ? 'bg-[#06b6d4] dark:bg-[#0891b2]' :
 									'bg-[#f59e0b] dark:bg-[#d97706]'
-								}`}></div>
+								}`} />
 								<h2 className="text-2xl font-semibold text-[#292929] dark:text-[#E6E6E6]">
 									{category.name}
 								</h2>
@@ -134,12 +134,13 @@ export default async function NowPage() {
 						<div className="p-5 rounded-lg bg-[rgba(0,0,0,0.03)] dark:bg-[rgba(255,255,255,0.05)] border-l-4 border-[#6366f1] dark:border-[#8b5cf6]">
 							<h3 className="font-semibold text-[#292929] dark:text-[#E6E6E6] mb-3 flex items-center gap-2">
 								<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<title>Information icon</title>
 									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
 								</svg>
 								About This Page
 							</h3>
 							<p className="text-[#6B6B6B] dark:text-[#8F8F8F] text-sm leading-relaxed">
-								This page follows the "now" page concept created by Derek Sivers. It's a living document that shows what I'm focused on right now, updated regularly to reflect my current priorities and projects.
+								This page follows the &quot;now&rdquo; page concept created by Derek Sivers. It&apos;s a living document that shows what I&apos;m focused on right now, updated regularly to reflect my current priorities and projects.
 							</p>
 						</div>
 					</div>
