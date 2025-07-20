@@ -1,13 +1,22 @@
 ---
 title: "Understand the Acronym Spaghetti: Part 4 - CQRS and Hexagonal Architecture"
-date: 2025-07-21
+date: 2025-07-20
 summary: "Apply CQRS and Hexagonal Architecture in React and Node.js. Learn when to separate queries from commands and how to structure frontend applications for maintainability."
-tags: [programming, architecture, cqrs, hexagonal-architecture, design-patterns, scalability]
+tags:
+  [
+    programming,
+    architecture,
+    cqrs,
+    hexagonal-architecture,
+    design-patterns,
+    scalability,
+  ]
 ---
 
 # Understand the Acronym Spaghetti: Part 4 - CQRS and Hexagonal Architecture
 
 ## TLDR
+
 - **CQRS**: Separate read/write operations for better performance
 - **Hexagonal Architecture**: Isolate business logic from external services
 
@@ -28,12 +37,14 @@ These patterns help you structure React applications and Node.js APIs, moving be
 **Why it matters:** Read and write operations have different performance characteristics, caching needs, and error handling. Separating them allows each to be optimized independently.
 
 **When to use:**
+
 - Complex forms with heavy validation
 - Different permissions for reading vs writing
 - Performance-critical apps where reads and writes need different optimization
 - Large teams where query logic and mutation logic change at different rates
 
 **When NOT to use:**
+
 - Simple CRUD operations where read/write are basically the same
 - Small applications where the separation adds unnecessary complexity
 - Prototypes or MVPs where you need to move fast
@@ -45,28 +56,30 @@ These patterns help you structure React applications and Node.js APIs, moving be
 const useUser = (userId: string) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
-  
+
   const fetchUser = async () => {
     setLoading(true);
     // Complex query with joins and calculations
-    const response = await fetch(`/api/users/${userId}?include=profile,stats,preferences`);
+    const response = await fetch(
+      `/api/users/${userId}?include=profile,stats,preferences`
+    );
     const userData = await response.json();
     setUser(userData);
     setLoading(false);
   };
-  
+
   const updateUser = async (data: any) => {
     setLoading(true);
     // Uses same complex endpoint for simple updates
     await fetch(`/api/users/${userId}`, {
-      method: 'PUT',
-      body: JSON.stringify(data)
+      method: "PUT",
+      body: JSON.stringify(data),
     });
     // Re-fetches complex data after simple update
     await fetchUser();
     setLoading(false);
   };
-  
+
   return { user, loading, updateUser, fetchUser };
 };
 ```
@@ -75,18 +88,18 @@ const useUser = (userId: string) => {
 // ✅ Separated read and write hooks
 const useUserQuery = (userId: string) => {
   return useQuery({
-    queryKey: ['user', userId],
-    queryFn: () => fetch(`/api/users/${userId}`).then(res => res.json())
+    queryKey: ["user", userId],
+    queryFn: () => fetch(`/api/users/${userId}`).then((res) => res.json()),
   });
 };
 
 const useUserMutation = () => {
   return useMutation({
-    mutationFn: ({ userId, data }: { userId: string; data: any }) => 
+    mutationFn: ({ userId, data }: { userId: string; data: any }) =>
       fetch(`/api/users/${userId}`, {
-        method: 'PUT',
-        body: JSON.stringify(data)
-      }).then(res => res.json())
+        method: "PUT",
+        body: JSON.stringify(data),
+      }).then((res) => res.json()),
   });
 };
 ```
@@ -97,20 +110,18 @@ const useUserMutation = () => {
 // ❌ Component with mixed concerns
 const UserProfile = ({ userId }: { userId: string }) => {
   const { user, loading, updateUser } = useUser(userId);
-  
+
   const handleNameChange = async (newName: string) => {
     // Heavy operation for simple field update
     await updateUser({ name: newName });
   };
-  
+
   if (loading) return <div>Loading...</div>;
   return (
     <div>
       <h1>{user.name}</h1>
       <p>Followers: {user.stats.followers}</p>
-      <button onClick={() => handleNameChange('New Name')}>
-        Change Name
-      </button>
+      <button onClick={() => handleNameChange("New Name")}>Change Name</button>
     </div>
   );
 };
@@ -121,18 +132,16 @@ const UserProfile = ({ userId }: { userId: string }) => {
 const UserProfile = ({ userId }: { userId: string }) => {
   const { data: user, isLoading } = useUserQuery(userId);
   const updateUser = useUserMutation();
-  
+
   const handleNameChange = (newName: string) => {
     updateUser.mutate({ userId, data: { name: newName } });
   };
-  
+
   if (isLoading) return <div>Loading...</div>;
   return (
     <div>
       <h1>{user.name}</h1>
-      <button onClick={() => handleNameChange('New Name')}>
-        Change Name
-      </button>
+      <button onClick={() => handleNameChange("New Name")}>Change Name</button>
     </div>
   );
 };
@@ -142,13 +151,13 @@ const UserProfile = ({ userId }: { userId: string }) => {
 
 ```typescript
 // ❌ Same endpoint for different needs
-app.get('/api/users/:id', async (req, res) => {
+app.get("/api/users/:id", async (req, res) => {
   // Heavy query for display
   const user = await db.getUserWithStats(req.params.id);
   res.json(user);
 });
 
-app.put('/api/users/:id', async (req, res) => {
+app.put("/api/users/:id", async (req, res) => {
   // Simple update but uses heavy query for validation
   const user = await db.getUserWithStats(req.params.id);
   await db.updateUser(req.params.id, req.body);
@@ -159,25 +168,25 @@ app.put('/api/users/:id', async (req, res) => {
 ```typescript
 // ✅ Separated by concern
 // Read endpoint - optimized for display
-app.get('/api/users/:id/profile', async (req, res) => {
+app.get("/api/users/:id/profile", async (req, res) => {
   const user = await db.getUserWithStats(req.params.id);
   res.json(user);
 });
 
 // Write endpoint - optimized for updates
-app.put('/api/users/:id', async (req, res) => {
+app.put("/api/users/:id", async (req, res) => {
   const exists = await db.userExists(req.params.id);
   if (!exists) {
-    return res.status(404).json({ error: 'User not found' });
+    return res.status(404).json({ error: "User not found" });
   }
-  
+
   await db.updateUser(req.params.id, req.body);
   res.json({ success: true });
 });
 ```
 
-
 **Benefits:**
+
 - **Performance**: Reads and writes can be optimized independently
 - **Maintainability**: Query logic and mutation logic can evolve separately
 - **Team Collaboration**: Different developers can work on reads vs writes
@@ -199,22 +208,22 @@ app.put('/api/users/:id', async (req, res) => {
 
 ```typescript
 // ❌ Business logic mixed with infrastructure
-app.post('/api/register', async (req, res) => {
+app.post("/api/register", async (req, res) => {
   const { name, email } = req.body;
-  
-  if (!email.includes('@')) {
-    return res.status(400).json({ error: 'Invalid email' });
+
+  if (!email.includes("@")) {
+    return res.status(400).json({ error: "Invalid email" });
   }
-  
+
   // Direct dependencies - hard to test
   const existing = await db.findUser(email);
   if (existing) {
-    return res.status(409).json({ error: 'User exists' });
+    return res.status(409).json({ error: "User exists" });
   }
-  
+
   await db.createUser(name, email);
   await emailService.sendWelcome(email);
-  
+
   res.json({ success: true });
 });
 ```
@@ -234,29 +243,29 @@ interface EmailService {
 // Pure business logic
 const createUserService = (userRepo: UserRepo, emailService: EmailService) => {
   const registerUser = async (userData: { name: string; email: string }) => {
-    if (!userData.email.includes('@')) {
-      return { success: false, error: 'Invalid email' };
+    if (!userData.email.includes("@")) {
+      return { success: false, error: "Invalid email" };
     }
-    
+
     const existing = await userRepo.findByEmail(userData.email);
     if (existing) {
-      return { success: false, error: 'User exists' };
+      return { success: false, error: "User exists" };
     }
-    
+
     const user = await userRepo.save(userData);
     await emailService.sendWelcome(user);
-    
+
     return { success: true, user };
   };
-  
+
   return { registerUser };
 };
 
 // HTTP adapter
-app.post('/api/register', async (req, res) => {
+app.post("/api/register", async (req, res) => {
   const userService = createUserService(userRepo, emailService);
   const result = await userService.registerUser(req.body);
-  
+
   if (result.success) {
     res.json({ user: result.user });
   } else {
@@ -266,6 +275,7 @@ app.post('/api/register', async (req, res) => {
 ```
 
 **Benefits:**
+
 - **Testability**: Test business logic with mocks
 - **Flexibility**: Easy to swap databases or email services
 - **Maintainability**: Business logic isolated from infrastructure
