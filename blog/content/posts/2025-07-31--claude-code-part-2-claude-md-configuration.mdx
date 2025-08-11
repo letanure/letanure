@@ -51,12 +51,12 @@ Claude Code respects a hierarchy of configuration files, with more specific file
 
 ### Configuration Hierarchy
 
-1. **Personal:** `~/.claude/CLAUDE.md` - Your preferences across all projects
-2. **Project:** `./CLAUDE.md` - Team rules for this project
-3. **Local:** `./CLAUDE.local.md` - Personal overrides (gitignored)
-4. **Folder:** `./src/auth/CLAUDE.md` - Module-specific rules
+1. **Enterprise:** System-wide policies (highest priority)
+2. **Project:** `./CLAUDE.md` - Team rules for this project  
+3. **User:** `~/.claude/CLAUDE.md` - Personal preferences across projects
+4. **Project Local:** Personal project overrides (deprecated)
 
-More specific files override general ones.
+Higher-level memories take precedence. Use `/memory` to edit memory files directly.
 
 ## Multi-AI Tool Sharing
 
