@@ -1,0 +1,479 @@
+---
+title: "Claude Code: Part 11 - Troubleshooting and Recovery"
+date: "2025-08-09"
+summary: "Master Claude Code troubleshooting with systematic approaches to common issues: installation problems, CLAUDE.md conflicts, performance optimization, custom commands, MCP servers, hooks, and emergency recovery procedures."
+tags:
+  [
+    "Claude Code",
+    "Troubleshooting",
+    "Debugging",
+    "Performance",
+    "Recovery",
+    "Problem Solving",
+    "Maintenance",
+  ]
+---
+
+# Claude Code: Part 11 - Troubleshooting and Recovery
+
+## The Problem
+
+You're now relying on Claude Code for significant parts of your development workflow. It's become an essential team member. But like any complex system, things occasionally go wrong:
+
+Claude suddenly can't find your CLAUDE.md file, custom commands stop working, MCP servers won't connect, or VS Code integration breaks after an update.
+
+When your AI teammate is having technical difficulties, your entire workflow grinds to a halt. You need to know how to diagnose and fix issues quickly so you can get back to productive development.
+
+## The Solution
+
+Most Claude Code issues follow predictable patterns with systematic solutions. Think of this as learning to troubleshoot your AI teammate's technical problems - just like you'd help a human colleague debug their development environment setup.
+
+## Common Installation Issues
+
+### "Command not found: claude"
+
+**Problem:** Claude command isn't in your PATH after installation.
+
+**Solutions:**
+
+```bash
+# Option 1: Use npx instead
+npx @anthropic-ai/claude-code
+
+# Option 2: Add npm global bin to PATH
+echo 'export PATH=$PATH:$(npm config get prefix)/bin' >> ~/.bashrc
+source ~/.bashrc
+
+# Option 3: Reinstall with proper permissions
+sudo npm install -g @anthropic-ai/claude-code
+```
+
+### VS Code Extension Not Installing
+
+**Problem:** Claude doesn't automatically install VS Code extension.
+
+**Solutions:**
+
+1. **Run Claude from VS Code terminal** (not external terminal)
+2. **Check VS Code marketplace permissions** - allow extension installs
+3. **Manual install:** Search "Claude Code" in VS Code extensions
+4. **Restart VS Code** after first Claude run
+
+### Permission Errors on macOS/Linux
+
+**Problem:** Permission denied during installation or file operations.
+
+**Solutions:**
+
+```bash
+# Fix npm permissions (recommended)
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
+
+# Or use a Node version manager (better long-term)
+# Install nvm, then:
+nvm install node
+npm install -g @anthropic-ai/claude-code
+```
+
+## CLAUDE.md Not Working
+
+### Rules Being Ignored
+
+**Problem:** Claude doesn't follow your CLAUDE.md rules.
+
+**Debug steps:**
+
+```bash
+# Check if Claude can find your CLAUDE.md
+ls -la CLAUDE.md
+
+# Verify you're in the right directory
+pwd
+
+# Test with simple rule first
+echo "- Always say 'CLAUDE.md is working' at the start" > CLAUDE.md
+```
+
+**Common causes:**
+
+- **Wrong directory** - CLAUDE.md must be in project root
+- **Typos in filename** - Must be exactly `CLAUDE.md` (case-sensitive)
+- **Complex rules** - Start simple, add complexity gradually
+
+### Rules Conflicting
+
+**Problem:** Multiple CLAUDE.md files causing confusion.
+
+**Check hierarchy:**
+
+```bash
+# See all CLAUDE.md files Claude might read
+find . -name "CLAUDE.md" -o -name "CLAUDE.local.md"
+ls ~/.claude/CLAUDE.md 2>/dev/null || echo "No user CLAUDE.md"
+```
+
+**Rule priority:** More specific overrides general
+
+1. Folder-specific (`./src/auth/CLAUDE.md`)
+2. Local project (`./CLAUDE.local.md`)
+3. Project (`./CLAUDE.md`)
+4. Personal (`~/.claude/CLAUDE.md`)
+
+## Performance Issues
+
+### Claude Responses Are Slow
+
+**Problem:** Long delays between request and response.
+
+**Optimization strategies:**
+
+```bash
+# Use faster model for simple tasks
+claude --model=haiku
+
+# Clear conversation history
+/clear
+
+# Compact long conversations instead of clearing
+/compact
+
+# Check your internet connection
+curl -I https://api.anthropic.com
+```
+
+**Context management:**
+
+- **Keep conversations focused** - use `/clear` for new topics
+- **Avoid huge file dumps** - reference specific sections instead
+- **Use subagents** for complex analysis to avoid back-and-forth
+
+### Token-Saving Pro Tip
+
+Instead of asking Claude to read many files and make changes:
+
+```
+❌ "Look at all components and replace useState with our custom hook"
+```
+
+Ask Claude to create a script that does the work:
+
+```
+✅ "Create a script that finds all useState calls and replaces them with useCustomState, run it, then delete the script"
+```
+
+**Why this works:**
+
+- Claude doesn't need to read all files individually (saves massive input tokens)
+- Script does bulk operations efficiently (saves output tokens)
+- Claude runs and cleans up automatically
+- Much faster for bulk operations across many files
+
+### Memory Usage Growing
+
+**Problem:** Claude Code consuming excessive memory.
+
+**Solutions:**
+
+```bash
+# Check Claude processes
+ps aux | grep claude
+
+# Restart Claude session
+exit
+claude
+
+# Clear session data
+rm ~/.claude/sessions/*.json
+```
+
+## Custom Commands Not Working
+
+### Command Not Found
+
+**Problem:** `/my-command` returns "command not found."
+
+**Debug checklist:**
+
+```bash
+# Check file exists
+ls .claude/commands/my-command.md
+
+# Check filename matches exactly (case-sensitive)
+ls .claude/commands/
+
+# Restart Claude to reload commands
+exit
+claude
+
+# Verify with /help
+/help
+```
+
+### Command File Has Wrong Format
+
+**Problem:** Command runs but behaves unexpectedly.
+
+**Check format:**
+
+```markdown
+# ✅ Correct format
+
+Run comprehensive testing:
+
+1. Run pnpm type:check
+2. Run pnpm lint
+3. Report any issues
+
+# ❌ Wrong format - missing instructions
+
+/test-all
+```
+
+**Common mistakes:**
+
+- **Empty files** - Must contain instructions
+- **Wrong extension** - Must be `.md`
+- **Command names with spaces** - Use hyphens: `test-all.md`, not `test all.md`
+
+## MCP Server Issues
+
+### Server Won't Connect
+
+**Problem:** MCP servers show as "disconnected" in `/mcp`.
+
+**Troubleshooting:**
+
+```bash
+# Check server installation
+npm list -g | grep mcp
+
+# Check configuration syntax
+cat ~/.claude/config.json | python -m json.tool
+
+# Test server independently
+# (Check server documentation for test commands)
+
+# Restart Claude to reload MCP connections
+exit
+claude
+```
+
+### Authentication Failing
+
+**Problem:** MCP server requires login but fails.
+
+**Steps:**
+
+1. **Use `/mcp` command** - Don't try to authenticate manually
+2. **Check API tokens** - Ensure they're valid and not expired
+3. **Verify permissions** - Check token scopes/permissions
+4. **Check network** - Firewalls might block connections
+
+## Context Management Issues
+
+### "Out of Context" Errors
+
+**Problem:** Claude says it's out of context or conversation is too long.
+
+**Immediate solutions:**
+
+```bash
+# Compact conversation (keeps summary)
+/compact
+
+# Start fresh (loses history)
+/clear
+
+# Check conversation size
+/status
+```
+
+**Prevention strategies:**
+
+- **Use focused sessions** - One topic per conversation
+- **Break complex tasks** into smaller steps
+- **Reference files directly** instead of pasting large code blocks
+- **Use subagents** for analysis that would require long context
+
+### Files Not Loading
+
+**Problem:** Claude can't read project files.
+
+**Check permissions:**
+
+```bash
+# Verify file exists and is readable
+ls -la src/components/MyComponent.tsx
+
+# Check file permissions
+stat src/components/MyComponent.tsx
+
+# Try with different path format
+# Instead of: "Look at ./src/components/MyComponent.tsx"
+# Try: "Look at src/components/MyComponent.tsx"
+```
+
+## IDE Integration Problems
+
+### VS Code Quick Launch Not Working
+
+**Problem:** Cmd+Esc (Mac) or Ctrl+Esc (Windows/Linux) doesn't work.
+
+**Solutions:**
+
+1. **Run `/ide` command** in Claude first
+2. **Check VS Code extension** is installed and enabled
+3. **Restart VS Code** after installing Claude extension
+4. **Check keyboard shortcuts** - might conflict with other extensions
+
+### Context Not Sharing
+
+**Problem:** Claude doesn't see selected text or current file.
+
+**Requirements:**
+
+- **Launch Claude from VS Code terminal** (not external terminal)
+- **Run `/ide` command** to establish connection
+- **Select text first**, then use quick launch shortcut
+- **Ensure VS Code extension** is active
+
+## Hook Configuration Issues
+
+### Hooks Not Running
+
+**Problem:** PostToolUse or other hooks don't execute.
+
+**Debug steps:**
+
+```bash
+# Check hook syntax
+cat .claude/settings.json | python -m json.tool
+
+# Test command manually
+pnpm type:check
+
+# Verify file matcher
+# Does "Edit:*.ts" match your file? Try "Edit:*" instead
+
+# Check hook permissions
+ls -la scripts/my-hook.sh
+chmod +x scripts/my-hook.sh
+```
+
+### Hook Blocking Claude
+
+**Problem:** Hook command fails and stops Claude from working.
+
+**Quick fix:**
+
+```bash
+# Temporarily disable hooks
+claude --no-hooks
+
+# Fix the hook command
+# Then re-enable hooks
+```
+
+**Common issues:**
+
+- **Non-zero exit codes** stop Claude - ensure scripts exit with 0 on success
+- **Missing executables** - verify commands exist in PATH
+- **Permission errors** - ensure scripts are executable
+
+## Productivity Tips
+
+### Speed Up Common Tasks
+
+```bash
+# Use aliases for frequent commands
+alias c="claude"
+alias cr="claude --resume"
+alias cq="claude --quiet"
+
+# Background commands for long operations
+# Ctrl+b: npm run build (continue working while building)
+
+# Custom commands for repeated workflows
+# Create .claude/commands/daily.md for your daily checklist
+```
+
+### Context Management Best Practices
+
+- **One topic per session** - use `/clear` when switching topics
+- **Reference files** instead of pasting code
+- **Use descriptive prompts** - "Fix the TypeScript error in UserService.handleLogin" vs "Fix this"
+- **Leverage IDE integration** - select code before launching Claude
+
+### Efficient File Organization
+
+```bash
+# Project structure that works well with Claude
+project/
+├── CLAUDE.md (main rules)
+├── CLAUDE.local.md (personal overrides, gitignored)
+├── .claude/
+│   ├── commands/ (custom commands)
+│   └── settings.json (hooks, config)
+└── src/
+    ├── auth/CLAUDE.md (auth-specific rules)
+    └── api/CLAUDE.md (API-specific rules)
+```
+
+### Team Collaboration Tips
+
+- **Share project CLAUDE.md** via git
+- **Keep personal rules local** (CLAUDE.local.md in .gitignore)
+- **Document custom commands** in README
+- **Standardize hook patterns** across team projects
+
+## When to Get Help
+
+### Check These Resources First
+
+1. **Claude Code documentation:** https://docs.anthropic.com/en/docs/claude-code
+2. **GitHub issues:** https://github.com/anthropics/claude-code/issues
+3. **Community discussions:** Search existing issues before creating new ones
+
+### Include This Information When Reporting Issues
+
+```bash
+# System information
+claude --version
+node --version
+npm --version
+
+# Error details
+# Include exact error messages, not paraphrases
+
+# Configuration (remove sensitive data)
+cat .claude/settings.json
+
+# Steps to reproduce
+# What you did, what you expected, what happened instead
+```
+
+Remember: Most Claude Code issues have simple solutions. Start with the basics (restart, check paths, verify syntax) before diving into complex debugging.
+
+---
+
+## Claude Code Blog Series
+
+**Previous:** [Part 10 - Power User CLI Options and Scripting](./2025-08-08--claude-code-part-10-power-user-cli-scripting)
+
+**Full Series:**
+
+1. Part 1 - Getting Started and Installation
+2. Part 2 - CLAUDE.md Configuration Files
+3. Part 3 - Conversation Management and Context
+4. Part 4 - Slash Commands and Custom Commands
+5. Part 5 - MCP Servers and Tool Integration
+6. Part 6 - Subagents and Task Delegation
+7. Part 7 - IDE Integration with VS Code and JetBrains
+8. Part 8 - Hooks for Automated Quality Checks
+9. Part 9 - Complete Development Workflows
+10. Part 10 - Power User CLI Options and Scripting
+11. Part 11 - Troubleshooting and Recovery (this post)
+
+**Series Complete!** You now have a comprehensive guide to mastering Claude Code from beginner to expert level. Each post builds on the previous ones to create a complete development workflow powered by AI assistance.

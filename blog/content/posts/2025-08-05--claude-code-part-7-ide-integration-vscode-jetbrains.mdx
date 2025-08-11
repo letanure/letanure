@@ -1,0 +1,167 @@
+---
+title: "Claude Code: Part 7 - IDE Integration with VS Code and JetBrains"
+date: "2025-08-05"
+summary: "Eliminate context switching between your IDE and Claude Code. Learn how to use VS Code and JetBrains integration features to share context automatically and maintain development flow."
+tags:
+  [
+    "Claude Code",
+    "IDE Integration",
+    "VS Code",
+    "JetBrains",
+    "Context Switching",
+    "Developer Experience",
+    "Productivity",
+  ]
+---
+
+# Claude Code: Part 7 - IDE Integration with VS Code and JetBrains
+
+## The Problem
+
+You're deep in debugging mode in VS Code. You've got the perfect file open, the exact line selected, and error messages staring at you from the Problems panel. But to get Claude's help, you have to:
+
+1. Open a separate terminal
+2. Launch Claude
+3. Manually describe the file you're in
+4. Copy-paste the error message
+5. Explain the context Claude can't see
+
+By the time Claude understands the situation, you've lost your debugging flow. It's like having a brilliant pair-programming partner who can't see your screen - constantly having to narrate everything breaks your concentration.
+
+## The Solution
+
+IDE integration lets Claude see exactly what you're working on without manual context sharing. Think of it as giving your AI teammate a second monitor that mirrors yours - they can see your current file, selected code, and error messages automatically.
+
+## VS Code Integration
+
+### Quick Setup
+
+1. **Install Claude Code** (if not already done)
+2. **Open VS Code** in your project
+3. **Open terminal** in VS Code (`` Ctrl+` `` or `` Cmd+` ``)
+4. **Run Claude**: `claude`
+5. **Extension auto-installs** when first run from VS Code
+
+### Quick Launch Shortcut
+
+- **Mac:** `Cmd+Esc`
+- **Windows/Linux:** `Ctrl+Esc`
+
+Opens Claude with current context:
+
+- Selected text (if any)
+- Current file path
+- Recent error messages from Problems panel
+
+**Simple example:**
+
+```
+1. Select a function in VS Code
+2. Press Cmd+Esc (Mac) or Ctrl+Esc (Windows/Linux)
+3. Claude opens with: "Looking at the selected code in src/utils/helpers.js..."
+```
+
+### Context Sharing Features
+
+**What Claude sees automatically:**
+
+- Current file you're editing
+- Text selection
+- Error messages from VS Code Problems panel
+- Workspace file structure
+
+**What you don't need to do:**
+
+- Copy-paste code snippets
+- Explain file locations
+- Describe error messages manually
+
+## JetBrains Integration
+
+Claude Code supports JetBrains IDEs (IntelliJ IDEA, WebStorm, PyCharm, etc.) through terminal integration.
+
+**Setup:**
+
+1. Open terminal in your JetBrains IDE
+2. Run `claude` in the terminal
+3. Context sharing works similar to VS Code
+
+**Note:** Full plugin integration may vary by IDE - check Claude Code documentation for specific IDE support.
+
+## Error Diagnostics Integration
+
+When you have TypeScript errors, ESLint warnings, or other diagnostics:
+
+1. **Errors appear in VS Code Problems panel**
+2. **Launch Claude** with quick shortcut
+3. **Claude sees the errors automatically**
+4. **Ask:** "Fix these TypeScript errors"
+
+No need to copy-paste error messages - Claude reads them from your IDE.
+
+## Multi-IDE Workflows
+
+**Best practices:**
+
+- **One Claude session per project** - works across different IDEs
+- **Context switches automatically** - based on which IDE you launch from
+- **Use `/clear`** when switching between major tasks
+
+## Advanced Integration Features
+
+### IDE Command
+
+```bash
+claude /ide
+```
+
+Connects Claude to IDE for enhanced integration (when available).
+
+### File References
+
+Claude understands your IDE's file structure and can reference files directly:
+
+```
+"Update the handleSubmit function in the current file"
+"Check the imports in UserList.tsx"
+```
+
+## Limitations and Notes
+
+**Current limitations:**
+
+- Full integration varies by IDE
+- Some features work best with VS Code
+- Terminal-based integration for most IDEs
+
+**For latest IDE support:** Check the [Claude Code documentation](https://docs.anthropic.com/en/docs/claude-code/ide-integrations)
+
+## Getting Started
+
+1. **Start with VS Code** (best supported)
+2. **Use quick launch shortcuts** (Cmd+Esc/Ctrl+Esc)
+3. **Test context sharing** - select code and launch Claude
+4. **Gradually explore** other IDE integrations
+
+The goal is seamless development where Claude understands exactly what you're working on without manual context switching.
+
+---
+
+## Claude Code Blog Series
+
+**Previous:** [Part 6 - Subagents and Task Delegation](./2025-08-04--claude-code-part-6-subagents-task-delegation)
+**Next:** [Part 8 - Hooks for Automated Quality Checks](./2025-08-06--claude-code-part-8-hooks-automated-quality-checks)
+
+**Full Series:**
+
+1. Part 1 - Getting Started and Installation
+2. Part 2 - CLAUDE.md Configuration Files
+3. Part 3 - Conversation Management and Context
+4. Part 4 - Slash Commands and Custom Commands
+5. Part 5 - MCP Servers and Tool Integration
+6. Part 6 - Subagents and Task Delegation
+7. Part 7 - IDE Integration with VS Code and JetBrains (this post)
+8. Part 8 - Hooks for Automated Quality Checks
+9. Part 9 - Complete Development Workflows
+10. Part 10 - Power User CLI Options and Scripting
+11. Part 11 - Troubleshooting and Recovery

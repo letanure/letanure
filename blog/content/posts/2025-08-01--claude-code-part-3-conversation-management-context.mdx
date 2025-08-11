@@ -1,0 +1,363 @@
+---
+title: "Claude Code: Part 3 - Conversation Management and Context"
+date: "2025-08-01"
+summary: "Move beyond basic Claude Code usage to advanced features like conversation management, multi-step workflows, context optimization, and preview mode. Transform from casual user to power user."
+tags:
+  [
+    "Claude Code",
+    "Advanced Features",
+    "Productivity",
+    "Context Management",
+    "Multi-step Workflows",
+  ]
+---
+
+# Claude Code: Part 3 - Conversation Management and Context
+
+## The Problem
+
+You've been using Claude Code for a few weeks now. The basic workflow is comfortable - ask questions, get code, make changes. But you're starting to feel limited by treating Claude like a simple question-and-answer tool.
+
+You have bigger ambitions: complex refactoring projects, multi-step feature implementations, and sophisticated analysis tasks. You want to move beyond "Hey Claude, fix this function" to "Claude, help me architect and implement this entire feature from scratch."
+
+The question is: how do you unlock Claude's advanced capabilities for complex, multi-step development work?
+
+## The Solution
+
+Advanced Claude Code features let you handle sophisticated development tasks through multi-step workflows, conversation management, and intelligent context handling. Think of it as the difference between using Claude as a coding helper versus a true development partner.
+
+## Conversation Management
+
+### The `/clear` Command
+
+Start fresh when switching contexts:
+
+```bash
+/clear
+```
+
+**When to use:**
+
+- Switching between different features
+- Moving from debugging to new development
+- When conversation gets too long and unfocused
+
+### The `/compact` Command
+
+Summarize long conversations while preserving context:
+
+```bash
+/compact
+```
+
+**What it does:**
+
+- Compresses conversation history
+- Keeps key decisions and context
+- Reduces token usage without losing information
+
+**Example:**
+
+```
+Before: 50 messages about implementing user authentication
+After: Compact summary + recent conversation about email verification
+```
+
+### Resume Previous Sessions
+
+Continue where you left off:
+
+```bash
+claude --resume
+```
+
+## Multi-Step Workflows
+
+### Planning Complex Features
+
+Instead of diving into code, start with comprehensive planning:
+
+```
+I need to implement a real-time notification system for this React app.
+Before writing any code, help me plan:
+
+1. Architecture design considerations
+2. Technology choices (WebSocket vs Server-Sent Events vs polling)
+3. Database schema requirements
+4. Component structure and data flow
+5. Testing strategy
+6. Performance and scalability considerations
+
+Break this down systematically.
+```
+
+Claude will provide structured analysis before any implementation begins.
+
+### Iterative Development Approach
+
+```
+Let's build this notification system step by step:
+
+Phase 1: Create the basic WebSocket connection and message handling
+Phase 2: Implement the UI components for displaying notifications
+Phase 3: Add persistence and notification history
+Phase 4: Implement real-time updates and optimistic UI
+Phase 5: Add comprehensive testing
+
+Start with Phase 1. After each phase, I'll review and approve before moving forward.
+```
+
+### Complex Refactoring Projects
+
+```
+I need to refactor this legacy authentication system. Here's my approach:
+
+1. First, analyze the current system and identify all dependencies
+2. Create a migration plan that maintains backward compatibility
+3. Implement the new system alongside the old one
+4. Create a feature flag to switch between systems
+5. Gradually migrate users and test thoroughly
+6. Remove the old system once migration is complete
+
+Start with step 1 - comprehensive analysis of the current system.
+```
+
+## Context Management Techniques
+
+### Focused Sessions
+
+Keep conversations targeted to specific domains:
+
+```
+# Authentication Session
+"I'm working solely on authentication features today.
+Only suggest changes related to auth, login, registration, and user management."
+
+# Performance Session
+"This session is focused on performance optimization.
+Analyze bundle size, loading times, and runtime performance only."
+```
+
+### Reference Management
+
+Help Claude understand large codebases:
+
+```
+"The main authentication flow happens in these files:
+- src/auth/AuthProvider.tsx (context setup)
+- src/auth/hooks/useAuth.ts (auth logic)
+- src/pages/login.tsx (login UI)
+- api/auth/login.ts (backend logic)
+
+Reference these files when working on auth-related tasks."
+```
+
+### Incremental Context Building
+
+```
+"Let me give you context about our e-commerce platform:
+
+1. We use Next.js with TypeScript
+2. State management with Zustand
+3. UI components with Radix + Tailwind
+4. Database with Prisma + PostgreSQL
+5. Payment processing with Stripe
+
+I'll be asking you to work on various features within this context."
+```
+
+## Advanced Analysis Capabilities
+
+### Codebase Architecture Analysis
+
+```
+"Analyze the overall architecture of this React application:
+
+1. Component organization and hierarchy
+2. State management patterns used
+3. Data flow and communication patterns
+4. Third-party integrations and dependencies
+5. Testing strategy and coverage
+6. Build and deployment setup
+7. Potential architectural issues or technical debt
+
+Provide a comprehensive architectural overview."
+```
+
+### Performance Analysis
+
+```
+"Conduct a performance analysis of this application:
+
+1. Bundle size analysis and recommendations
+2. Runtime performance bottlenecks
+3. Database query optimization opportunities
+4. API endpoint performance issues
+5. Frontend rendering optimizations
+6. Caching strategy improvements
+
+Focus on actionable performance improvements."
+```
+
+### Security Assessment
+
+```
+"Review this application for security vulnerabilities:
+
+1. Authentication and authorization implementation
+2. Input validation and sanitization
+3. API endpoint security
+4. Database query security (SQL injection prevention)
+5. XSS and CSRF protection
+6. Sensitive data handling
+
+Identify specific security improvements needed."
+```
+
+## Preview Mode
+
+See what Claude will do before making changes:
+
+```
+"Show me exactly what changes you would make to implement user roles,
+but don't make any changes yet. I want to review your plan first."
+```
+
+Claude will outline:
+
+- Files that need to be modified
+- New files that need to be created
+- Specific changes to existing code
+- Testing requirements
+- Potential breaking changes
+
+## Advanced Problem-Solving Patterns
+
+### Root Cause Analysis
+
+```
+"This React component is causing memory leaks. Don't just fix the symptom -
+investigate the root cause:
+
+1. Analyze the component lifecycle and cleanup
+2. Check for subscription leaks and event listeners
+3. Examine state management and data flow
+4. Look for circular references or closures
+5. Identify the fundamental issue causing the leak
+
+Provide both the analysis and the fix."
+```
+
+### System Integration
+
+```
+"Help me integrate Stripe payments into this e-commerce app.
+Consider the full integration:
+
+1. Frontend payment component with proper UX
+2. Backend webhook handling and security
+3. Database schema for orders and payment tracking
+4. Error handling and retry logic
+5. Testing strategy for payment flows
+6. Compliance and security requirements
+
+Design the complete integration, not just the payment form."
+```
+
+### Scalability Planning
+
+```
+"This app currently handles 1,000 users. Help me prepare it for 100,000 users:
+
+1. Database optimization and indexing
+2. API rate limiting and caching
+3. Frontend performance optimization
+4. Infrastructure scaling considerations
+5. Monitoring and alerting setup
+
+Create a scalability roadmap with specific implementation steps."
+```
+
+## Efficient Context Switching
+
+### Project Templates
+
+Create reusable project contexts:
+
+```
+"Save this as my 'React + TypeScript Web App' context:
+- Next.js 13+ with TypeScript
+- Tailwind CSS for styling
+- Prisma for database
+- NextAuth for authentication
+- React Query for API calls
+- Jest + React Testing Library for tests
+
+Use this context for all similar projects unless I specify otherwise."
+```
+
+### Domain-Specific Sessions
+
+```bash
+# Database session
+claude --session=database
+"Focus only on database schema, queries, and data modeling"
+
+# Frontend session
+claude --session=frontend
+"Work only on React components, styling, and user interface"
+
+# API session
+claude --session=api
+"Handle only backend logic, API endpoints, and server-side code"
+```
+
+## Advanced Debugging Workflows
+
+### Systematic Bug Investigation
+
+```
+"This user registration is failing intermittently. Let's debug systematically:
+
+1. Reproduce the issue in development
+2. Add comprehensive logging to track the flow
+3. Analyze potential race conditions
+4. Check database constraints and validation
+5. Review error handling and edge cases
+6. Create a test that reproduces the bug
+7. Fix the root cause
+8. Verify the fix prevents regression
+
+Start with step 1 - let's reproduce this issue."
+```
+
+## Getting Started with Advanced Features
+
+1. **Plan before coding** - Use Claude for architectural planning
+2. **Break down complex tasks** - Multi-phase implementation approach
+3. **Manage conversation context** - Use `/clear` and `/compact` strategically
+4. **Preview changes** - Review plans before implementation
+5. **Focus sessions** - One domain per conversation when possible
+
+Advanced Claude Code usage transforms development from individual task assistance to comprehensive project partnership.
+
+---
+
+## Claude Code Blog Series
+
+**Previous:** [Part 2 - CLAUDE.md Configuration Files](./2025-07-31--claude-code-part-2-claude-md-configuration)
+**Next:** [Part 4 - Slash Commands and Custom Commands](./2025-08-02--claude-code-part-4-slash-commands-custom-commands)
+
+**Full Series:**
+
+1. Part 1 - Getting Started and Installation
+2. Part 2 - CLAUDE.md Configuration Files
+3. Part 3 - Conversation Management and Context (this post)
+4. Part 4 - Slash Commands and Custom Commands
+5. Part 5 - MCP Servers and Tool Integration
+6. Part 6 - Subagents and Task Delegation
+7. Part 7 - IDE Integration with VS Code and JetBrains
+8. Part 8 - Hooks for Automated Quality Checks
+9. Part 9 - Complete Development Workflows
+10. Part 10 - Power User CLI Options and Scripting
+11. Part 11 - Troubleshooting and Recovery

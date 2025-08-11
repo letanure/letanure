@@ -1,0 +1,376 @@
+---
+title: "Claude Code: Part 9 - Complete Development Workflows"
+date: "2025-08-07"
+summary: "Learn how to combine all Claude Code features into complete development workflows. From feature planning to deployment, see how CLAUDE.md, slash commands, MCP servers, subagents, IDE integration, and hooks work together for seamless development."
+tags:
+  [
+    "Claude Code",
+    "Development Workflows",
+    "Feature Development",
+    "Bug Fixing",
+    "Code Review",
+    "Team Collaboration",
+    "End-to-End Process",
+  ]
+---
+
+# Claude Code: Part 9 - Complete Development Workflows
+
+## The Problem
+
+You've learned all the individual Claude Code features - CLAUDE.md, slash commands, MCP servers, subagents, IDE integration, and hooks. But you're looking at them like separate tools in a toolbox, not sure how they work together.
+
+You know Claude can help with individual tasks, but your real development work isn't isolated tasks. It's complete workflows: planning a feature, implementing it, testing it, reviewing it, and deploying it. Right now, you're using Claude for pieces but not for the whole process.
+
+It's like having a talented team member who's great at individual tasks but hasn't learned how your actual development process works.
+
+## The Solution
+
+Real-world workflows combine all Claude Code features into seamless development processes. Think of it as teaching your AI teammate not just individual skills, but how your entire development process flows from idea to production.
+
+## Feature Development Workflow
+
+**The complete process:** From idea to deployed feature using Claude Code.
+
+### 1. Project Setup
+
+```bash
+# Start new feature branch
+git checkout -b feature/user-notifications
+
+# Launch Claude with context
+claude
+```
+
+**CLAUDE.md rule:** `- Run pnpm type:check before marking features complete`
+
+### 2. Planning Phase
+
+```
+Plan the user notifications feature:
+1. Database schema for notifications
+2. API endpoints needed
+3. React components structure
+4. Integration points with existing code
+```
+
+**Claude analyzes your codebase and creates a structured plan.**
+
+### 3. Implementation with Custom Commands
+
+```bash
+# Use your custom workflow command
+/feature-start notifications
+
+# This runs your .claude/commands/feature-start.md:
+# 1. Analyze existing patterns in this codebase
+# 2. Create feature folder structure
+# 3. Set up basic files following project conventions
+# 4. Run type checking to ensure no conflicts
+```
+
+### 4. Development with MCP Integration
+
+```
+Check GitHub issues labeled "notifications" and implement the API endpoints
+```
+
+**With GitHub MCP server connected, Claude:**
+
+- Reads actual issues from your repository
+- Understands requirements from issue descriptions
+- Creates code that addresses specific reported needs
+
+### 5. Quality Assurance with Hooks
+
+**Your PostToolUse hook automatically runs:**
+
+```json
+{
+  "matcher": "Edit:*.ts|Edit:*.tsx",
+  "hooks": [
+    {
+      "type": "command",
+      "command": "pnpm type:check && pnpm lint"
+    }
+  ]
+}
+```
+
+**Every file Claude edits gets automatically validated.**
+
+### 6. Testing with Subagents
+
+```
+Use an agent to write comprehensive tests for the notifications feature
+```
+
+**Subagent autonomously:**
+
+- Analyzes all notification-related code
+- Creates unit tests for components
+- Writes integration tests for API endpoints
+- Ensures good test coverage
+
+### 7. Final Review
+
+```bash
+/feature-complete notifications
+
+# Your custom command:
+# 1. Run full test suite
+# 2. Check for console.logs and TODOs
+# 3. Verify responsive design
+# 4. Generate summary of changes
+# 5. Suggest improvements before PR
+```
+
+## Bug Fixing Workflow
+
+**Quick and systematic bug resolution.**
+
+### 1. Bug Analysis
+
+```bash
+# Open VS Code to the problematic file
+# Select the buggy code
+# Press Cmd+Esc (Mac) or Ctrl+Esc (Windows/Linux)
+```
+
+**Claude launches with:**
+
+- The selected buggy code
+- Current file context
+- Any TypeScript/ESLint errors from Problems panel
+
+### 2. Root Cause Investigation
+
+```
+Analyze this authentication bug. Check related files and explain the issue.
+```
+
+**Claude examines:**
+
+- The specific code causing issues
+- Related authentication files (following your CLAUDE.md patterns)
+- Recent git changes that might be related
+
+### 3. Fix Implementation
+
+```
+Fix this bug following our existing error handling patterns
+```
+
+**Your CLAUDE.md ensures:**
+
+- Consistent error handling approach
+- Proper logging (no sensitive data)
+- Following established code patterns
+
+### 4. Verification
+
+**Post-fix hook automatically:**
+
+- Runs relevant tests
+- Checks type safety
+- Validates the fix doesn't break other functionality
+
+## Code Review Workflow
+
+**Prepare code for review efficiently.**
+
+### 1. Self-Review Preparation
+
+```bash
+/review-prep
+
+# Your custom command runs:
+# 1. Check for TODO comments
+# 2. Find hardcoded values
+# 3. Verify error handling
+# 4. Check TypeScript types
+# 5. Suggest readability improvements
+```
+
+### 2. Documentation Updates
+
+```
+Update the README with the new notifications feature and API endpoints
+```
+
+**Claude references:**
+
+- Your actual implemented code
+- Existing documentation patterns
+- API endpoints you just created
+
+### 3. PR Creation with MCP
+
+```
+Create a GitHub PR for this feature branch with a comprehensive description
+```
+
+**With GitHub MCP server:**
+
+- Analyzes your commits since branch creation
+- Generates meaningful PR description
+- Includes testing checklist
+- References related issues automatically
+
+## Legacy Code Modernization
+
+**Systematic approach to improving old code.**
+
+### 1. Assessment with Subagents
+
+```
+Use an agent to analyze the legacy auth system and create a modernization plan
+```
+
+**Subagent provides:**
+
+- Complete analysis of existing code
+- Security concerns identified
+- Modernization recommendations
+- Step-by-step migration plan
+
+### 2. Incremental Updates
+
+```
+Modernize the user authentication to use our current patterns, maintaining backward compatibility
+```
+
+**Your folder-specific CLAUDE.md in `src/auth/` ensures:**
+
+- Security-first approach
+- Consistent with current auth patterns
+- Proper validation and error handling
+
+### 3. Testing Strategy
+
+```
+Create comprehensive tests for the modernized auth system to ensure no regressions
+```
+
+**Claude creates:**
+
+- Tests that verify existing functionality
+- New tests for improved features
+- Integration tests for compatibility
+
+## Daily Development Shortcuts
+
+**Speed up common tasks.**
+
+### Quick File Navigation
+
+```bash
+# In VS Code terminal
+claude
+
+# Then use Claude as your project assistant
+"Show me all components that use the UserContext"
+"Find files related to payment processing"
+```
+
+### Rapid Debugging
+
+```bash
+# Select error message in VS Code
+# Cmd+Esc to launch Claude with context
+# Claude sees the error automatically
+
+"Fix this TypeScript error"
+```
+
+### Code Quality Maintenance
+
+```bash
+/health-check
+
+# Custom command that:
+# 1. Runs full test suite
+# 2. Checks for security issues
+# 3. Analyzes bundle size
+# 4. Reports technical debt
+```
+
+## Team Collaboration Workflows
+
+**Consistent team practices.**
+
+### Onboarding New Developers
+
+```
+Analyze this codebase and create an onboarding guide for new developers
+```
+
+**Claude generates:**
+
+- Architecture overview
+- Key patterns and conventions
+- Development setup instructions
+- Common tasks and workflows
+
+### Code Standards Enforcement
+
+**Team's shared CLAUDE.md ensures:**
+
+- Consistent coding patterns across team members
+- Automated quality checks via hooks
+- Standardized commit messages and PR formats
+
+### Knowledge Sharing
+
+```
+Document the payment integration patterns we use across all features
+```
+
+**Claude creates:**
+
+- Comprehensive documentation
+- Code examples from actual codebase
+- Best practices based on your implementations
+
+## Combining Features for Maximum Efficiency
+
+**The power is in the combination:**
+
+1. **CLAUDE.md** provides context and standards
+2. **Custom commands** automate repeated workflows
+3. **MCP servers** eliminate tool switching
+4. **Subagents** handle complex analysis
+5. **Hooks** ensure quality automatically
+6. **IDE integration** provides seamless context
+
+**Result:** Claude becomes a true development partner that understands your project, follows your standards, and automates your workflows.
+
+## Getting Started with Workflows
+
+1. **Start with one workflow** - Pick your most common task
+2. **Build incrementally** - Add features as you see benefits
+3. **Share with team** - Successful workflows become team standards
+4. **Iterate and improve** - Workflows evolve with your needs
+
+The goal is to spend more time on creative problem-solving and less time on repetitive development tasks.
+
+---
+
+## Claude Code Blog Series
+
+**Previous:** [Part 8 - Hooks for Automated Quality Checks](./2025-08-06--claude-code-part-8-hooks-automated-quality-checks)
+**Next:** [Part 10 - Power User CLI Options and Scripting](./2025-08-08--claude-code-part-10-power-user-cli-scripting)
+
+**Full Series:**
+
+1. Part 1 - Getting Started and Installation
+2. Part 2 - CLAUDE.md Configuration Files
+3. Part 3 - Conversation Management and Context
+4. Part 4 - Slash Commands and Custom Commands
+5. Part 5 - MCP Servers and Tool Integration
+6. Part 6 - Subagents and Task Delegation
+7. Part 7 - IDE Integration with VS Code and JetBrains
+8. Part 8 - Hooks for Automated Quality Checks
+9. Part 9 - Complete Development Workflows (this post)
+10. Part 10 - Power User CLI Options and Scripting
+11. Part 11 - Troubleshooting and Recovery

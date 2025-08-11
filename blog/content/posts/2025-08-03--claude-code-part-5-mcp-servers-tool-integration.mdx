@@ -1,0 +1,186 @@
+---
+title: "Claude Code: Part 5 - MCP Servers and Tool Integration"
+date: "2025-08-03"
+summary: "Stop switching between Claude Code, GitHub, Sentry, and other development tools. Learn how MCP (Model Context Protocol) servers create seamless workflows by connecting all your tools directly within Claude Code."
+tags:
+  [
+    "Claude Code",
+    "MCP",
+    "Model Context Protocol",
+    "GitHub Integration",
+    "Sentry",
+    "Tool Integration",
+    "Development Workflow",
+  ]
+---
+
+# Claude Code: Part 5 - MCP Servers and Tool Integration
+
+## The Problem
+
+Your development workflow involves constant tool switching:
+
+- Claude Code for development assistance
+- GitHub web interface for issues and PRs
+- Sentry dashboard for error monitoring
+- Database tools for query analysis
+- Slack for team communication
+- Linear/Jira for project management
+
+Each context switch breaks your flow. You're helping Claude understand an issue, then jumping to Sentry to grab error details, back to Claude to explain the context, then to GitHub to check related issues. By the time you've gathered all the information, you've lost your problem-solving momentum.
+
+## The Solution
+
+MCP (Model Context Protocol) servers connect your external tools directly to Claude Code. Think of it as giving Claude direct access to your development toolchain - it can read GitHub issues, analyze Sentry errors, and query databases without you having to switch contexts manually.
+
+## What is MCP?
+
+MCP (Model Context Protocol) is an open-source standard that connects Claude Code to external tools and services. Instead of manual copy-pasting, Claude accesses tools directly.
+
+**Learn more:** [MCP Documentation](https://docs.anthropic.com/en/docs/claude-code/mcp)
+
+**Example:**
+```
+You: "Analyze Sentry errors for authentication"
+Claude: [Queries Sentry directly, analyzes data, provides insights]
+```
+
+## Essential MCP Servers
+
+### Installation Methods
+
+```bash
+# Add local server
+claude mcp add server-name /path/to/server
+
+# Add remote SSE server (real-time)
+claude mcp add --transport sse name https://server-url/sse
+
+# Add remote HTTP server
+claude mcp add --transport http name https://server-url/mcp
+```
+
+### GitHub Server
+
+- Read issues, PRs, and discussions
+- Create issues and PRs
+- Analyze commits and code changes
+
+### Sentry Server
+
+- Analyze error trends and stack traces
+- Correlate errors with code changes
+- Suggest fixes based on context
+
+### Other Popular Servers
+
+- **Linear/Asana** - Project management  
+- **Notion** - Documentation
+- **Stripe** - Payment processing
+- **Figma** - Design integration
+- **Airtable** - Database/spreadsheets
+- **SQLite/PostgreSQL** - Database querying
+
+## Authentication
+
+- **OAuth 2.0 support** - Secure authentication
+- **Use `/mcp` to authenticate** - Follow prompts
+- **Tokens refresh automatically** - No manual renewal
+
+⚠️ **Security Note:** Use third-party MCP servers at your own risk. Verify trustworthiness before installing.
+
+## Managing Connections
+
+Use `/mcp` to:
+- View connected servers
+- Check authentication status  
+- Reconnect or configure servers
+
+## Example Workflows
+
+**Bug investigation:**
+```
+"Check Sentry for login errors, correlate with recent GitHub commits"
+```
+
+**PR review:**
+```
+"Review PR #123, check for related Sentry errors and security issues"
+```
+
+**Release prep:**
+```
+"List GitHub issues for v2.1.0, check critical Sentry errors"
+```
+
+
+
+### Network Security
+
+- **Firewall considerations** - MCP servers make external API calls
+- **Corporate networks** - May need proxy configuration
+- **Rate limiting** - Respect service API limits
+
+## Troubleshooting MCP Issues
+
+### Connection Problems
+
+```bash
+# Check server status
+/mcp
+
+# Verify installation
+npm list -g | grep mcp
+
+# Test authentication
+# Use service-specific test commands
+```
+
+### Authentication Failures
+
+1. **Verify tokens** are valid and not expired
+2. **Check permissions** - ensure tokens have necessary scopes
+3. **Review network** - firewalls might block connections
+4. **Restart Claude** to reload MCP configurations
+
+### Performance Considerations
+
+- **MCP calls take time** - External API requests add latency
+- **Batch requests** when possible - ask for related data together
+- **Cache awareness** - Some data might be cached by MCP servers
+
+## Getting Started with MCP
+
+1. **Start with GitHub** - Most immediately useful for developers
+2. **Add error monitoring** - Sentry integration saves significant context switching
+3. **Include security scanning** - Socket.dev prevents supply chain issues
+4. **Explore gradually** - Add servers as you identify workflow gaps
+
+**Simple first test:**
+
+```
+"Check our GitHub repository for any open issues tagged as 'bug'"
+```
+
+MCP transforms Claude Code from an isolated assistant into a fully connected development partner that can access and analyze data from your entire toolchain.
+
+---
+
+## Claude Code Blog Series
+
+**Previous:** [Part 4 - Slash Commands and Custom Commands](./2025-08-02--claude-code-part-4-slash-commands-custom-commands)
+**Next:** [Part 6 - Subagents and Task Delegation](./2025-08-04--claude-code-part-6-subagents-task-delegation)
+
+**Full Series:**
+
+1. Part 1 - Getting Started and Installation
+2. Part 2 - CLAUDE.md Configuration Files
+3. Part 3 - Conversation Management and Context
+4. Part 4 - Slash Commands and Custom Commands
+5. Part 5 - MCP Servers and Tool Integration (this post)
+6. Part 6 - Subagents and Task Delegation
+7. Part 7 - IDE Integration with VS Code and JetBrains
+8. Part 8 - Hooks for Automated Quality Checks
+9. Part 9 - Complete Development Workflows
+10. Part 10 - Power User CLI Options and Scripting
+11. Part 11 - Troubleshooting and Recovery

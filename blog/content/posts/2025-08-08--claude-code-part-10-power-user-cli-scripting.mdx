@@ -1,0 +1,182 @@
+---
+title: "Claude Code: Part 10 - Common Issues and Quick Fixes"
+date: "2025-08-08"
+summary: "Solve the most common Claude Code problems: context overflow, conflicting rules, token optimization, and broken custom commands. Quick troubleshooting for experienced users."
+tags:
+  [
+    "Claude Code",
+    "Troubleshooting",
+    "Context Management",
+    "Token Optimization",
+    "Custom Commands",
+    "Problem Solving",
+  ]
+---
+
+# Claude Code: Part 10 - Common Issues and Quick Fixes
+
+## The Problem
+
+You've been using Claude Code for weeks. It works great most of the time, but you keep hitting the same frustrating issues: conversations get too long and Claude loses context, your CLAUDE.md rules conflict with each other, tokens run out faster than expected, and custom commands randomly stop working.
+
+These aren't beginner problems - they're the issues experienced users face when pushing Claude Code to its limits.
+
+## Context Too Long
+
+**Problem:** Claude says the conversation is too long or starts forgetting earlier context.
+
+**Quick fixes:**
+
+```bash
+# Compress conversation history
+/compact
+
+# Start fresh but keep project context
+/clear
+
+# Check conversation size
+/status
+```
+
+**Prevention:**
+- Use `/compact` regularly instead of letting conversations grow endlessly
+- Start new conversations for different topics
+- Reference files instead of pasting large code blocks
+
+## Rules Conflicting
+
+**Problem:** Multiple CLAUDE.md files causing confusion or contradictory behavior.
+
+**Debug hierarchy:**
+1. Folder-specific (`./src/auth/CLAUDE.md`) - highest priority
+2. Local project (`./CLAUDE.local.md`)
+3. Project (`./CLAUDE.md`)
+4. Personal (`~/.claude/CLAUDE.md`) - lowest priority
+
+**Common conflicts:**
+```markdown
+# Project CLAUDE.md says:
+- Use TypeScript strict mode
+
+# Personal ~/.claude/CLAUDE.md says:
+- Skip TypeScript for quick prototypes
+```
+
+**Solution:** Be more specific about when rules apply:
+```markdown
+# In project CLAUDE.md:
+- Use TypeScript strict mode for all production code
+- Prototypes in /experiments/ can skip strict mode
+```
+
+## Token-Saving Pro Tip
+
+**Problem:** Hitting token limits too quickly, especially with large CLAUDE.md files.
+
+**Token wasters:**
+- Verbose CLAUDE.md files (keep under 100 lines each)
+- Pasting entire files instead of referencing them
+- Long conversations about multiple topics
+- Detailed explanations in rules
+
+**Token savers:**
+```markdown
+❌ "When implementing authentication, always ensure you follow security best practices including input validation, proper error handling, secure token storage, and following our established patterns in the auth/ directory..."
+
+✅ "Auth code: validate inputs, handle errors securely, follow auth/ patterns"
+```
+
+**Script approach:**
+Instead of asking Claude to read many files:
+```
+❌ "Look at all components and replace useState with our custom hook"
+```
+
+Ask Claude to create a script:
+```
+✅ "Create a script to replace useState with useCustomState across all components, run it, then delete the script"
+```
+
+This saves massive input tokens and is much faster.
+
+## Custom Commands Not Working
+
+**Problem:** `/my-command` returns "command not found" or behaves unexpectedly.
+
+**Debug checklist:**
+1. **Check filename:** Must be exactly `.claude/commands/my-command.md`
+2. **Restart Claude:** Commands load on startup
+3. **File format:** Must contain instructions, not just command names
+
+**Common mistakes:**
+```markdown
+❌ Wrong format (just the command name):
+/test-all
+
+✅ Correct format (actual instructions):
+Run comprehensive testing:
+1. Run type checking
+2. Run linter
+3. Run tests
+4. Report issues
+```
+
+**File location issues:**
+- Commands must be in `.claude/commands/` directory
+- Use hyphens, not spaces: `test-all.md` not `test all.md`
+- Check case sensitivity on your system
+
+## Performance Tips
+
+**Slow responses:**
+- Use `/clear` for new topics instead of continuing long conversations
+- Reference specific files instead of asking Claude to "look at everything"
+- Break complex requests into smaller, focused questions
+
+**Memory usage:**
+- Restart Claude sessions periodically
+- Avoid keeping multiple long-running sessions open
+- Use specific commands instead of general requests
+
+## Quick Diagnostics
+
+```bash
+# Check what's loaded
+/help
+
+# See conversation stats
+/status
+
+# Restart fresh
+/clear
+```
+
+## Getting Help
+
+**For persistent issues:**
+1. Check [Claude Code documentation](https://docs.anthropic.com/en/docs/claude-code)
+2. Search [GitHub issues](https://github.com/anthropics/claude-code/issues)
+3. Include exact error messages and steps to reproduce
+
+Most Claude Code issues have simple solutions - start with the basics before diving into complex debugging.
+
+---
+
+## Claude Code Blog Series
+
+**Previous:** [Part 9 - Complete Development Workflows](./2025-08-07--claude-code-part-9-complete-development-workflows)
+**Next:** [Part 11 - Troubleshooting and Recovery](./2025-08-09--claude-code-part-11-troubleshooting-recovery)
+
+**Full Series:**
+
+1. Part 1 - Getting Started and Installation
+2. Part 2 - CLAUDE.md Configuration Files
+3. Part 3 - Conversation Management and Context
+4. Part 4 - Slash Commands and Custom Commands
+5. Part 5 - MCP Servers and Tool Integration
+6. Part 6 - Subagents and Task Delegation
+7. Part 7 - IDE Integration with VS Code and JetBrains
+8. Part 8 - Hooks for Automated Quality Checks
+9. Part 9 - Complete Development Workflows
+10. Part 10 - Common Issues and Quick Fixes (this post)
+11. Part 11 - Troubleshooting and Recovery

@@ -1,0 +1,312 @@
+---
+title: "Claude Code: Part 8 - Hooks for Automated Quality Checks"
+date: "2025-08-06"
+summary: "Stop manually running the same quality checks after every Claude Code change. Learn how to use hooks to automatically run tests, linting, type checking, and custom validation whenever Claude modifies your code."
+tags:
+  [
+    "Claude Code",
+    "Hooks",
+    "Automation",
+    "Quality Assurance",
+    "Testing",
+    "Workflow Optimization",
+    "Development Tools",
+  ]
+---
+
+# Claude Code: Part 8 - Hooks for Automated Quality Checks
+
+## The Problem
+
+Every time Claude edits a TypeScript file, you find yourself typing the same commands:
+
+"Now run `pnpm type:check` to make sure there are no errors"
+"Don't forget to run the linter"  
+"Can you test this change?"
+
+It's like having a talented developer who consistently forgets the basic quality checks. They do great work, but you're constantly reminding them about the fundamentals: compile, lint, test, repeat.
+
+## The Solution
+
+Hooks automatically run quality checks at specific points in your workflow. Think of them as training your AI teammate to follow your development standards automatically - like a senior developer who runs tests before every commit without being reminded.
+
+## What Are Hooks?
+
+Hooks are shell commands that trigger automatically when certain events happen:
+
+**Example:** Automatically run `pnpm type:check` after Claude edits any TypeScript file
+**Example:** Validate security rules before Claude accesses authentication files
+**Example:** Auto-format code after Claude writes new files
+
+## Common Hook Events
+
+**`PostToolUse`** - After Claude uses a tool
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit:*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pnpm type:check"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**`PreToolUse`** - Before Claude uses a tool
+**`UserPromptSubmit`** - When you submit a prompt
+**`SessionStart`** - When Claude starts
+
+## Simple Example: Auto Type-Check
+
+Create this in your Claude settings:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit:*.ts|Edit:*.tsx",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pnpm type:check --noEmit"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+**What happens:**
+
+1. Claude edits a TypeScript file
+2. Hook automatically runs type checking
+3. You see results immediately
+
+## Practical Hook Patterns
+
+### Code Quality Enforcement
+
+```json
+{
+  "matcher": "Write|Edit",
+  "hooks": [
+    {
+      "type": "command",
+      "command": "pnpm lint --fix"
+    }
+  ]
+}
+```
+
+### Security Validation
+
+```json
+{
+  "matcher": "Read:src/auth/*|Edit:src/auth/*",
+  "hooks": [
+    {
+      "type": "command",
+      "command": "./scripts/security-check.sh"
+    }
+  ]
+}
+```
+
+### Test Runner
+
+```json
+{
+  "matcher": "Edit:*.test.*",
+  "hooks": [
+    {
+      "type": "command",
+      "command": "npm test -- --related"
+    }
+  ]
+}
+```
+
+### Communication Improvements
+
+Stop Claude from saying "You are right" repeatedly:
+
+```json
+{
+  "UserPromptSubmit": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "echo 'Skip acknowledgments - focus on the solution'"
+        }
+      ]
+    }
+  ]
+}
+```
+
+This hook reminds Claude to be more direct and action-focused in responses.
+
+## Hook Configuration Locations
+
+**Project-level:** `.claude/settings.json`
+
+```json
+{
+  "hooks": {
+    // Project-specific hooks here
+  }
+}
+```
+
+**Personal:** `~/.claude/settings.json`
+
+```json
+{
+  "hooks": {
+    // Your personal hooks across all projects
+  }
+}
+```
+
+## Hook Scripts Best Practices
+
+**Create focused scripts:**
+
+```bash
+#!/bin/bash
+# scripts/validate-auth.sh
+echo "Validating authentication code..."
+if grep -r "console.log" src/auth/; then
+  echo "❌ Found console.log in auth code"
+  exit 1
+fi
+echo "✅ Auth validation passed"
+```
+
+**Make them fast:**
+
+- Use specific file patterns
+- Avoid running heavy operations on every edit
+- Cache results when possible
+
+## Security Considerations
+
+**⚠️ Important:** Hooks execute shell commands. Only use hooks you trust.
+
+**Best practices:**
+
+- Review hook commands before adding them
+- Use absolute paths for scripts
+- Test hooks in safe environments first
+- Avoid hooks from untrusted sources
+
+## When Hooks Are Useful
+
+**Perfect for:**
+
+- Code quality enforcement (linting, type checking)
+- Running relevant tests after changes
+- Security validation for sensitive files
+- Custom workflow automation
+
+**Avoid for:**
+
+- Complex logic (keep hooks simple)
+- Slow operations that interrupt workflow
+- Operations that require user input
+
+## Troubleshooting Hooks
+
+**Hook not running?**
+
+1. Check JSON syntax in settings
+2. Verify command exists and is executable
+3. Test command manually first
+
+**Hook causing problems?**
+
+1. Check exit codes (non-zero stops Claude)
+2. Review hook output for errors
+3. Temporarily disable to isolate issues
+
+## Background Command Execution
+
+**New in Claude Code 1.0.71:** Run bash commands in the background without interrupting your Claude conversation.
+
+**Shortcut:** `Ctrl+b`
+
+**Example:**
+
+1. Press `Ctrl+b`
+2. Type: `npm run build`
+3. Command runs in background
+4. Continue working with Claude while build runs
+5. See results when complete
+
+**Perfect for:**
+
+- Long-running builds or tests
+- File watching processes
+- Background monitoring tasks
+
+## Getting Started
+
+1. **Start simple** - One hook for type checking
+2. **Test thoroughly** - Run commands manually first
+3. **Add gradually** - Don't overwhelm your workflow
+4. **Monitor impact** - Ensure hooks help, don't hinder
+
+**Example starter hook:**
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit:*.ts|Edit:*.tsx",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'TypeScript file edited'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Hooks turn Claude into a more integrated part of your development environment, automatically handling the routine tasks you'd normally do manually.
+
+---
+
+## Claude Code Blog Series
+
+**Previous:** [Part 7 - IDE Integration with VS Code and JetBrains](./2025-08-05--claude-code-part-7-ide-integration-vscode-jetbrains)
+**Next:** [Part 9 - Complete Development Workflows](./2025-08-07--claude-code-part-9-complete-development-workflows)
+
+**Full Series:**
+
+1. Part 1 - Getting Started and Installation
+2. Part 2 - CLAUDE.md Configuration Files
+3. Part 3 - Conversation Management and Context
+4. Part 4 - Slash Commands and Custom Commands
+5. Part 5 - MCP Servers and Tool Integration
+6. Part 6 - Subagents and Task Delegation
+7. Part 7 - IDE Integration with VS Code and JetBrains
+8. Part 8 - Hooks for Automated Quality Checks (this post)
+9. Part 9 - Complete Development Workflows
+10. Part 10 - Power User CLI Options and Scripting
+11. Part 11 - Troubleshooting and Recovery

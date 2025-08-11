@@ -1,0 +1,147 @@
+---
+title: "Claude Code: Part 6 - Subagents and Task Delegation"
+date: "2025-08-04"
+summary: "Learn how to delegate complex, multi-step analysis and implementation tasks to autonomous subagents. Let specialized AI agents handle comprehensive codebase analysis, feature planning, and systematic problem-solving while you focus on high-level decisions."
+tags:
+  [
+    "Claude Code",
+    "Subagents",
+    "Task Delegation",
+    "Autonomous Analysis",
+    "Complex Workflows",
+    "AI Collaboration",
+  ]
+---
+
+# Claude Code: Part 6 - Subagents and Task Delegation
+
+## The Problem
+
+You're facing a complex development challenge that requires deep, systematic analysis:
+
+- Refactoring a large legacy system with many interdependencies
+- Planning a major feature that touches multiple parts of your application
+- Investigating a performance issue that could have various root causes
+- Migrating to a new framework while maintaining functionality
+
+These tasks require hours of careful analysis, reading through dozens of files, understanding complex relationships, and maintaining context across multiple steps. It's exhausting to guide Claude through every single step, and you lose focus on the bigger picture while managing the details.
+
+## The Solution
+
+Subagents are specialized AI assistants that operate in separate contexts with focused expertise. They handle complex tasks autonomously while you focus on high-level decisions.
+
+**Learn more:** [Subagents Documentation](https://docs.anthropic.com/en/docs/claude-code/sub-agents)
+
+## How Subagents Work
+
+**Creation:**
+```bash
+/agents  # Interactive interface (recommended)
+# Or create files in .claude/agents/ or ~/.claude/agents/
+```
+
+**Usage:**
+```
+Use an agent to analyze the authentication system
+```
+
+**What happens:** ⏺ indicator shows subagent is working autonomously
+
+### Key Features
+
+- **Separate contexts** - Don't consume main conversation tokens
+- **Specialized expertise** - Custom system prompts for specific tasks  
+- **Tool access control** - Limited permissions for security
+- **Automatic selection** - Claude picks appropriate agent for task
+
+## Agent Types
+
+**Code Reviewer:** Proactively reviews code quality and security
+**Debugger:** Specializes in root cause analysis  
+**Data Scientist:** Focuses on SQL queries and data analysis
+
+## When to Use
+
+- Complex codebase analysis
+- Multi-step refactoring plans
+- Performance investigations
+- Architecture planning
+- Systematic code reviews
+
+
+## Best Practices
+
+- **Single responsibility** - One focused purpose per agent
+- **Clear system prompts** - Detailed instructions for agent behavior  
+- **Limited tool access** - Only necessary permissions
+- **Version control** - Track project-level agents in git
+
+## Example Usage
+
+```
+"Use an agent to analyze the user onboarding flow"
+"Use an agent to plan Redux to Zustand migration"  
+"Use an agent to review payment processing security"
+```
+
+## Working with Results
+
+- **Review outputs** - Subagent results may need refinement
+- **Break down plans** - Convert analysis into actionable steps
+- **Chain agents** - Use results for follow-up analysis
+
+## Task Definition Tips
+
+```
+❌ "Use an agent to look at the code"
+✅ "Use an agent to analyze authentication security and create modernization plan"
+```
+
+**Be specific:**
+- Define scope and constraints
+- Set success criteria
+- Request actionable output
+
+## Performance Benefits
+
+- **Context preservation** - Don't consume main conversation tokens
+- **Specialized analysis** - Custom expertise for specific tasks
+- **Autonomous work** - No need for step-by-step guidance
+- **Chain workflows** - Connect multiple agents for complex tasks
+
+## When NOT to Use
+
+- Simple questions
+- Interactive debugging
+- Small changes
+- Tasks needing frequent input
+
+## Getting Started
+
+1. Use `/agents` to create specialized agents
+2. Start with analysis tasks
+3. Be specific about scope and goals
+4. Review and iterate on results
+
+Subagents transform Claude into specialized AI analysts handling complex work autonomously.
+
+---
+
+## Claude Code Blog Series
+
+**Previous:** [Part 5 - MCP Servers and Tool Integration](./2025-08-03--claude-code-part-5-mcp-servers-tool-integration)
+**Next:** [Part 7 - IDE Integration with VS Code and JetBrains](./2025-08-05--claude-code-part-7-ide-integration-vscode-jetbrains)
+
+**Full Series:**
+
+1. Part 1 - Getting Started and Installation
+2. Part 2 - CLAUDE.md Configuration Files
+3. Part 3 - Conversation Management and Context
+4. Part 4 - Slash Commands and Custom Commands
+5. Part 5 - MCP Servers and Tool Integration
+6. Part 6 - Subagents and Task Delegation (this post)
+7. Part 7 - IDE Integration with VS Code and JetBrains
+8. Part 8 - Hooks for Automated Quality Checks
+9. Part 9 - Complete Development Workflows
+10. Part 10 - Power User CLI Options and Scripting
+11. Part 11 - Troubleshooting and Recovery

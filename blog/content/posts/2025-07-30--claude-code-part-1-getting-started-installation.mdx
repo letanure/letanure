@@ -1,0 +1,223 @@
+---
+title: "Claude Code: Part 1 - Getting Started and Installation"
+date: "2025-07-30"
+summary: "Meet Claude Code, your brilliant but overeager AI teammate. Learn how to set up and start working with Claude Code for software development, from installation to your first productive coding session."
+tags:
+  [
+    "Claude Code",
+    "AI Development",
+    "Getting Started",
+    "Development Tools",
+    "Tutorial",
+  ]
+---
+
+# Claude Code: Part 1 - Getting Started and Installation
+
+## The Problem
+
+You've heard about AI coding assistants, but every one you've tried feels like a disconnected chatbot. They can generate code snippets, but they don't understand your project, follow your patterns, or integrate with your actual development workflow.
+
+You need an AI teammate that works _with_ you, not just for you - one that understands your codebase, follows your coding standards, and becomes a true development partner rather than just another code completion tool.
+
+## Meet Your New Teammate
+
+Claude Code is like having a genius junior developer who took too many Red Bulls. Brilliant, capable of incredible work, but needs guidance on your specific project and coding patterns. The difference is that this teammate learns your project inside and out and never gets tired.
+
+**What makes Claude Code different:**
+
+- **Full codebase understanding** - Reads and comprehends your entire project
+- **Project-aware** - Follows your existing patterns and conventions
+- **Tool integration** - Works with your development tools and services
+- **Contextual memory** - Remembers project-specific rules and preferences
+
+## Installation
+
+**Prerequisites:**
+
+- Node.js (version 18 or higher)
+- npm or yarn package manager
+
+**Install globally:**
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+**Verify installation:**
+
+```bash
+claude --version
+```
+
+**Start Claude Code:**
+
+```bash
+# In your project directory
+cd your-project
+claude
+```
+
+## First Session Setup
+
+When you first run Claude Code:
+
+1. **Authentication** - Follow the prompts to sign in
+2. **Project detection** - Claude analyzes your current directory
+3. **Initial conversation** - Start with a simple task to test everything works
+
+**Example first interaction:**
+
+```
+You: "Analyze this project and tell me what kind of application this is"
+Claude: [Examines your files and provides project overview]
+```
+
+## Key Features Overview
+
+### Codebase Analysis
+
+Claude can read and understand your entire project:
+
+- **Architecture patterns** - Identifies frameworks and structures
+- **Coding conventions** - Learns your style preferences
+- **Dependencies** - Understands your tech stack
+- **Project context** - Knows what your application does
+
+### Intelligent Code Generation
+
+Goes beyond simple snippets:
+
+- **Pattern matching** - Follows your existing code patterns
+- **Context-aware** - Considers surrounding code and architecture
+- **Integration-focused** - Creates code that fits your project
+
+### Development Workflow Integration
+
+Works with your existing tools:
+
+- **Git integration** - Understands version control context
+- **File operations** - Reads, writes, and modifies files
+- **Build tools** - Runs tests, builds, and other project commands
+- **IDE compatibility** - Works alongside your favorite editor
+
+## Your First Productive Session
+
+**Start with exploration:**
+
+```
+"Walk me through the main components of this React application"
+"Show me how authentication is currently handled"
+"What testing patterns are used in this project?"
+```
+
+**Move to practical tasks:**
+
+```
+"Add error handling to the user registration form"
+"Create a new component for displaying user notifications"
+"Fix the TypeScript errors in the payment module"
+```
+
+**Collaborate on bigger features:**
+
+```
+"Help me plan and implement a user dashboard feature"
+"Review and refactor the API service layer"
+"Add comprehensive logging to the authentication flow"
+```
+
+## Best Practices for New Users
+
+### Start Small
+
+- Begin with simple, isolated tasks
+- Test Claude's understanding with questions
+- Gradually increase task complexity
+
+### Provide Context
+
+- Explain your project's purpose and users
+- Share relevant business requirements
+- Mention any constraints or preferences
+
+### Review Everything
+
+- Always review generated code before using it
+- Test changes in development environment
+- Understand what Claude built, don't just copy-paste
+
+### Iterate and Improve
+
+- Ask follow-up questions for clarification
+- Request modifications when something isn't quite right
+- Build on previous work in the same conversation
+
+## Common Beginner Questions
+
+**Q: How much of my code can Claude see?**
+A: Claude can read any files in your project directory when needed, but only accesses files relevant to your current task.
+
+**Q: Will Claude make changes without asking?**
+A: Claude asks for permission before modifying files and shows you exactly what changes it will make.
+
+**Q: Can Claude learn my project's specific patterns?**
+A: Yes! Claude learns your coding style, architecture patterns, and project conventions through analysis and your feedback.
+
+**Q: Is my code sent to external servers?**
+A: Claude Code follows Anthropic's privacy policies. Check the latest privacy documentation for specifics about data handling.
+
+## Troubleshooting Common Issues
+
+**"Command not found" error:**
+
+```bash
+# Try using npx instead
+npx @anthropic-ai/claude-code
+
+# Or check your PATH
+echo $PATH
+```
+
+**Claude seems confused about my project:**
+
+- Make sure you're in the correct directory
+- Try asking specific questions about visible files
+- Provide more context about your project structure
+
+**Authentication issues:**
+
+- Check your internet connection
+- Try logging out and back in: `claude logout` then `claude login`
+
+## What's Next?
+
+Now that you have Claude Code running, you're ready to explore deeper features:
+
+- **Project Configuration** - Learn how to customize Claude for your specific project
+- **Advanced Commands** - Discover powerful built-in commands
+- **Workflow Integration** - Connect Claude with your development tools
+
+The goal is to move from "Claude as a tool" to "Claude as a teammate" - an AI partner that understands your project deeply and helps you build better software faster.
+
+---
+
+## Claude Code Blog Series
+
+This is Part 1 of our comprehensive Claude Code guide series. Each post builds on the previous ones, taking you from beginner to power user.
+
+**Next:** [Part 2 - CLAUDE.md Configuration Files](./2025-07-31--claude-code-part-2-claude-md-configuration)
+
+**Full Series:**
+
+1. Part 1 - Getting Started and Installation (this post)
+2. Part 2 - CLAUDE.md Configuration Files
+3. Part 3 - Conversation Management and Context
+4. Part 4 - Slash Commands and Custom Commands
+5. Part 5 - MCP Servers and Tool Integration
+6. Part 6 - Subagents and Task Delegation
+7. Part 7 - IDE Integration with VS Code and JetBrains
+8. Part 8 - Hooks for Automated Quality Checks
+9. Part 9 - Complete Development Workflows
+10. Part 10 - Power User CLI Options and Scripting
+11. Part 11 - Troubleshooting and Recovery

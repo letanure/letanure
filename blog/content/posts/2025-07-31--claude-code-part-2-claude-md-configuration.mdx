@@ -1,0 +1,145 @@
+---
+title: "Claude Code: Part 2 - CLAUDE.md Configuration Files"
+date: "2025-07-31"
+summary: "Learn how to use CLAUDE.md files to guide Claude Code's behavior, set project rules, and create consistent development patterns. Includes memory hierarchy, multi-AI tool sharing, and team collaboration strategies."
+tags:
+  [
+    "Claude Code",
+    "Configuration",
+    "CLAUDE.md",
+    "Project Management",
+    "AI Development",
+    "Team Collaboration",
+  ]
+---
+
+# Claude Code: Part 2 - CLAUDE.md Configuration Files
+
+## The Problem
+
+You've started using Claude Code, and it's incredibly capable. Too capable. It suggests complex architectural changes when you wanted a simple bug fix. It writes elaborate documentation when you needed a quick comment. It refactors your entire component when you asked it to fix one function.
+
+Claude is like an enthusiastic new team member who doesn't yet understand your project's constraints, coding standards, or the difference between "quick fix" and "complete rewrite."
+
+You need a way to teach Claude about your project's specific context, rules, and boundaries.
+
+## The Solution
+
+CLAUDE.md files act as a persistent memory system and rule book for your project. Think of it as onboarding documentation that teaches Claude about your project's specific needs, just like you'd brief a new human developer.
+
+## How CLAUDE.md Works
+
+Place a `CLAUDE.md` file in your project root with rules and context:
+
+```markdown
+# Project: E-commerce Platform
+
+## Tech Stack
+- Next.js, TypeScript, Tailwind, Prisma
+
+## Rules
+- Use TypeScript strict mode
+- Follow patterns in src/components/
+- Functional components only
+```
+
+Claude now follows your project-specific rules automatically.
+
+## Memory Hierarchy
+
+Claude Code respects a hierarchy of configuration files, with more specific files overriding general ones:
+
+### Configuration Hierarchy
+
+1. **Personal:** `~/.claude/CLAUDE.md` - Your preferences across all projects
+2. **Project:** `./CLAUDE.md` - Team rules for this project
+3. **Local:** `./CLAUDE.local.md` - Personal overrides (gitignored)
+4. **Folder:** `./src/auth/CLAUDE.md` - Module-specific rules
+
+More specific files override general ones.
+
+## Multi-AI Tool Sharing
+
+Want to use Claude Code alongside other AI tools? The CLAUDE.md approach works for now, but there's an initiative to create a universal standard called AGENT.md. Learn more at [ampcode.com/AGENT.md](https://ampcode.com/AGENT.md).
+
+For now, you can create a symlink to share the same configuration:
+
+```bash
+# Create shared memory file
+mkdir ~/.ai-tools
+touch ~/.ai-tools/shared-memory.md
+
+# Link it as CLAUDE.md
+ln -s ~/.ai-tools/shared-memory.md ./CLAUDE.md
+
+# Link for other AI tools
+ln -s ~/.ai-tools/shared-memory.md ./AI-CONTEXT.md
+ln -s ~/.ai-tools/shared-memory.md ./CURSOR-RULES.md
+```
+
+**Benefits:**
+
+- One source of truth for project context
+- Consistent behavior across AI tools
+- Easy maintenance and updates
+
+## Writing Effective Rules
+
+**Be specific and concise:**
+```markdown
+❌ "Use good coding practices"
+✅ "Functional components, TypeScript, max 200 lines"
+```
+
+**Set clear boundaries:**
+- Never modify payment code without review
+- No new packages without approval
+- No breaking API changes
+
+
+## Token Consumption Warning
+
+⚠️ **Keep CLAUDE.md files under 100 lines!** They're included in every interaction.
+
+**Write concisely:**
+```markdown
+❌ "Always ensure components use hooks rather than classes"
+✅ "Functional components only"
+```
+
+## Best Practices
+
+- Start with 5-10 essential rules
+- Remove outdated rules regularly  
+- Test rules work: "Create a component following our patterns"
+- Review monthly, prune verbosity
+
+## Getting Started
+
+1. Create `CLAUDE.md` with 5-10 essential rules
+2. Test it works
+3. Keep it under 100 lines
+4. Update monthly
+
+CLAUDE.md transforms Claude into a project-aware teammate.
+
+---
+
+## Claude Code Blog Series
+
+**Previous:** [Part 1 - Getting Started and Installation](./2025-07-30--claude-code-part-1-getting-started-installation)
+**Next:** [Part 3 - Conversation Management and Context](./2025-08-01--claude-code-part-3-conversation-management-context)
+
+**Full Series:**
+
+1. Part 1 - Getting Started and Installation
+2. Part 2 - CLAUDE.md Configuration Files (this post)
+3. Part 3 - Conversation Management and Context
+4. Part 4 - Slash Commands and Custom Commands
+5. Part 5 - MCP Servers and Tool Integration
+6. Part 6 - Subagents and Task Delegation
+7. Part 7 - IDE Integration with VS Code and JetBrains
+8. Part 8 - Hooks for Automated Quality Checks
+9. Part 9 - Complete Development Workflows
+10. Part 10 - Power User CLI Options and Scripting
+11. Part 11 - Troubleshooting and Recovery

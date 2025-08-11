@@ -1,0 +1,109 @@
+---
+title: "Claude Code: Part 4 - Slash Commands and Custom Commands"
+date: "2025-08-02"
+summary: "Stop repeating the same instructions every day. Learn to use built-in slash commands and create custom commands that automate your most common Claude Code workflows and development tasks."
+tags:
+  [
+    "Claude Code",
+    "Slash Commands",
+    "Automation",
+    "Custom Commands",
+    "Productivity",
+    "Workflow Optimization",
+  ]
+---
+
+# Claude Code: Part 4 - Slash Commands and Custom Commands
+
+## The Problem
+
+You type the same instructions to Claude every day: "Run tests", "Check TypeScript errors", "Review changes". Repetitive and wasteful.
+
+## The Solution
+
+Slash commands turn repeated instructions into shortcuts. `/test` replaces paragraphs of testing instructions.
+
+## Built-in Commands
+
+```bash
+/clear      # Fresh start
+/compact    # Compress history
+/help       # Show commands
+/mcp        # MCP servers
+/ide        # IDE integration
+/exit       # End session
+```
+
+## Custom Commands
+
+Create `.claude/commands/test-all.md`:
+
+```markdown
+1. Run pnpm type:check
+2. Run pnpm lint
+3. Run pnpm test
+4. Report issues
+```
+
+Now `/test-all` runs everything.
+
+### Example Commands
+
+`.claude/commands/morning.md`: Daily setup (git pull, tests, status)
+`.claude/commands/ready.md`: Pre-commit checks
+`.claude/commands/review.md`: PR preparation
+
+
+## Organization
+
+Group commands by phase (planning/, development/, deployment/) or domain (frontend/, backend/, testing/).
+
+## Best Practices
+
+- Be specific: "Check TypeScript errors in src/" not "Check code"
+- Include success criteria: "0 test failures, 80% coverage"
+- Keep commands under 10 steps
+- Use numbered lists for clarity
+
+## Sharing Commands
+
+- **Team:** Commit `.claude/commands/` to git
+- **Personal:** Use `~/.claude/commands/` globally
+
+## Advanced Features
+
+Commands can include:
+- Parameters: "Ask for feature name, create feature/[name]"
+- Conditionals: "If production, run security scan"
+- Context awareness: "Analyze current file"
+
+
+## Getting Started
+
+1. Identify what you repeat daily
+2. Create `.claude/commands/[name].md`
+3. Keep instructions under 10 steps
+4. Test and refine
+
+Slash commands eliminate repetitive instructions.
+
+---
+
+## Claude Code Blog Series
+
+**Previous:** [Part 3 - Conversation Management and Context](./2025-08-01--claude-code-part-3-conversation-management-context)
+**Next:** [Part 5 - MCP Servers and Tool Integration](./2025-08-03--claude-code-part-5-mcp-servers-tool-integration)
+
+**Full Series:**
+
+1. Part 1 - Getting Started and Installation
+2. Part 2 - CLAUDE.md Configuration Files
+3. Part 3 - Conversation Management and Context
+4. Part 4 - Slash Commands and Custom Commands (this post)
+5. Part 5 - MCP Servers and Tool Integration
+6. Part 6 - Subagents and Task Delegation
+7. Part 7 - IDE Integration with VS Code and JetBrains
+8. Part 8 - Hooks for Automated Quality Checks
+9. Part 9 - Complete Development Workflows
+10. Part 10 - Power User CLI Options and Scripting
+11. Part 11 - Troubleshooting and Recovery
