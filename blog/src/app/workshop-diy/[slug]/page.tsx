@@ -3,6 +3,7 @@ import { Tag } from "@/components/ui/Tag";
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXContent } from "@/components/MDXContent";
 import { workshopItems } from "@/data/workshopItems";
+import { notFound } from "next/navigation";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -13,13 +14,7 @@ export default async function WorkshopItemPage({ params }: Props) {
   const item = workshopItems.find((item) => item.slug === slug);
 
   if (!item) {
-    return (
-      <div className="max-w-4xl mx-auto px-4">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-8">
-          Workshop not found
-        </h1>
-      </div>
-    );
+    notFound();
   }
 
   const mdxSource = await serialize(item.content || '');

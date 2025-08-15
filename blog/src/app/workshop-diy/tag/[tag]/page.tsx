@@ -1,5 +1,6 @@
 import { WorkshopItem } from "@/components/WorkshopItem";
 import { workshopItems } from "@/data/workshopItems";
+import { notFound } from "next/navigation";
 
 interface Props {
   params: Promise<{ tag: string }>;
@@ -10,6 +11,10 @@ export default async function TagPage({ params }: Props) {
   const filteredItems = workshopItems.filter((item) =>
     item.tags.includes(tag)
   );
+
+  if (filteredItems.length === 0) {
+    notFound();
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4">
