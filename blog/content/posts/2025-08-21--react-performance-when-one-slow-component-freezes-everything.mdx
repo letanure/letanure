@@ -16,6 +16,10 @@ tags:
 
 # React Performance: When One Slow Component Freezes Everything
 
+So, this came up in an interview recently: there was a single **slow component** I was **not allowed to change**.
+I fixed it with a quick `React.memo` wrap during the interview, but later I thought, hey, why stop there?
+Let me share how I handled it and some other ways to tackle this problem.
+
 ## TL;DR
 
 Got a slow component that's freezing your app? Can't touch its code? Here's your survival kit:
@@ -29,10 +33,6 @@ Got a slow component that's freezing your app? Can't touch its code? Here's your
 Try the solutions yourself in the sandbox below
 
 [Open in CodeSandbox](https://codesandbox.io/embed/react-slow-component-freeze-demo?fontsize=14&hidenavigation=1&theme=dark)
-
-So, this came up in an interview recently: there was a single **slow component** I was **not allowed to change**.
-I fixed it with a quick `React.memo` wrap during the interview, but later I thought, hey, why stop there?
-Let me share how I handled it and some other ways to tackle this problem.
 
 ## The Problem
 
