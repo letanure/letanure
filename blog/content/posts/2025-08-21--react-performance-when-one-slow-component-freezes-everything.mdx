@@ -18,11 +18,15 @@ tags:
 
 ## TL;DR
 
-- Use `React.memo` to prevent unnecessary re-renders if props don't change.
-- Isolate state by splitting slow and fast parts into separate subtrees.
-- Lazy load the slow component with `React.lazy` and `Suspense` for faster initial paint.
-- Defer non-urgent updates with `useDeferredValue` or `useTransition` for smoother typing.
-- For extreme cases, use stronger isolation (iframe, web worker, virtualization).
+Got a slow component that's freezing your app? Can't touch its code? Here's your survival kit:
+
+- **`React.memo`** - Stop pointless re-renders when props haven't changed
+- **State isolation** - Move the slow stuff away from your fast UI
+- **Lazy loading** - Make it someone else's problem (later)
+- **`useDeferredValue`** - Let users type while the slow component catches up
+- **Nuclear options** - iframe, web worker, or virtual scrolling when all else fails
+
+Try the solutions yourself in the sandbox below
 
 [Open in CodeSandbox](https://codesandbox.io/embed/react-slow-component-freeze-demo?fontsize=14&hidenavigation=1&theme=dark)
 
