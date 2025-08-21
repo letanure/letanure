@@ -1,0 +1,203 @@
+---
+title: "React Performance: When One Slow Component Freezes Everything"
+date: "2025-08-21"
+summary: "How to keep your React app responsive when a slow component you cannot change is freezing the UI. Strategies include memoization, isolating state, lazy loading, and using concurrent features to minimize the impact of unoptimized components."
+tags:
+  [
+    "React",
+    "Performance",
+    "Optimization",
+    "Frontend",
+    "JavaScript",
+    "Memoization",
+    "Lazy Loading",
+  ]
+---
+
+# React Performance: When One Slow Component Freezes Everything
+
+So, this came up in an interview recently: there was a single **slow component** I was **not allowed to change**.
+I fixed it with a quick `React.memo` wrap during the interview, but later I thought, hey, why stop there?
+Let me share how I handled it and some other ways to tackle this problem.
+
+## The Problem
+
+There’s a slow component I can’t change. My job is to keep the UI responsive while it exists on the page.
+
+Goals:
+
+- Keep typing fast.
+- Avoid re-rendering the slow component on every keystroke.
+- Improve initial load if possible.
+
+```tsx
+function App() {
+  const [value, setValue] = React.useState("");
+  return (
+    <div>
+      <input value={value} onChange={(e) => setValue(e.target.value)} />
+      <VerySlowComponent />
+      <span>Length: {value.length}</span>
+    </div>
+  );
+}
+```
+
+We **cannot** edit `<VerySlowComponent />`. Everything else is fair game.
+
+## Solutions
+
+### 1. `React.memo` (quick win)
+
+Wrap your slow component in `React.memo` to tell React, “Hey, only re-render me if my props actually change.”
+This works great as long as you don’t pass any changing props.
+It’s like putting a “Do Not Disturb” sign on your component’s door.
+
+```jsx
+const SlowComponent = React.memo(function SlowComponent({ data }) {
+  const result = heavyCalculation(data);
+  return <div>{result}</div>;
+});
+```
+
+Now, `SlowComponent` chills and only wakes up when `data` changes, not every time unrelated state updates happen. Nice!
+
+### 2. Isolate State
+
+Move stateful input into a separate subtree so the slow component never re-renders. Keep the input and its state in a different branch; render the slow part as a sibling, memoized. No props flow from the input to the slow component, so it stays idle.
+
+```tsx
+// Isolate state in a sibling subtree
+import { memo, useState } from "react";
+
+const MemoSlow = memo(VerySlowComponent);
+
+function FastPanel() {
+  const [value, setValue] = useState("");
+  return (
+    <>
+      <input value={value} onChange={(e) => setValue(e.target.value)} />
+      <div>Length: {value.length}</div>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <div style={{ display: "grid", gap: 12 }}>
+      <MemoSlow />
+      <FastPanel />
+    </div>
+  );
+}
+```
+
+Because the FastPanel’s state changes don’t flow into MemoSlow, the slow component never re-renders.
+
+### 3. Lazy Load the Slow Component
+
+Why load the slow component right away if you don’t need it? Use `React.lazy` and `Suspense` to load it only when you want it (saving your app from feeling sluggish at startup).
+
+```jsx
+const SlowComponent = React.lazy(() => import("./SlowComponent"));
+
+function App() {
+  const [show, setShow] = React.useState(false);
+
+  return (
+    <>
+      <button onClick={() => setShow(!show)}>Toggle Slow Component</button>
+      <React.Suspense fallback={<div>Loading...</div>}>
+        {show && <SlowComponent />}
+      </React.Suspense>
+    </>
+  );
+}
+```
+
+This way, your app loads faster and only asks the slow component to join the party when needed. This does not stop re-renders later; it improves first paint.
+
+### 4. Defer Non-Urgent Updates
+
+Another option is to defer updates so typing stays smooth. In this example, we still render the slow component but lazy load it, and pass in the input value. Typing stays responsive while the slow part shows up with a loading fallback.
+
+```tsx
+import { Suspense, lazy, useState } from "react";
+
+const Slow = lazy(() =>
+  import("./shared/VerySlowComponent").then((m) => ({
+    default: m.VerySlowComponent,
+  }))
+);
+
+function App() {
+  const [value, setValue] = useState("");
+
+  return (
+    <div style={{ display: "grid", gap: 8 }}>
+      <input
+        placeholder="Type something"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+      <Suspense fallback={<p>Loading slow part…</p>}>
+        <Slow query={value} />
+      </Suspense>
+      <div>Length: {value.length}</div>
+    </div>
+  );
+}
+```
+
+This way you keep the input responsive, get a nice loading state, and still handle the slow component without blocking typing.
+
+### 5. Defer with `useDeferredValue` and `useTransition`
+
+React 18 gives us concurrent features to mark updates as non-urgent. With `useDeferredValue` and `useTransition`, you can keep typing responsive while slow components update a bit later.
+
+```tsx
+import { useState, useDeferredValue, useTransition } from "react";
+import { VerySlowComponent } from "./shared/VerySlowComponent";
+
+export default function DeferTransition() {
+  const [value, setValue] = useState("");
+  const deferred = useDeferredValue(value);
+  const [, startTransition] = useTransition();
+
+  return (
+    <div>
+      <input
+        value={value}
+        onChange={(e) => {
+          const v = e.target.value;
+          startTransition(() => setValue(v)); // mark as non-urgent
+        }}
+      />
+      <div>Length (deferred): {deferred.length}</div>
+      <VerySlowComponent />
+    </div>
+  );
+}
+```
+
+This lets React prioritize the input first, then update the slow part in the background, keeping the UI feeling snappy.
+
+### 6. Stronger Isolation Techniques
+
+If your slow component is still being a party pooper, think about isolating it completely:
+
+- Put it in an iframe or a web worker (because sometimes you need to put it in timeout).
+- Use virtualization libraries like `react-window` or `react-virtualized` to handle huge lists efficiently.
+- Break the component into smaller, less scary pieces.
+
+### Try order
+
+1. `memo` if props are stable
+2. Isolate state into a sibling subtree
+3. Lazy load for faster first paint
+4. Defer with useDeferredValue/useTransition
+5. Stronger isolation (portals, separate root)
+
+## Conclusion
+
+When one slow component tries to hog the spotlight and freeze your whole app, don’t panic! With some smart state management, memoization, lazy loading, and React’s fancy concurrent features, you can keep your app smooth and your users happy. Your React app deserves to be fast — no potato-powered freezes allowed!
