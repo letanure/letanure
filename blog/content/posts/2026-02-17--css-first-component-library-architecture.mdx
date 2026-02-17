@@ -1,0 +1,87 @@
+---
+title: "I'm Building a CSS-Only Component Library (For Fun)"
+date: "2026-02-17"
+summary: "In an era where AI spits out Tailwind for everything, I decided to build a CSS-only component library from scratch. Here's why and how."
+tags:
+  [
+    "CSS",
+    "Architecture",
+    "Design Systems",
+    "Side Project",
+    "Component Library",
+  ]
+---
+
+# I'm Building a CSS-Only Component Library (For Fun)
+
+Ask any AI to build you a UI and you'll get Tailwind. Every single time. `className="flex items-center justify-between p-4 rounded-lg shadow-md bg-white dark:bg-gray-800"` -- you know the drill.
+
+There's nothing wrong with Tailwind. But I wanted to go the other direction. What if the component library was just CSS? No React. No Vue. No runtime. A single CSS file you drop into any project and suddenly you have buttons, forms, cards, modals, everything.
+
+So I started building one. Mostly for fun, partly to learn, and a little bit because I think the idea has legs.
+
+## The Pitch
+
+The core idea: build the visual layer once in pure CSS, then reuse it everywhere. Want React components? Wrap the classes. Vue? Same classes, different wrapper. Angular, Svelte, htmx, plain HTML? Same CSS file, same classes.
+
+```html
+<button class="ui-button ui-button--primary">Click me</button>
+```
+
+That works today in every framework that exists and every framework that will exist next year.
+
+But I didn't want just a bag of utility classes. I wanted real components with a structured API -- modifiers, elements, tokens, documentation, visual tests. Something that feels like a proper design system, not a stylesheet.
+
+## How I Got to Cascade Layers
+
+I started the way most people would: reset at the top, base styles, then components, then utilities. Classic ITCSS triangle. But ITCSS manages priority through selector specificity, and specificity is a nightmare at scale. You end up writing increasingly specific selectors just to override something simple.
+
+CSS Cascade Layers fix this. One line declares the priority order:
+
+```scss
+@layer reset, tokens, base, primitives, components.styles, components.tokens, utilities, themes;
+```
+
+Done. Utilities always beat components. Themes always beat utilities. No specificity wars, no `!important`. The architecture emerged naturally from ITCSS but with modern tools doing the heavy lifting.
+
+## The Theme Problem
+
+Here's what I'm really trying to solve: most component libraries bake in a visual identity. Material UI looks like Material UI. Mantine looks like Mantine. You can tweak colors, sure, but the bones are recognizable.
+
+I want the same code to produce completely different visual outputs. Material's rounded buttons or sharp corporate ones. Spacious layouts or dense data-heavy interfaces. All driven by tokens, not by rewriting components.
+
+Every component uses a three-tier fallback:
+
+```scss
+var(--ui-button-height, var(--ui-row-2, #{t.$row-2}))
+```
+
+Override the component token for one button. Override the global token for all buttons. Or do nothing and get sensible defaults. Swap a theme file and the whole library transforms.
+
+That's the goal, at least. Early days.
+
+## What's Actually Built
+
+60+ components across the usual categories -- buttons, forms, cards, tables, modals, navigation. 16 layout primitives for common page structures. Utility classes for spacing, display, text.
+
+Some things I'm proud of:
+
+- **Drop a folder, get a component.** Create the files in the right directory and the build system discovers it, compiles it, generates docs, adds it to the site. No registration, no config.
+- **Visual regression tests in Docker.** Every component has a Playwright screenshot test. Change a token and you see exactly what breaks before merging.
+- **Linters that enforce the architecture.** Hardcoded a color value? The linter catches it. Used a token without a fallback? Caught. Put a global token in the wrong layer? Caught.
+
+## What's Not Great
+
+**The learning curve is real.** The token system has three layers, components split across two cascade layers, there's BEM naming, logical properties, SCSS variables. It's a lot to hold in your head for a first contribution.
+
+**No JavaScript.** A toggle switch looks right but doesn't toggle. A dropdown renders beautifully but doesn't open. The CSS handles appearance; you wire up behavior. Framework wrappers will solve this eventually, but they don't exist yet.
+
+**Docs are verbose.** Documentation is driven by JSON config files, which is great for consistency and terrible for writing speed.
+
+## Why Bother?
+
+Honestly? It's fun. I'm learning a ton about cascade layers, modern CSS features, token architecture, and what it takes to build something that scales to 60+ components without turning into a mess.
+
+Will it be useful to anyone else? Maybe. The framework-agnostic angle is genuinely appealing. CSS doesn't break between major versions. It doesn't need migration guides. It just works.
+
+And if nothing else, next time an AI suggests Tailwind, I'll have an alternative ready.
