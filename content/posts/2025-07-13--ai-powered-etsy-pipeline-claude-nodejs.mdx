@@ -119,6 +119,7 @@ So, the final plan, after integrating all was:
 Drop a lot of images in a folder, run a terminal script.
 
 My app will read all images, and for each one:
+
 - Resize the image to low quality, to send to OpenAI, saving tokens
 - Resize to a 2000x2000 px to send to photoroom, to generate one snapshot, one live photo, one image without background
 - Send the smallest image to OpenAI, generate the specific data with Zod format, validated

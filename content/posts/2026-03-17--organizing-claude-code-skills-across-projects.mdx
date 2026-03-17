@@ -31,7 +31,7 @@ I installed every Claude Code plugin that looked useful. Marketing skills, front
 
 Everything lives in one private git repo. Symlinked into `~/.claude/` so Claude discovers it automatically.
 
-```
+```text
 claude-setup/
   skills/              → symlinked to ~/.claude/skills/
     me:write-like-me/
@@ -65,7 +65,7 @@ With 130 skills from 8 sources, I could not tell which were mine, which came fro
 Prefixes fixed this:
 
 | Prefix | Source |
-|--------|--------|
+| --- | --- |
 | `me:` | My personal skills |
 | `mapo:` | Matt Pocock vendor skills |
 | `superpowers:` | Plugin |
@@ -128,7 +128,7 @@ Skills eat context when loaded. A 200-line skill burns tokens every time you inv
 The rule I follow now:
 
 | Part | Target | When loaded |
-|------|--------|-------------|
+| --- | --- | --- |
 | Description (frontmatter) | 1-2 sentences | Every session, always |
 | SKILL.md body | Under 80 lines | When invoked |
 | references/ directory | Unlimited | On demand |

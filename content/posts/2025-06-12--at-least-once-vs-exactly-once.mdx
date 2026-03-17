@@ -5,7 +5,7 @@ summary: Learn about message delivery guarantees in distributed systems. Underst
 tags: ['system design', 'backend', 'queues', 'supabase', 'jobs']
 ---
 
-# At-Least-Once vs. Exactly-Once: Understanding Message Delivery Guarantees
+## At-Least-Once vs. Exactly-Once: Understanding Message Delivery Guarantees
 
 In distributed systems, when performing critical operations such as webhook delivery, job processing, or payment recording, a fundamental question arises:
 
@@ -87,6 +87,7 @@ export async function POST(req: Request) {
 ```
 
 This implementation ensures that:
+
 1. Duplicate events are detected and handled gracefully
 2. Event processing is tracked and can be monitored
 3. Failures are properly recorded
@@ -118,21 +119,25 @@ Even major platforms like Stripe, Kafka, and AWS don't implement exactly-once de
 These delivery guarantees are crucial in several scenarios:
 
 ### 1. Webhook Delivery
+
 - External service notifications
 - Payment processing callbacks
 - Integration events
 
 ### 2. Background Job Processing
+
 - Email sending
 - Report generation
 - Data synchronization
 
 ### 3. Side Effects
+
 - Inventory updates
 - Receipt generation
 - Payout processing
 
 ### 4. Event Processing
+
 - User notifications
 - Audit logging
 - System state changes
@@ -165,10 +170,10 @@ These delivery guarantees are crucial in several scenarios:
 
 ## Summary
 
-| Delivery Type     | Guarantees            | Implementation Complexity | Use Cases                |
-|-------------------|------------------------|---------------------------|--------------------------|
-| At-Least-Once     | Will execute ≥1 times  | Moderate                 | Most production systems  |
-| Exactly-Once      | Will execute =1 time   | High                     | Rare, specific cases     |
+| Delivery Type | Guarantees | Implementation Complexity | Use Cases |
+| --- | --- | --- | --- |
+| At-Least-Once | Will execute ≥1 times | Moderate | Most production systems |
+| Exactly-Once | Will execute =1 time | High | Rare, specific cases |
 
 For most production systems, the recommended approach is:
 
