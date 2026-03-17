@@ -1,0 +1,133 @@
+---
+title: I Built Yet Another Planning Poker App and I Don't Care
+date: 2026-03-17
+summary: There are 200 planning poker tools. I built one anyway — because I liked some card illustrations, wanted to play with WebSockets, and needed an excuse to ship something fun with Claude Code.
+tags: ['side-project', 'partykit', 'websockets', 'cloudflare', 'react', 'claude-code', 'posthog']
+---
+
+I forked a GitHub repo 7 years ago because I liked how the cards looked.
+
+[Redbooth's Scrum Poker Cards](https://github.com/redbooth/scrum-poker-cards) — a set of beautifully illustrated planning poker cards. Each card has an idiom matching the effort: "Piece of cake" for 2, "Here be dragons" for the unknown, "Monster task" for 100. They even had a platypus for 5, because *ornitorinco* rhymes with *cinco* in Spanish.
+
+The repo was just SVGs and a README. I starred it, forked it, and forgot about it.
+
+## The idea that wouldn't die
+
+Every few months I'd see the repo in my GitHub profile and think: "These cards should be a real app." Then I'd close the tab and do something else.
+
+Last week I ran out of excuses. I wanted to:
+
+- **Play with WebSockets** — specifically [PartyKit](https://partykit.io/), which runs on Cloudflare Workers
+- **Try PostHog** — anonymous analytics without the Google Analytics guilt
+- **Deploy something on Cloudflare Pages** — been using it for static sites, never for a real app
+- **Build with Claude Code** — see how far AI pair programming goes on a greenfield project
+- **Ship something I'd actually use** — my team does sprint planning every two weeks
+
+Yes, there are 200 planning poker tools already. I don't care. I'm building for fun.
+
+## What I built
+
+[scrumpoker.work](https://scrumpoker.work) — a free, real-time planning poker app with the original Redbooth card illustrations.
+
+**The basics work:**
+- Create a session, get a shareable URL
+- Anyone joins by entering their name — no accounts
+- Pick a card, host reveals, see results with stats
+- Sessions are ephemeral — nothing stored anywhere
+
+**The fun parts:**
+- When you select a card, the idiom floats up like you're calling it out: *"Here be dragons!"*
+- Vote reveal shows contextual messages: "Ship it! 🚀" when everyone agrees, "We have absolutely no idea 🤯" when votes spread from 1 to 100
+- Confidence toggle — vote 8 with "confident" vs vote 8 with "no idea" tells the team very different things
+- Outlier detection — if you vote 13 when everyone else voted 3, the app asks "why?"
+- Topic queue — host adds stories upfront, team votes through them in order
+
+## The tech stack
+
+| What | Why |
+|------|-----|
+| React + TypeScript + Vite | Fast, typed, no framework overhead |
+| Tailwind CSS + Framer Motion | Utility styles + playful animations |
+| PartyKit | WebSocket rooms on Cloudflare Workers. One file (`party/poker.ts`) handles all real-time logic |
+| Cloudflare Pages | Static hosting, edge-deployed, free |
+| PostHog | Anonymous usage analytics, memory persistence (no cookies) |
+| Sentry | Error tracking for when things break in production |
+
+### PartyKit is the interesting one
+
+I've built WebSocket servers before — with Socket.io, with raw `ws`, even with Durable Objects directly. PartyKit abstracts all of it into something that feels like writing a React component.
+
+One class. `onConnect`, `onMessage`, `onClose`. Room state lives in memory. Broadcasting is a for-loop. The whole server is [one file](https://github.com/letanure/Scrum-poker-cards/blob/master/party/poker.ts), ~300 lines, handling:
+
+- Player join/leave with stable identity (UUID in localStorage)
+- Vote collection and reveal
+- Host management and transfer
+- Topic queue navigation
+- Kick with confirmation
+- Auto-reveal when all players vote
+- 5-second grace period for reconnection (tab switch, reload)
+
+Deploy is `npx partykit deploy`. That's it. It runs on Cloudflare's edge globally.
+
+### The reconnection problem
+
+The hardest part wasn't the features — it was handling reconnections. When a user reloads their browser, their WebSocket connection dies and a new one opens. Every user has a connection ID that changes on reconnect. If you use the connection ID as identity (like I did initially), the server thinks it's a new player every time.
+
+I went through 5 iterations:
+1. Name matching (fragile — what about duplicate names?)
+2. Grace periods with name lookup (race conditions)
+3. "Replaced" messages to old tabs (infinite reconnection loops)
+4. BroadcastChannel for tab coordination (helped, but didn't fix the root)
+5. **Stable UUID in localStorage** — the actual fix
+
+The final approach: each browser gets a UUID stored in `localStorage`. The server maps `stableId → player`, not `connectionId → player`. Reconnects silently swap the socket. Other users see nothing. Tab switches use `BroadcastChannel` to coordinate which tab owns the connection.
+
+Should have done this from the start. The lesson: your player identity should never be your transport identity.
+
+## Building with Claude Code
+
+I built 90% of this with Claude Code in a single session. Not as a party trick — as genuine pair programming.
+
+What worked well:
+- **Parallel agents** — "create the server, the components, and the pages" in one message, three agents working simultaneously
+- **Iterating on UI** — "the cards are cut by the container" → immediate fix with explanation
+- **Feature brainstorming** — I pasted 10 feature ideas from a ChatGPT conversation, we evaluated each one together, picked 3 to build
+- **The boring stuff** — SEO meta tags, schema markup, legal pages, robots.txt, sitemap — all generated correctly in parallel
+
+What needed correction:
+- First build had no card illustrations — the `Card` component never loaded the SVGs
+- WebSocket host fallback used `??` instead of `||` — empty string is truthy
+- Initial player identity used connection IDs (see reconnection saga above)
+- Several `as` casts that violated my strict TypeScript rules
+
+The pattern: Claude Code is great at generating the 80% and iterating on feedback. The 20% where it guesses wrong, you catch by testing. Having strict TypeScript and a `tsc -b` check after every change caught most issues before they reached the browser.
+
+## Numbers
+
+- **26 commits** in one session
+- **~4,500 lines of code** (including server)
+- **14 illustrated cards** from the original Redbooth set
+- **5 card presets** (All, Fibonacci, Simple, T-Shirt, Powers of 2)
+- **0 databases** — everything ephemeral
+- **685KB JS bundle** — needs code splitting, but works
+- **$0/month** to run — Cloudflare Pages free tier + PartyKit hobby tier
+
+## What's next
+
+The [TODO list](https://github.com/letanure/Scrum-poker-cards) has ideas parked:
+- Code splitting to reduce bundle size
+- Dark mode
+- Sound effects (optional)
+- Silent poker (multi-round bias reduction)
+- Import topics from Jira/Linear
+- i18n (Portuguese, Spanish)
+
+But honestly? It works. My team can use it next sprint. That's enough.
+
+## Try it
+
+**[scrumpoker.work](https://scrumpoker.work)** — create a session, share the link, estimate some stories.
+
+Source code: [github.com/letanure/Scrum-poker-cards](https://github.com/letanure/Scrum-poker-cards)
+
+The card illustrations are CC BY 3.0 by [Redbooth](https://github.com/redbooth/scrum-poker-cards). Thank you for making them — 7 years later, they're finally in a real app.
