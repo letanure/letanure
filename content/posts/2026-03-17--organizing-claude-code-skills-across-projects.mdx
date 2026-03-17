@@ -1,0 +1,182 @@
+---
+title: I Had 130 Claude Code Skills and Couldn't Find Any of Them
+date: 2026-03-17
+summary: How to organize Claude Code skills, commands, and plugins across projects. Global vs local, vendor skills, per-project profiles, and a bootstrap script for new machines.
+tags: ['claude-code', 'ai', 'developer-tools', 'productivity', 'skills', 'cli', 'automation']
+---
+
+I installed every Claude Code plugin that looked useful. Marketing skills, frontend design, code review, Slack integration, superpowers, UI/UX patterns. Then vendor skills from Matt Pocock. Then my own custom skills for PR reviews, Linear issues, Slack messages.
+
+130 skills. I could not remember 10 of them.
+
+## The real problems
+
+**Overlap.** Three different skills triggered when I said "review this PR." Project commands, personal skills, and a plugin — all doing roughly the same thing. Claude picked one. Sometimes the wrong one.
+
+**No organization.** Some skills are global (my writing voice). Some are project-specific (test patterns for a monorepo). Some are useful only for personal projects (SEO, marketing). They were all loaded everywhere, all the time.
+
+**New machine = amnesia.** My skills lived in `~/.claude/skills/`, my commands in `~/.claude/commands/`, plugins were installed manually. No way to reproduce the setup on another machine. No way to remember what I had.
+
+**Context waste.** Every skill description sits in Claude's context, every session. 25 marketing skills loaded while I was writing code at work. That is wasted tokens doing nothing.
+
+## What I wanted
+
+1. One repo, one command, full Claude Code setup on any machine
+2. Global skills that work everywhere
+3. Per-project profiles that suppress irrelevant skills
+4. Vendor skills from other developers without copy-pasting
+5. A way to find the right skill for the task
+
+## The solution: a setup repo
+
+Everything lives in one private git repo. Symlinked into `~/.claude/` so Claude discovers it automatically.
+
+```
+claude-setup/
+  skills/              → symlinked to ~/.claude/skills/
+    me:write-like-me/
+    me:commit.md
+    me:linear-issue.md
+    me:toolkit/
+  commands/            → symlinked to ~/.claude/commands/
+  vendor/
+    mattpocock-skills/ → git submodule
+  vendor.json          → which vendor skills to enable
+  plugins.json         → which plugins to install
+  toolkit.default.json → task-to-skill mapping
+  manual-checklist.md  → things that need manual setup
+  setup.sh             → THE one command
+```
+
+New machine:
+
+```bash
+git clone --recursive git@github.com:you/claude-setup.git
+cd claude-setup
+./setup.sh
+```
+
+The script symlinks skills and commands, initializes vendor submodules, checks which plugins are installed, and prints a checklist for everything it can not automate (MCP servers, API keys).
+
+## Naming: know what is yours
+
+With 130 skills from 8 sources, I could not tell which were mine, which came from plugins, which were vendor skills.
+
+Prefixes fixed this:
+
+| Prefix | Source |
+|--------|--------|
+| `me:` | My personal skills |
+| `mapo:` | Matt Pocock vendor skills |
+| `superpowers:` | Plugin |
+| `marketing-skills:` | Plugin |
+| (no prefix) | Built-in or project-specific |
+
+Now when I see `me:write-like-me` vs `superpowers:brainstorming` vs `marketing-skills:seo-audit`, I know exactly where each comes from.
+
+## Vendor skills without copy-pasting
+
+I wanted to use skills from other developers, but not copy files. Git submodules solved this.
+
+`vendor.json` controls which skills get symlinked and what prefix they use:
+
+```json
+{
+  "mattpocock/skills": {
+    "path": "vendor/mattpocock-skills",
+    "prefix": "mapo",
+    "enabled": [
+      "write-a-prd",
+      "prd-to-issues",
+      "improve-codebase-architecture",
+      "request-refactor-plan"
+    ]
+  }
+}
+```
+
+`setup.sh` reads this and creates symlinks like `mapo:write-a-prd` pointing to the submodule. Update vendor skills with `git submodule update`. Enable or disable one by editing the list.
+
+## Per-project profiles: the toolkit skill
+
+The biggest win. A skill called `me:toolkit` that maps tasks to the right skill based on where you are.
+
+Two profiles: `work` and `personal`. Each project gets a `.claude/toolkit.json` (gitignored) that tells Claude which profile to use and what to suppress.
+
+```json
+{
+  "profile": "work",
+  "project": "bunch-platform",
+  "suppress": ["marketing-skills:*", "mapo:obsidian-vault"],
+  "overrides": {
+    "test": ["/test (project command)"],
+    "start a task": ["/task (project command)"]
+  }
+}
+```
+
+When I open Claude in a work repo, marketing skills are suppressed. When I open a personal project, everything is available.
+
+Running `/me:toolkit setup` in a new project scans `package.json`, git remote, and existing `.claude/commands/` to suggest the right profile automatically.
+
+Running `/me:toolkit` shows the task map: "want to create an issue? use `me:linear-issue`. Want to plan a feature? start with `mapo:write-a-prd`."
+
+## Skill size matters
+
+Skills eat context when loaded. A 200-line skill burns tokens every time you invoke it.
+
+The rule I follow now:
+
+| Part | Target | When loaded |
+|------|--------|-------------|
+| Description (frontmatter) | 1-2 sentences | Every session, always |
+| SKILL.md body | Under 80 lines | When invoked |
+| references/ directory | Unlimited | On demand |
+
+The main skill file is a router. Core rules and a quick reference table. Deep context per medium, examples, extended patterns — all in `references/` files that Claude reads only when needed.
+
+A Slack message uses 76 lines of context. A blog post uses 76 + the blog guide reference. Progressive loading, not a wall of instructions.
+
+## Health checks
+
+A `SessionStart` hook runs `check-links.sh` every time Claude starts. If symlinks are broken (repo moved, submodule not initialized), it warns you immediately.
+
+```json
+{
+  "hooks": {
+    "SessionStart": [{
+      "matcher": "",
+      "hooks": [{
+        "type": "command",
+        "command": "$HOME/.claude/hooks/check-setup.sh",
+        "timeout": 5
+      }]
+    }]
+  }
+}
+```
+
+Silent when healthy. Warns when something is wrong.
+
+## What I would do differently
+
+**Start with fewer skills.** I installed everything, then had to clean up. Better to add skills as you hit real needs.
+
+**Name from the start.** The `me:` prefix convention would have saved confusion if I had it from day one.
+
+**Profile early.** Suppressing marketing skills in work repos should have been the default. 25 skill descriptions in context for no reason.
+
+## Template repo
+
+I am working on a public template version of this setup — no personal skills, just the structure, scripts, and config format. Fork it, add your skills, run `setup.sh`.
+
+<!-- TODO: add link when public repo is ready -->
+
+## What is next
+
+- Test the toolkit routing in real projects for a few weeks
+- Add vendor skills from Vercel (`react-best-practices`, `composition-patterns`) and Google Labs (`shadcn-ui`)
+- Explore whether Claude Code will add native skill scoping per project — that would replace the toolkit suppress hack
+- Build a voice maintenance skill that periodically checks if my writing skill still matches how I actually write
+
+If you are drowning in Claude Code skills and can not find the one you need, the problem is not the skills. It is the organization. Fix that first, then add more.
