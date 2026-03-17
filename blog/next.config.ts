@@ -1,29 +1,27 @@
+import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
-import remarkFrontmatter from "remark-frontmatter";
-import rehypePrismPlus from "rehype-prism-plus";
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
 	pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
 	images: {
 		remotePatterns: [
 			{
-				protocol: 'https' as const,
+				protocol: 'https',
 				hostname: 'source.unsplash.com',
 				pathname: '/**',
 			},
 			{
-				protocol: 'https' as const,
+				protocol: 'https',
 				hostname: 'images.unsplash.com',
 				pathname: '/**',
 			},
 			{
-				protocol: 'https' as const,
+				protocol: 'https',
 				hostname: 'picsum.photos',
 				pathname: '/**',
 			},
 			{
-				protocol: 'https' as const,
+				protocol: 'https',
 				hostname: 'api.dicebear.com',
 				pathname: '/**',
 			},
@@ -34,8 +32,8 @@ const nextConfig = {
 const withMDX = createMDX({
 	extension: /\.mdx?$/,
 	options: {
-		remarkPlugins: [remarkFrontmatter],
-		rehypePlugins: [rehypePrismPlus],
+		remarkPlugins: ['remark-frontmatter'],
+		rehypePlugins: ['rehype-prism-plus'],
 	},
 });
 
