@@ -14,7 +14,7 @@ I design developer tools, scalable frontend architectures, and the systems that 
 
 ## Latest Posts
 
-<!-- BLOG-POST-LIST:START -->- [React Performance: When One Slow Component Freezes Everything](https://www.letanure.dev/blog/2025-08-21--react-performance-when-one-slow-component-freezes-everything)- [Claude Code: Part 11 - Troubleshooting and Recovery](https://www.letanure.dev/blog/2025-08-09--claude-code-part-11-troubleshooting-recovery)- [Claude Code: Part 10 - Common Issues and Quick Fixes](https://www.letanure.dev/blog/2025-08-08--claude-code-part-10-power-user-cli-scripting)- [Claude Code: Part 9 - Complete Development Workflows](https://www.letanure.dev/blog/2025-08-07--claude-code-part-9-complete-development-workflows)- [Claude Code: Part 8 - Hooks for Automated Quality Checks](https://www.letanure.dev/blog/2025-08-06--claude-code-part-8-hooks-automated-quality-checks)<!-- BLOG-POST-LIST:END -->
+<!-- BLOG-POST-LIST:START -->- [I Had 130 Claude Code Skills and Couldn&#39;t Find Any of Them](https://www.letanure.dev/blog/2026-03-17--organizing-claude-code-skills-across-projects)- [I Built Yet Another Planning Poker App and I Don&#39;t Care](https://www.letanure.dev/blog/2026-03-17--building-scrum-poker-cards)- [I&#39;m Building a CSS-Only Component Library &lpar;For Fun&rpar;](https://www.letanure.dev/blog/2026-02-17--css-first-component-library-architecture)- [React Performance: When One Slow Component Freezes Everything](https://www.letanure.dev/blog/2025-08-21--react-performance-when-one-slow-component-freezes-everything)- [Claude Code: Part 11 - Troubleshooting and Recovery](https://www.letanure.dev/blog/2025-08-09--claude-code-part-11-troubleshooting-recovery)<!-- BLOG-POST-LIST:END -->
 
 ## Connect
 
